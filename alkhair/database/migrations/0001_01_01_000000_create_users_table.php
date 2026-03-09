@@ -13,10 +13,23 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('fullName');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phone')->nullable();
+            $table->string('profilePhoto')->nullable();
+            $table->enum('role', ['admin', 'donator', 'association'])->default('donator');
+
+            $table->string('licenseNumber')->nullable();
+            $table->string('address')->nullable();
+            $table->string('rib')->nullable();
+            $table->text('description')->nullable();
+            $table->string('documentKYC')->nullable();
+            $table->enum('status', ['PENDING', 'ACTIVE', 'BANNED'])->nullable();
+
+            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
+
             $table->rememberToken();
             $table->timestamps();
         });
