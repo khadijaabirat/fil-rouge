@@ -4,8 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Project;
+use App\Models\Category;
+use App\Models\Donation;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -44,5 +49,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function projects(){
+    return $this->HasMany(Project::class,'association_id');
+    }
+    public function categories(){
+        return $this->BelongsTo(Category::class,'category_id');
+    }
+    public function donations(){
+        return $this->HasMany(Donation::class,'donator_id');
     }
 }

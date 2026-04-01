@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('documentKYC')->nullable();
             $table->enum('status', ['PENDING', 'ACTIVE', 'BANNED'])->nullable();
 
-            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
+            $table->foreignId('category_id')->nullable()->constrained('categories');
 
             $table->rememberToken();
             $table->timestamps();

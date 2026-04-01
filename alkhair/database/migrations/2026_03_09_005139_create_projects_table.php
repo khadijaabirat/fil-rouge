@@ -20,12 +20,9 @@ return new class extends Migration
             $table->string('videoUrl')->nullable();
             $table->dateTime('startDate');
             $table->dateTime('endDate');
-            $table->enum('ProjectStatus',['OPEN','CLOSED','COMPLETED'])->default('OPEN');
-            $table->foreignId('association_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('category_id')
-      ->nullable()
-      ->constrained('categories')
-      ->nullOnDelete();
+            $table->enum('status',['OPEN','CLOSED','COMPLETED'])->default('OPEN');
+            $table->foreignId('association_id')->constrained('users');
+            $table->foreignId('category_id')->nullable()->constrained('categories');
 
             $table->timestamps();
         });
