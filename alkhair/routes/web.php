@@ -3,7 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-
+use App\Http\Controllers\AssociationController;
+use App\Http\Controllers\ProjectController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -29,9 +30,8 @@ Route::post('/admin/association/{id}/validate', [AdminController::class, 'valida
 });
 
 Route::middleware(['auth','role:association'])->group(function(){
-Route::get('/association/dashboard',function(){
-return view('dashboard');
-})->name('association.dashboard');
+Route::get('/association/dashboard', [AssociationController::class, 'dashboard'])->name('association.dashboard');
+Route::resource('projects', ProjectController::class);
 });
 
 Route::middleware(['auth','role:donator'])->group(function(){

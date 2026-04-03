@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Category;
 
 class ProjectController extends Controller
 {
@@ -22,7 +24,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('projects.create');
+        $categories=Category::all();
+        return view('projects.create',compact('categories'));
     }
 
     /**
@@ -36,11 +39,13 @@ class ProjectController extends Controller
             'goalAmount'=>'required|numeric|min:1',
             'startDate'=>'required|date',
             'endDate'=>'required|date|after:startDate',
+            'category_id' => 'required|exists:categories,id',
+            'videoUrl' => 'nullable|url',
         ]);
-        $validate['association_id']=1;
-        $validate['category_id']=1;
-        Project::create($validate);
-        return redirect()->route('projects.index')->with('success','project ajouté avec succes');
+        $user=Auth::user();
+        $validate['association_id']=$user->id;
+         Project::create($validate);
+        return redirect()->route('association.dashboard')->with('success', 'Projet ajouté avec succès');
     }
 
     /**
@@ -57,7 +62,7 @@ class ProjectController extends Controller
     public function edit(string $id)
     {
         $project=Project::findOrFail($id);
-        
+
     }
 
     /**
