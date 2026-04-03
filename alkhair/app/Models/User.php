@@ -26,7 +26,17 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-    ];
+        'phone',
+        'profilePhoto',
+        'role',
+        'ville',
+'licenseNumber',
+ 'address',
+ 'rib',
+ 'description',
+ 'documentKYC',
+  'status',
+   'category_id'    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -54,10 +64,19 @@ class User extends Authenticatable
     public function projects(){
     return $this->HasMany(Project::class,'association_id');
     }
-    public function categories(){
+    public function category(){
         return $this->BelongsTo(Category::class,'category_id');
     }
     public function donations(){
         return $this->HasMany(Donation::class,'donator_id');
+    }
+    public function isAdmin(){
+        return $this->role='admin';
+    }
+     public function isAssociation(){
+        return $this->role='association';
+    }
+     public function isDonator(){
+        return $this->role='donator';
     }
 }
