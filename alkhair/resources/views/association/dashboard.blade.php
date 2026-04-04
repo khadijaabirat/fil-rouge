@@ -8,7 +8,7 @@
 <body class="bg-gray-100 p-8">
 
     <div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4">Espace Association : {{ $association->fullName }}</h1>
+        <h1 class="text-2xl font-bold mb-4">Espace Association : {{ $association->name }}</h1>
 
         @if($association->status === 'PENDING')
             <div class="bg-yellow-100 text-yellow-800 p-4 rounded mb-4 border border-yellow-300">

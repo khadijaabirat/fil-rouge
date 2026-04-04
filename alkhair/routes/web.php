@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssociationController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\DonatorController;
+use App\Http\Controllers\DonationController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -35,7 +38,13 @@ Route::resource('projects', ProjectController::class);
 });
 
 Route::middleware(['auth','role:donator'])->group(function(){
-Route::get('/donator/dashboard',function(){
-return view('dashboard');
-})->name('donator.dashboard');
+Route::get('/donator/dashboard', [DonatorController::class, 'dashboard'])->name('donator.dashboard');
+
+
+Route::get('/projects/{id}/donate', [DonationController::class, 'create'])->name('donations.create');
+Route::post('/projects/{id}/donate', [DonationController::class, 'store'])->name('donations.store');
+
+//  Stripe
+Route::get('/donations/{id}/success', [DonationController::class, 'success'])->name('donations.success');
+Route::get('/donations/{id}/cancel', [DonationController::class, 'cancel'])->name('donations.cancel');
 });

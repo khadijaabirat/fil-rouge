@@ -8,7 +8,7 @@ use App\Models\User;
 class AdminController extends Controller
 {
     public function dashboard(){
-        $pendingAssociations=User::where('role', 'association')->where('status','pending')->get();
+        $pendingAssociations=User::where('role', 'association')->where('status','PENDING')->get();
 return view('admin.dashboard', compact('pendingAssociations'));
     }
 
