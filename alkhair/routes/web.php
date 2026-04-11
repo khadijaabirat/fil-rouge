@@ -28,8 +28,8 @@ require __DIR__.'/auth.php';
 Route::middleware(['auth','role:admin'])->group(function(){
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 Route::post('/admin/association/{id}/validate', [AdminController::class, 'validateAssociation'])->name('admin.validateAssociation');
-
-
+Route::post('/admin/donation/{id}/validate', [AdminController::class, 'validateDonation'])->name('admin.validateDonation');
+Route::post('/admin/donation/{id}/reject', [AdminController::class, 'rejectDonation'])->name('admin.rejectDonation');
 });
 
 Route::middleware(['auth','role:association'])->group(function(){

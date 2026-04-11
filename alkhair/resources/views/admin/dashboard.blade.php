@@ -53,7 +53,62 @@
         @else
             <p class="text-gray-500">Aucune association en attente pour le moment.</p>
         @endif
+<h2 class="text-xl font-semibold mt-10 mb-3">Dons manuels en attente de validation</h2>
 
+        @if($pendingDonations->count() > 0)
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="p-2 border">Donateur</th>
+                            <th class="p-2 border">Projet</th>
+                            <th class="p-2 border">Montant</th>
+                            <th class="p-2 border">Reçu (Preuve)</th>
+                            <th class="p-2 border">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($pendingDonations as $donation)
+                            <tr>
+                                <td class="p-2 border">
+                                    {{ $donation->isAnonymous ? 'Anonyme' : ($donation->donator->name ?? 'Inconnu') }}
+                                </td>
+                                <td class="p-2 border">{{ $donation->project->title ?? 'Projet supprimé' }}</td>
+                                <td class="p-2 border font-bold text-green-600">{{ $donation->amount }} DH</td>
+                                <td class="p-2 border">
+                                    @if($donation->payment && $donation->payment->paymentReceipt)
+                                        <a href="{{ asset('storage/' . $donation->payment->paymentReceipt) }}" target="_blank" class="text-blue-500 underline flex items-center">
+                                            📄 Voir le reçu
+                                        </a>
+                                    @else
+                                        <span class="text-red-500">Aucun reçu</span>
+                                    @endif
+                                </td>
+                               <td class="p-2 border">
+                                    <div class="flex space-x-2">
+                                        <form action="{{ route('admin.validateDonation', $donation->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">
+                                                Valider
+                                            </button>
+                                        </form>
+
+                                        <form action="{{ route('admin.rejectDonation', $donation->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir refuser ce don ? Le reçu sera supprimé.');">
+                                            @csrf
+                                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition">
+                                                Refuser
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <p class="text-gray-500 bg-gray-50 p-4 rounded border">Aucun don manuel en attente.</p>
+        @endif
         <form method="POST" action="{{ route('logout') }}" class="mt-8">
             @csrf
             <button type="submit" class="text-red-500 underline">Se déconnecter</button>
