@@ -80,4 +80,24 @@ class ProjectController extends Controller
     {
         //
     }
+
+     public function extendDeadline(Request $request, $id)
+    {
+        $project = Project::findOrFail($id);
+
+        if ($project->association_id !== Auth::id()) {
+            abort(403, 'Accès non autorisé.');
+        }
+
+        $request->validate([
+            'newEndDate' => 'required|date|after:' . $project->endDate,
+        ]);
+
+         $project->update([
+            'endDate' => $request->newEndDate,
+            'status' => 'OPEN',
+        ]);
+
+        return back()->with('success', 'La date limite du projet a été prolongée avec succès !');
+    }
 }

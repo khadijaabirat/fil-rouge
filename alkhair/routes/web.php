@@ -7,7 +7,7 @@ use App\Http\Controllers\AssociationController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\DonatorController;
 use App\Http\Controllers\DonationController;
-
+use App\Http\Controllers\ImpactReportController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -30,11 +30,21 @@ Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('adm
 Route::post('/admin/association/{id}/validate', [AdminController::class, 'validateAssociation'])->name('admin.validateAssociation');
 Route::post('/admin/donation/{id}/validate', [AdminController::class, 'validateDonation'])->name('admin.validateDonation');
 Route::post('/admin/donation/{id}/reject', [AdminController::class, 'rejectDonation'])->name('admin.rejectDonation');
+Route::post('/admin/project/{id}/approve-withdrawal', [AdminController::class, 'approveWithdrawal'])->name('admin.approveWithdrawal');
+ Route::post('/admin/association/{id}/ban', [AdminController::class, 'banAssociation'])->name('admin.banAssociation');
+  Route::post('/admin/project/{id}/suspend', [AdminController::class, 'suspendProject'])->name('admin.suspendProject');
+
 });
 
 Route::middleware(['auth','role:association'])->group(function(){
 Route::get('/association/dashboard', [AssociationController::class, 'dashboard'])->name('association.dashboard');
 Route::resource('projects', ProjectController::class);
+Route::post('/projects/{id}/extend', [\App\Http\Controllers\ProjectController::class, 'extendDeadline'])->name('projects.extend');
+Route::post('/association/projects/{id}/withdraw', [AssociationController::class, 'withdrawFunds'])->name('association.withdraw');
+Route::get('/association/projects/{id}/impact', [ImpactReportController::class, 'create'])->name('impact.create');
+Route::post('/association/projects/{id}/impact', [ImpactReportController::class, 'store'])->name('impact.store');
+
+
 });
 
 Route::middleware(['auth','role:donator'])->group(function(){

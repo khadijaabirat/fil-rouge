@@ -37,4 +37,16 @@ class Project extends Model
     public function donations(){
         return $this->hasMany(Donation::class);
     }
+    public function calculateProgress()
+    {
+        if ($this->currentAmount >= $this->goalAmount && $this->status === 'OPEN') {
+            $this->update(['status' => 'COMPLETED']);
+        }
+    }
+    public function checkDeadline()
+    {
+        if (\Carbon\Carbon::now()->greaterThan($this->endDate) && $this->status === 'OPEN') {
+            $this->update(['status' => 'CLOSED']);
+        }
+    }
 }

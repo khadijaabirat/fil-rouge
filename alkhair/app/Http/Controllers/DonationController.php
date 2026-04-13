@@ -18,6 +18,7 @@ class DonationController extends Controller
         return view('donator.donate', compact('project'));
     }
 
+
     public function store(Request $request, $id)
     {
         $project = Project::findOrFail($id);
@@ -92,6 +93,8 @@ $checkout_session = Session::create([
 
     }
 
+
+
 public function success(Request $request, $id)
     {
         $donation = Donation::findOrFail($id);
@@ -103,8 +106,12 @@ public function success(Request $request, $id)
          $project = Project::findOrFail($donation->project_id);
         $project->increment('currentAmount', $donation->amount);
 
+        $project->calculateProgress();
+        
         return redirect()->route('donator.dashboard')->with('success', 'Merci, Votre don en ligne a été validé.');
     }
+
+
 
 
  public function cancel($id)

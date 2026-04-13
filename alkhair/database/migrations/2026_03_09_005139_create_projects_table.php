@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('videoUrl')->nullable();
             $table->dateTime('startDate');
             $table->dateTime('endDate');
-            $table->enum('status',['OPEN','CLOSED','COMPLETED'])->default('OPEN');
+            $table->enum('status',['OPEN','CLOSED','COMPLETED','SUSPENDED'])->default('OPEN');
             $table->foreignId('association_id')->constrained('users');
             $table->foreignId('category_id')->nullable()->constrained('categories');
 
