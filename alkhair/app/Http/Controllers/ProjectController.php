@@ -24,8 +24,16 @@ class ProjectController extends Controller
      */
     public function create()
     {
+        $hasPendingReports =  Project::where('association_id', Auth::id())
+            ->whereHas('donations', function ($query) {
+                 $query->where('status', 'RECEIVED');
+            })->exists();
+            if ($hasPendingReports) {
+            return redirect()->route('association.dashboard')
+            ->with('error', 'Action bloquée : Vous devez d\'abord publier les rapports d\'impact de vos projets précédents (fonds reçus) avant de créer un nouveau projet.');
+        }
         $categories=Category::all();
-        return view('projects.create',compact('categories'));
+return view('projects.create', compact('categories'));
     }
 
     /**
@@ -33,6 +41,14 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $hasPendingReports =  Project::where('association_id', Auth::id())
+            ->whereHas('donations', function ($query) {
+                $query->where('status', 'RECEIVED');
+            })->exists();
+
+        if ($hasPendingReports) {
+            abort(403, 'Vous devez publier vos rapports d\'impact en attente.');
+        }
        $validate= $request->validate([
             'title'=>'required|string|max:250',
             'description'=>'required|string',
@@ -53,7 +69,9 @@ class ProjectController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $project = Project::with('association')->findOrFail($id);
+
+        return view('projects.show', compact('project'));
     }
 
     /**
@@ -70,7 +88,21 @@ class ProjectController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $project = Project::findOrFail($id);
+
+        if ($project->association_id !== Auth::id()) {
+            abort(403, 'Accès non autorisé.');
+        }
+
+         $validate = $request->validate([
+            'title' => 'required|string|max:250',
+            'description' => 'required|string',
+            'videoUrl' => 'nullable|url',
+        ]);
+
+        $project->update($validate);
+
+        return redirect()->route('association.dashboard')->with('success', 'Les détails du projet ont été mis à jour.');
     }
 
     /**
@@ -78,7 +110,18 @@ class ProjectController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+       $project = Project::findOrFail($id);
+
+         if ($project->association_id !== Auth::id()) {
+            abort(403, 'Accès non autorisé.');
+        }
+
+         if ($project->currentAmount > 0) {
+            return back()->with('error', 'Impossible de supprimer ce projet car il a déjà reçu des dons. Demandez à l\'administration de le suspendre.');
+        }
+
+        $project->delete();
+        return back()->with('success', 'Le projet a été supprimé avec succès.');
     }
 
      public function extendDeadline(Request $request, $id)

@@ -44,6 +44,32 @@
         <h2 class="text-3xl font-bold text-gray-800 mb-2 text-center">Projets Solidaires en Cours</h2>
         <p class="text-gray-500 text-center mb-10">Choisissez une cause qui vous tient à cœur et faites un don.</p>
 
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mb-8 max-w-4xl mx-auto">
+            <form action="{{ url()->current() }}" method="GET" class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher un projet par nom..." class="w-full border-gray-300 rounded-md p-2 focus:ring-green-500 focus:border-green-500">
+                </div>
+
+                <div class="w-full md:w-48">
+                    <select name="category" class="w-full border-gray-300 rounded-md p-2 focus:ring-green-500 focus:border-green-500">
+                        <option value="">Toutes les catégories</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition font-medium">
+                    Filtrer
+                </button>
+
+                <a href="{{ url()->current() }}" class="bg-gray-100 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-200 transition text-center border">
+                    Réinitialiser
+                </a>
+            </form>
+        </div>
         @if($projects->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($projects as $project)
@@ -51,7 +77,7 @@
                         <div class="p-6">
                             <span class="text-xs font-bold bg-green-100 text-green-800 px-2 py-1 rounded mb-4 inline-block">Ouvert aux dons</span>
                             <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $project->title }}</h3>
-                            <p class="text-sm text-gray-500 mb-4">Par : <strong>{{ $project->association->fullName ?? 'Association' }}</strong></p>
+                            <p class="text-sm text-gray-500 mb-4">Par : <strong>{{ $project->association->name ?? 'Association' }}</strong></p>
                             <p class="text-gray-600 text-sm mb-6 line-clamp-3">{{ $project->description }}</p>
 
                             <div class="mb-4">
@@ -82,13 +108,13 @@
                 @endforeach
             </div>
         @else
-            <div class="text-center p-10 bg-white rounded-lg shadow-sm">
-                <p class="text-gray-500 text-lg">Aucun projet n'est ouvert pour le moment. Revenez plus tard !</p>
+            <div class="text-center p-10 bg-white rounded-lg shadow-sm mt-4">
+                <p class="text-gray-500 text-lg">Aucun projet ne correspond à votre recherche pour le moment.</p>
             </div>
         @endif
     </section>
 
-    <footer class="bg-gray-900 text-gray-400 py-8 text-center">
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center mt-12">
         <p>&copy; 2026 AL-KHAIR - Projet YouCode Fil Rouge par Khadija.</p>
     </footer>
 

@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use  App\Models\Donation;
+use App\Models\Category;
 class DonatorController extends Controller
 {
- public function dashboard(){
-    Project::where('status', 'OPEN')
+public function dashboard(Request $request)
+{    Project::where('status', 'OPEN')
                            ->where('endDate', '<', now())
                            ->update(['status' => 'CLOSED']);
 
@@ -17,15 +18,28 @@ class DonatorController extends Controller
                            ->whereColumn('currentAmount', '>=', 'goalAmount')
                            ->update(['status' => 'COMPLETED']);
 
+$query = Project::where('status', 'OPEN')
+->with(['association', 'category']);
+
+if ($request->has('search') && $request->search != '') {
+        $query->where('title', 'like', '%' . $request->search . '%');
+    }
+
+  if ($request->has('category') && $request->category != '') {
+        $query->where('category_id', $request->category);
+    }
+
+    $projects = $query->get();
+    $categories = Category::all();
+
     $donator=Auth::user();
-    $projects=Project::where('status','OPEN')
-    ->with('association')
-    ->get();
+
     $myDonations = Donation::where('donator_id', $donator->id)
                                            ->with(['project', 'payment'])
                                            ->get();
-    return view('donator.dashboard',compact('donator','projects', 'myDonations'));
- }
+return view('donator.dashboard', compact('donator', 'projects', 'myDonations', 'categories'));
+
+}
 
 
 

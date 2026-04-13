@@ -32,7 +32,7 @@ class Project extends Model
         return $this->belongsTo(Category::class);
     }
     public function impactReport(){
-        return $this->belongsTo(ImpactReport::class);
+        return $this->hasOne(ImpactReport::class);
     }
     public function donations(){
         return $this->hasMany(Donation::class);

@@ -23,7 +23,32 @@
         @endif
 
         <h2 class="text-xl font-semibold mb-4 text-gray-700">Projets solidaires en cours</h2>
+<div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mb-8">
+    <form action="{{ url()->current() }}" method="GET" class="flex flex-col md:flex-row gap-4">
+        <div class="flex-1">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher un projet par nom..." class="w-full border-gray-300 rounded-md p-2 focus:ring-green-500 focus:border-green-500">
+        </div>
 
+        <div class="w-full md:w-48">
+            <select name="category" class="w-full border-gray-300 rounded-md p-2 focus:ring-green-500 focus:border-green-500">
+                <option value="">Toutes les catégories</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition font-medium">
+            Filtrer
+        </button>
+
+        <a href="{{ url()->current() }}" class="bg-gray-100 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-200 transition text-center">
+            Réinitialiser
+        </a>
+    </form>
+</div>
         @if($projects->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($projects as $project)

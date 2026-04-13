@@ -10,13 +10,20 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ImpactReportController;
 use App\Http\Controllers\CategoryController;
 use App\Models\Project;
-Route::get('/', function () {
-    $projects = Project::where('status', 'OPEN')
+use Illuminate\Http\Request;
+Route::get('/', function (Request $request) {
+    $categories = App\Models\Category::all();
+        $projects = Project::where('status', 'OPEN')
+        ->when($request->search, function ($query, $search) {
+            return $query->where('title', 'like', "%{$search}%");
+        })
+        ->when($request->category, function ($query, $category) {
+            return $query->where('category_id', $category);
+        })
                        ->with('association')
                        ->latest()
-                       ->take(6)
                        ->get();
-    return view('welcome',compact('projects'));
+return view('welcome', compact('projects', 'categories'));
 })->name('home');
 
 Route::get('/dashboard', function () {
@@ -57,8 +64,8 @@ Route::post('/projects/{id}/extend', [\App\Http\Controllers\ProjectController::c
 Route::post('/association/projects/{id}/withdraw', [AssociationController::class, 'withdrawFunds'])->name('association.withdraw');
 Route::get('/association/projects/{id}/impact', [ImpactReportController::class, 'create'])->name('impact.create');
 Route::post('/association/projects/{id}/impact', [ImpactReportController::class, 'store'])->name('impact.store');
-     Route::get('/association/profile', [\App\Http\Controllers\AssociationController::class, 'editProfile'])->name('association.profile');
-    Route::put('/association/profile', [\App\Http\Controllers\AssociationController::class, 'updateProfile'])->name('association.updateProfile');
+Route::get('/association/profile', [\App\Http\Controllers\AssociationController::class, 'editProfile'])->name('association.profile');
+Route::put('/association/profile', [\App\Http\Controllers\AssociationController::class, 'updateProfile'])->name('association.updateProfile');
 
 });
 

@@ -48,7 +48,7 @@
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
                     <label for="startDate" class="block text-gray-700 font-medium mb-2">Date de début *</label>
-                    <input type="date" id="startDate" name="startDate" value="{{ old('startDate') }}" required class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
+                    <input type="date" id="startDate" name="startDate"  min="{{ date('Y-m-d') }}" value="{{ old('startDate') }}" required class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
                     @error('startDate') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div>

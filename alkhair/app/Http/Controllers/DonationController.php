@@ -108,9 +108,9 @@ public function success(Request $request, $id)
         if (!$sessionId) {
             abort(403, 'Session de paiement introuvable ou invalide.');
         }
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+         Stripe::setApiKey(env('STRIPE_SECRET'));
         try {
-            $session = \Stripe\Checkout\Session::retrieve($sessionId);
+            $session =  Session::retrieve($sessionId);
 
             if ($session->payment_status !== 'paid') {
                 abort(403, 'Le paiement n\'a pas été complété chez Stripe.');
