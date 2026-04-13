@@ -8,8 +8,17 @@
 <body class="bg-gray-100 p-8">
 
     <div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4">Espace Association : {{ $association->fullName }}</h1>
+        <h1 class="text-2xl font-bold mb-4">Espace Association : {{ $association->name }}</h1>
+<div class="space-x-3">
+                <a href="{{ route('association.profile') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition shadow-sm">
+                    Mon Profil & RIB
+                </a>
 
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Se déconnecter</button>
+                </form>
+            </div>
         @if($association->status === 'PENDING')
             <div class="bg-yellow-100 text-yellow-800 p-4 rounded mb-4 border border-yellow-300">
                 <strong>Attention :</strong> Votre compte est en cours de vérification par l'administration.
@@ -118,10 +127,7 @@
             @endif
         @endif
 
-        <form method="POST" action="{{ route('logout') }}" class="mt-8 border-t pt-4">
-            @csrf
-            <button type="submit" class="text-red-500 underline">Se déconnecter</button>
-        </form>
+        
     </div>
 
 </body>

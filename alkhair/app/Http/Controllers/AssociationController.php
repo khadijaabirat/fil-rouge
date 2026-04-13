@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
-class AssociationController extends Controller
+use Illuminate\Support\Facades\Storage;
+ class AssociationController extends Controller
 {
     public function dashboard()
     {
@@ -44,4 +45,49 @@ $project->donations()->where('status', 'VALIDATED')->update(['status' => 'PROCES
 
          return back()->with('success', 'Votre demande de retrait des fonds pour le projet "' . $project->title . '" a été envoyée à l\'administration avec succès. Vous serez contacté prochainement.');
     }
+
+
+     public function editProfile()
+    {
+        $association =  Auth::user();
+        return view('association.profile', compact('association'));
+    }
+
+
+
+
+    public function updateProfile(Request $request)
+    {
+        $association = Auth::user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'ville' => 'nullable|string|max:100',
+            'address' => 'nullable|string|max:255',
+            'rib' => 'nullable|string|size:24',
+            'description' => 'nullable|string',
+            'profilePhoto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+if ($request->hasFile('profilePhoto')) {
+             if ($association->profilePhoto) {
+                Storage::disk('public')->delete($association->profilePhoto);
+            }
+
+             $path = $request->file('profilePhoto')->store('profiles', 'public');
+            $association->profilePhoto = $path;
+        }
+         $association->name = $request->name;
+        $association->phone = $request->phone;
+        $association->ville = $request->ville;
+        $association->address = $request->address;
+        $association->rib = $request->rib;
+        $association->description = $request->description;
+
+        $association->save();
+
+        return back()->with('success', 'Votre profil a été mis à jour avec succès.');
+    }
+
+
 }

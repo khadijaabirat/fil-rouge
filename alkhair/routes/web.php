@@ -44,6 +44,8 @@ Route::post('/admin/project/{id}/approve-withdrawal', [AdminController::class, '
     Route::post('/admin/project/{id}/restore', [AdminController::class, 'restoreProject'])->name('admin.restoreProject');
      Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
     Route::post('/admin/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+ Route::get('/admin/categories/{id}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
+    Route::put('/admin/categories/{id}', [CategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/admin/categories/{id}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
 
     });
@@ -55,7 +57,8 @@ Route::post('/projects/{id}/extend', [\App\Http\Controllers\ProjectController::c
 Route::post('/association/projects/{id}/withdraw', [AssociationController::class, 'withdrawFunds'])->name('association.withdraw');
 Route::get('/association/projects/{id}/impact', [ImpactReportController::class, 'create'])->name('impact.create');
 Route::post('/association/projects/{id}/impact', [ImpactReportController::class, 'store'])->name('impact.store');
-
+     Route::get('/association/profile', [\App\Http\Controllers\AssociationController::class, 'editProfile'])->name('association.profile');
+    Route::put('/association/profile', [\App\Http\Controllers\AssociationController::class, 'updateProfile'])->name('association.updateProfile');
 
 });
 

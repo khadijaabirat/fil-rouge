@@ -36,7 +36,8 @@ class User extends Authenticatable
  'description',
  'documentKYC',
   'status',
-   'category_id'    ];
+   'category_id'
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -71,12 +72,12 @@ class User extends Authenticatable
         return $this->HasMany(Donation::class,'donator_id');
     }
     public function isAdmin(){
-        return $this->role='admin';
+        return $this->role==='admin';
     }
      public function isAssociation(){
-        return $this->role='association';
+        return $this->role==='association';
     }
      public function isDonator(){
-        return $this->role='donator';
+        return $this->role==='donator';
     }
 }

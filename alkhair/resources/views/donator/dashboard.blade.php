@@ -59,7 +59,70 @@
                 Aucun projet n'est ouvert aux dons pour le moment.
             </div>
         @endif
+<h2 class="text-2xl font-bold text-gray-800 mt-12 mb-6">Mon Historique de Dons</h2>
 
+        @if(isset($myDonations) && $myDonations->count() > 0)
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-10">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-700">
+                                <th class="p-4 border-b">Date</th>
+                                <th class="p-4 border-b">Projet</th>
+                                <th class="p-4 border-b">Montant</th>
+                                <th class="p-4 border-b">Type</th>
+                                <th class="p-4 border-b">Statut du don</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($myDonations as $donation)
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="p-4 border-b text-sm text-gray-600">
+                                        {{ $donation->created_at->format('d/m/Y H:i') }}
+                                    </td>
+                                    <td class="p-4 border-b font-medium text-gray-800">
+                                        {{ $donation->project->title ?? 'Projet supprimé' }}
+                                    </td>
+                                    <td class="p-4 border-b font-bold text-green-600">
+                                        {{ $donation->amount }} DH
+                                    </td>
+                                    <td class="p-4 border-b text-sm">
+                                        @if($donation->payment && strtoupper($donation->payment->paymentMethod) === 'ONLINE')
+                                            <span class="text-blue-600 font-medium flex items-center gap-1">
+                                                  En ligne (Stripe)
+                                            </span>
+                                        @else
+                                            <span class="text-gray-600 font-medium flex items-center gap-1">
+                                                 Manuel (Virement)
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="p-4 border-b text-sm font-bold">
+                                        @if($donation->status === 'PENDING')
+                                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">En attente (Validation)</span>
+                                        @elseif($donation->status === 'VALIDATED')
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded">Validé</span>
+                                        @elseif($donation->status === 'PROCESSING')
+                                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">Transfert en cours</span>
+                                        @elseif($donation->status === 'RECEIVED')
+                                            <span class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded">Reçu par l'association</span>
+                                        @elseif($donation->status === 'IMPACT')
+                                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded border border-purple-300">🌟 Impact Réalisé</span>
+                                        @elseif($donation->status === 'FAILED')
+                                            <span class="bg-red-100 text-red-800 px-2 py-1 rounded">Refusé / Échoué</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @else
+            <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-200 text-center mb-10">
+                <p class="text-gray-500 text-lg">Vous n'avez pas encore fait de don. Explorez les projets ci-dessus !</p>
+            </div>
+        @endif
     </div>
 
 </body>

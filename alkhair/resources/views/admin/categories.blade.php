@@ -49,13 +49,20 @@
                         <tr class="hover:bg-gray-50">
                             <td class="p-3 border text-gray-500">{{ $category->id }}</td>
                             <td class="p-3 border font-medium">{{ $category->name }}</td>
-                            <td class="p-3 border text-right">
-                                <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette catégorie ?');">
-                                    @csrf
-                                    @method('DELETE') <button type="submit" class="text-red-600 hover:text-red-800 font-medium">
-                                        Supprimer
-                                    </button>
-                                </form>
+                           <td class="p-3 border text-right">
+                                <div class="flex justify-end space-x-3 items-center">
+                                    <a href="{{ route('admin.categories.edit', $category->id) }}" class="text-blue-600 hover:text-blue-800 font-medium bg-blue-50 px-3 py-1 rounded">
+                                        Modifier
+                                    </a>
+
+                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette catégorie ?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-800 font-medium bg-red-50 px-3 py-1 rounded">
+                                            Supprimer
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

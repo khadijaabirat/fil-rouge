@@ -49,9 +49,13 @@
 
             <div class="flex justify-between items-center mt-6">
                 <a href="{{ route('donator.dashboard') }}" class="text-gray-500 hover:text-gray-700 underline">Annuler</a>
-                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 font-medium transition duration-200">
-                    Confirmer le Don
-                </button>
+                <form action="{{ route('donations.store', $project->id) }}" method="POST" enctype="multipart/form-data" onsubmit="document.getElementById('submitBtn').disabled = true; document.getElementById('submitBtn').innerHTML = 'Traitement en cours...';">
+    @csrf
+
+    <button type="submit" id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Confirmer le don
+    </button>
+</form>
             </div>
         </form>
     </div>

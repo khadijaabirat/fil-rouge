@@ -28,6 +28,30 @@ class CategoryController extends Controller
 
 
 
+
+     public function edit($id)
+    {
+        $category = Category::findOrFail($id);
+        return view('admin.categories_edit', compact('category'));
+    }
+
+
+
+     public function update(Request $request, $id)
+    {
+         $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name,' . $id,
+        ]);
+
+        $category = Category::findOrFail($id);
+        $category->update([
+            'name' => $request->name
+        ]);
+
+        return redirect()->route('admin.categories.index')->with('success', 'La catégorie a été modifiée avec succès.');
+    }
+
+
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
