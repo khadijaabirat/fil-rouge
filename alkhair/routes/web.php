@@ -8,9 +8,16 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\DonatorController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ImpactReportController;
+use App\Http\Controllers\CategoryController;
+use App\Models\Project;
 Route::get('/', function () {
-    return view('welcome');
-});
+    $projects = Project::where('status', 'OPEN')
+                       ->with('association')
+                       ->latest()
+                       ->take(6)
+                       ->get();
+    return view('welcome',compact('projects'));
+})->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -33,8 +40,13 @@ Route::post('/admin/donation/{id}/reject', [AdminController::class, 'rejectDonat
 Route::post('/admin/project/{id}/approve-withdrawal', [AdminController::class, 'approveWithdrawal'])->name('admin.approveWithdrawal');
  Route::post('/admin/association/{id}/ban', [AdminController::class, 'banAssociation'])->name('admin.banAssociation');
   Route::post('/admin/project/{id}/suspend', [AdminController::class, 'suspendProject'])->name('admin.suspendProject');
+     Route::post('/admin/association/{id}/unban', [AdminController::class, 'unbanAssociation'])->name('admin.unbanAssociation');
+    Route::post('/admin/project/{id}/restore', [AdminController::class, 'restoreProject'])->name('admin.restoreProject');
+     Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+    Route::post('/admin/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::delete('/admin/categories/{id}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
 
-});
+    });
 
 Route::middleware(['auth','role:association'])->group(function(){
 Route::get('/association/dashboard', [AssociationController::class, 'dashboard'])->name('association.dashboard');

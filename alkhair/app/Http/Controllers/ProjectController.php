@@ -88,7 +88,9 @@ class ProjectController extends Controller
         if ($project->association_id !== Auth::id()) {
             abort(403, 'Accès non autorisé.');
         }
-
+         if ($project->currentAmount >= $project->goalAmount) {
+            return back()->with('error', 'Vous ne pouvez pas prolonger un projet qui a déjà atteint son objectif financier.');
+        }
         $request->validate([
             'newEndDate' => 'required|date|after:' . $project->endDate,
         ]);

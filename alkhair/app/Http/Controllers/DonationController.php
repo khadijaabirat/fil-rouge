@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
+use Illuminate\Support\Facades\DB;
 class DonationController extends Controller
 {
     public function create($id)
@@ -22,7 +23,9 @@ class DonationController extends Controller
     public function store(Request $request, $id)
     {
         $project = Project::findOrFail($id);
-
+         if ($project->status !== 'OPEN') {
+            abort(403, 'Ce projet n\'accepte plus de dons.');
+        }
          $request->validate([
             'amount' => 'required|numeric|min:100',
             'message' => 'nullable|string|max:500',
@@ -98,6 +101,25 @@ $checkout_session = Session::create([
 public function success(Request $request, $id)
     {
         $donation = Donation::findOrFail($id);
+        if ($donation->status === 'VALIDATED') {
+            return redirect()->route('donator.dashboard')->with('info', 'Ce paiement a déjà été validé.');
+        }
+        $sessionId = $request->query('session_id');
+        if (!$sessionId) {
+            abort(403, 'Session de paiement introuvable ou invalide.');
+        }
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        try {
+            $session = \Stripe\Checkout\Session::retrieve($sessionId);
+
+            if ($session->payment_status !== 'paid') {
+                abort(403, 'Le paiement n\'a pas été complété chez Stripe.');
+            }
+        } catch (\Exception $e) {
+            abort(500, 'Erreur de vérification avec Stripe.');
+        }
+
+        DB::transaction(function () use ($donation, $session, $sessionId) {
         $payment = Payment::where('donation_id', $donation->id)->first();
 
          $donation->update(['status' => 'VALIDATED']);
@@ -105,9 +127,8 @@ public function success(Request $request, $id)
 
          $project = Project::findOrFail($donation->project_id);
         $project->increment('currentAmount', $donation->amount);
-
         $project->calculateProgress();
-        
+        });
         return redirect()->route('donator.dashboard')->with('success', 'Merci, Votre don en ligne a été validé.');
     }
 

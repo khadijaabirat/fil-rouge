@@ -36,7 +36,12 @@ class AssociationController extends Controller
          if ($project->status !== 'COMPLETED') {
             return back()->with('error', 'Vous ne pouvez retirer les fonds que si le projet est COMPLETED.');
         }
+         $hasProcessing = $project->donations()->where('status', 'PROCESSING')->exists();
+        if ($hasProcessing) {
+            return back()->with('error', 'Une demande de retrait est déjà en cours de traitement pour ce projet.');
+        }
 $project->donations()->where('status', 'VALIDATED')->update(['status' => 'PROCESSING']);
+
          return back()->with('success', 'Votre demande de retrait des fonds pour le projet "' . $project->title . '" a été envoyée à l\'administration avec succès. Vous serez contacté prochainement.');
     }
 }

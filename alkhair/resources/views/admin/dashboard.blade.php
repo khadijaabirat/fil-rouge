@@ -8,7 +8,14 @@
 <body class="bg-gray-100 p-8">
 
     <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4">Espace Administrateur</h1>
+ 
+<div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">Espace Administrateur</h1>
+            <a href="{{ route('admin.categories.index') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                Gérer les Catégories
+            </a>
+        </div>
+
 
         @if(session('success'))
             <div class="bg-green-100 text-green-800 p-3 rounded mb-4">
@@ -148,8 +155,8 @@
             <p class="text-gray-500 bg-gray-50 p-4 rounded border mb-10">Aucune demande de retrait en attente.</p>
         @endif
 
-        <h2 class="text-xl font-semibold mt-10 mb-3 text-red-700">Modération : Projets en cours</h2>
-        @if(isset($activeProjects) && $activeProjects->count() > 0)
+        <h2 class="text-xl font-semibold mt-10 mb-3 text-red-700">Modération : Projets (Actifs & Suspendus)</h2>
+        @if(isset($managedProjects) && $managedProjects->count() > 0)
             <div class="overflow-x-auto mb-6">
                 <table class="w-full text-left border-collapse border border-red-200">
                     <thead>
@@ -161,18 +168,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($activeProjects as $project)
+                        @foreach($managedProjects as $project)
                             <tr>
                                 <td class="p-2 border">{{ $project->title }}</td>
                                 <td class="p-2 border">{{ $project->association->name ?? 'N/A' }}</td>
                                 <td class="p-2 border font-bold text-gray-700">{{ $project->status }}</td>
                                 <td class="p-2 border">
-                                    <form action="{{ route('admin.suspendProject', $project->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir SUSPENDRE ce projet ?');">
-                                        @csrf
-                                        <button type="submit" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
-                                            Suspendre
-                                        </button>
-                                    </form>
+                                    @if($project->status === 'SUSPENDED')
+                                        <form action="{{ route('admin.restoreProject', $project->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                                                Restaurer (Activer)
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('admin.suspendProject', $project->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir SUSPENDRE ce projet ?');">
+                                            @csrf
+                                            <button type="submit" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
+                                                Suspendre
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -180,32 +196,43 @@
                 </table>
             </div>
         @else
-            <p class="text-gray-500 mb-6">Aucun projet actif à modérer.</p>
+            <p class="text-gray-500 mb-6">Aucun projet à modérer.</p>
         @endif
 
-        <h2 class="text-xl font-semibold mt-6 mb-3 text-red-700">Modération : Associations Actives</h2>
-        @if(isset($activeAssociations) && $activeAssociations->count() > 0)
+        <h2 class="text-xl font-semibold mt-6 mb-3 text-red-700">Modération : Associations (Actives & Bannies)</h2>
+        @if(isset($managedAssociations) && $managedAssociations->count() > 0)
             <div class="overflow-x-auto mb-10">
                 <table class="w-full text-left border-collapse border border-red-200">
                     <thead>
                         <tr class="bg-red-100 text-red-900">
                             <th class="p-2 border">Nom de l'Association</th>
                             <th class="p-2 border">Ville</th>
+                            <th class="p-2 border">Statut</th>
                             <th class="p-2 border">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($activeAssociations as $assoc)
+                        @foreach($managedAssociations as $assoc)
                             <tr>
                                 <td class="p-2 border font-bold">{{ $assoc->name }}</td>
                                 <td class="p-2 border">{{ $assoc->ville }}</td>
+                                <td class="p-2 border font-bold {{ $assoc->status === 'BANNED' ? 'text-red-600' : 'text-green-600' }}">{{ $assoc->status }}</td>
                                 <td class="p-2 border">
-                                    <form action="{{ route('admin.banAssociation', $assoc->id) }}" method="POST" onsubmit="return confirm('ALERTE : Voulez-vous vraiment BANNIR cette association ? Tous ses projets seront suspendus.');">
-                                        @csrf
-                                        <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
-                                            Bannir (Ban)
-                                        </button>
-                                    </form>
+                                    @if($assoc->status === 'BANNED')
+                                        <form action="{{ route('admin.unbanAssociation', $assoc->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
+                                                Réactiver (Unban)
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('admin.banAssociation', $assoc->id) }}" method="POST" onsubmit="return confirm('ALERTE : Voulez-vous vraiment BANNIR cette association ? Tous ses projets seront suspendus.');">
+                                            @csrf
+                                            <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+                                                Bannir (Ban)
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -213,7 +240,7 @@
                 </table>
             </div>
         @else
-            <p class="text-gray-500 mb-10">Aucune association active à modérer.</p>
+            <p class="text-gray-500 mb-10">Aucune association à modérer.</p>
         @endif
 
         <form method="POST" action="{{ route('logout') }}" class="mt-8">

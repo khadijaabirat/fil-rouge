@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Donation;
 use App\Models\Project;
+use App\Models\Category;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+
 class AdminController extends Controller
 {
     public function dashboard(){
@@ -50,18 +53,24 @@ $association->update([
 
  public function validateDonation($id)
     {
+        DB::transaction(function () use ($id) {
         $donation = Donation::findOrFail($id);
         $payment = Payment::where('donation_id', $donation->id)->first();
 
         $donation->update(['status' => 'VALIDATED']);
-        $payment->update(['status' => 'SUCCESS']);
-
+        if ($payment) {
+                $payment->update(['status' => 'SUCCESS']);
+            }
         $project = Project::findOrFail($donation->project_id);
         $project->increment('currentAmount', $donation->amount);
 
         $project->calculateProgress();
+        });
         return back()->with('success', 'Le don manuel a été validé et le montant a été ajouté au projet !');
     }
+
+
+
 
     public function rejectDonation($id)
     {
@@ -88,6 +97,7 @@ $association->update([
 
         return back()->with('success', 'Les fonds ont été marqués comme transférés à l\'association.');
     }
+
 
 public function banAssociation($id)
     {
@@ -127,7 +137,7 @@ public function suspendProject($id)
 
 
 
-    
+
      public function restoreProject($id)
     {
         $project = Project::findOrFail($id);
@@ -139,4 +149,6 @@ public function suspendProject($id)
 
         return back()->with('success', 'Le projet a été restauré et est de nouveau en ligne.');
     }
+
+ 
 }
