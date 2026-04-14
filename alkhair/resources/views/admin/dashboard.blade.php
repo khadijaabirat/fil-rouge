@@ -8,7 +8,7 @@
 <body class="bg-gray-100 p-8">
 
     <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
- 
+
 <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">Espace Administrateur</h1>
             <a href="{{ route('admin.categories.index') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
@@ -86,7 +86,7 @@
                                 <td class="p-2 border">
                                     @if($donation->payment && $donation->payment->paymentReceipt)
                                         <a href="{{ asset('storage/' . $donation->payment->paymentReceipt) }}" target="_blank" class="text-blue-500 underline flex items-center">
-                                            📄 Voir le reçu
+                                             Voir le reçu
                                         </a>
                                     @else
                                         <span class="text-red-500">Aucun reçu</span>

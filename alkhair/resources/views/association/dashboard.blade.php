@@ -72,7 +72,7 @@
                     + Créer un nouveau projet
                 </a>
             @endif
-        </div>
+        <!-- </div> -->
 
 <h2 id="projets" class="text-xl font-semibold mb-3">Mes Projets</h2>            @if($projects->count() > 0)
                 <ul class="list-disc pl-5">

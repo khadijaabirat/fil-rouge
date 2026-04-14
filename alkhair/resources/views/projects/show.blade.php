@@ -150,7 +150,39 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="mt-8 pt-6 border-t border-gray-100">
+                        <h4 class="font-bold text-gray-800 text-sm mb-5 uppercase tracking-wider flex items-center gap-2">
+                            <span>🤝</span> Derniers soutiens
+                        </h4>
 
+                        @if($project->donations->count() > 0)
+                            <ul class="space-y-4">
+                                @foreach($project->donations as $donation)
+                                    <li class="flex items-center gap-4 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                                        <div class="w-10 h-10 rounded-full {{ $donation->isAnonymous ? 'bg-gray-200 text-gray-500' : 'bg-blue-100 text-blue-600' }} flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-sm">
+                                            {{ $donation->isAnonymous ? '?' : strtoupper(substr($donation->donator->name ?? 'A', 0, 1)) }}
+                                        </div>
+
+                                        <div>
+                                            <p class="text-sm font-bold text-gray-800">
+                                                {{ $donation->isAnonymous ? 'Un donateur anonyme' : ($donation->donator->name ?? 'Donateur') }}
+                                            </p>
+                                            <p class="text-xs text-gray-500 mt-0.5">
+                                                A fait un don de <span class="font-bold text-green-600">{{ $donation->amount }} DH</span>
+                                            </p>
+                                            <p class="text-[10px] text-gray-400 mt-0.5">
+                                                il y a {{ $donation->created_at->diffForHumans() }}
+                                            </p>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <div class="bg-gray-50 p-4 rounded-xl text-center border border-dashed border-gray-300">
+                                <p class="text-sm text-gray-500 font-medium">Soyez le premier à soutenir ce projet ! ❤️</p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
 

@@ -69,8 +69,11 @@ return view('projects.create', compact('categories'));
      */
     public function show(string $id)
     {
-        $project = Project::with('association')->findOrFail($id);
-
+      $project = Project::with(['association', 'donations' => function($query) {
+            $query->whereIn('status', ['VALIDATED', 'PROCESSING', 'RECEIVED', 'IMPACT'])
+                  ->latest()
+                  ->take(5); 
+        }, 'donations.donator'])->findOrFail($id);
         return view('projects.show', compact('project'));
     }
 
