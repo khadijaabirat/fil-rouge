@@ -12,7 +12,7 @@ class Category extends Model
     use HasFactory;
     protected $fillable = ['name'];
     public function associations(){
-    return $this->hasMany(User::class,'category_id');
+    return $this->hasMany(User::class,'category_id')->where('role', 'association');
     }
     public function projects(){
     return $this->hasMany(Project::class,'category_id');

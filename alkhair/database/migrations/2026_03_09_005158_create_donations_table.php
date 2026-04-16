@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
-            $table->double('amount');
+         $table->decimal('amount',12, 2);
         $table->string('message')->nullable();
-        $table->dateTime('donationDate');
+        $table->dateTime('donationDate')->useCurrent();
         $table->boolean('isAnonymous')->default(false);
         $table->enum('status', ['PENDING', 'VALIDATED', 'PROCESSING', 'RECEIVED', 'IMPACT'])->default('PENDING');
-
-        $table->foreignId('donator_id')->constrained('users');
-        $table->foreignId('project_id')->constrained('projects');
+        $table->foreignId('donator_id')->constrained('users')->onDelete('restrict');;
+        $table->foreignId('project_id')->constrained('projects')->onDelete('restrict');;
             $table->timestamps();
         });
     }

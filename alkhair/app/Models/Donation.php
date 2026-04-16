@@ -18,10 +18,13 @@ class Donation extends Model
     public function donator(){
         return $this->belongsTo(User::class,'donator_id');
     }
-    public function project(){
-        return $this->belongsTo(project::class);
+   public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
     }
-    public function payment(){
-    return $this->hasOne(Payment::class);
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
     }
 }

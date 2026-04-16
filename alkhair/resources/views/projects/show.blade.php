@@ -58,6 +58,30 @@
                     </div>
                 </div>
 
+                @if(isset($project->impactReport))
+                    <div class="bg-gradient-to-r from-purple-50 to-white p-6 md:p-8 rounded-2xl shadow-sm border border-purple-100">
+                        <div class="flex items-center gap-3 mb-6 border-b border-purple-200 pb-3">
+                            <span class="text-3xl">🌟</span>
+                            <h2 class="text-2xl font-bold text-purple-900">Rapport d'Impact Officiel</h2>
+                        </div>
+
+                        <p class="text-sm font-bold text-purple-600 mb-4 bg-purple-100 inline-block px-3 py-1 rounded-full">
+                            Projet réalisé le : {{ \Carbon\Carbon::parse($project->impactReport->completionDate)->format('d/m/Y') }}
+                        </p>
+
+                        <div class="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line text-lg mb-6">
+                            {{ $project->impactReport->description }}
+                        </div>
+
+                        @if($project->impactReport->videoLink)
+                            <a href="{{ $project->impactReport->videoLink }}" target="_blank" class="inline-flex items-center gap-2 bg-purple-600 text-white px-5 py-2.5 rounded-lg hover:bg-purple-700 transition font-medium shadow-sm">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                                Voir la vidéo des réalisations
+                            </a>
+                        @endif
+                    </div>
+                @endif
+
                 <div class="bg-green-50 p-6 md:p-8 rounded-2xl border border-green-100 flex flex-col sm:flex-row items-center gap-6">
                     <div class="flex-shrink-0">
                         @if(isset($project->association) && $project->association->profilePhoto)

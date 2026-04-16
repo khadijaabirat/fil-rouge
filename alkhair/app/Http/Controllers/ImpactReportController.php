@@ -16,7 +16,10 @@ class ImpactReportController extends Controller
         if ($project->association_id !== Auth::id()) {
             abort(403, 'Accès non autorisé.');
         }
-
+    if ($project->impactReport()->exists()) {
+            return redirect()->route('association.dashboard')
+                ->with('error', 'Ce projet possède déjà un rapport d\'impact.');
+        }
         return view('association.impact_create', compact('project'));
     }
 
@@ -29,7 +32,10 @@ class ImpactReportController extends Controller
         if ($project->association_id !== Auth::id()) {
             abort(403, 'Accès non autorisé.');
         }
-
+if ($project->impactReport()->exists()) {
+            return redirect()->route('association.dashboard')
+                ->with('error', 'Un rapport d\'impact a déjà été publié pour ce projet.');
+        }
         $request->validate([
             'description' => 'required|string|min:50',
             'completionDate' => 'required|date',

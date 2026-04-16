@@ -12,7 +12,8 @@ class ImpactReport extends Model
     protected $fillable = [
         'description', 'completionDate', 'videoLink', 'project_id'
     ];
-    public function projects(){
+public function project() 
+    {
        return $this->belongsTo(Project::class);
     }
 }

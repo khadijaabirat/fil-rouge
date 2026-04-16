@@ -12,6 +12,13 @@ use App\Http\Controllers\CategoryController;
 use App\Models\Project;
 use Illuminate\Http\Request;
 Route::get('/', function (Request $request) {
+    $totalCollected = App\Models\Project::sum('currentAmount');
+     $totalInMillions = round($totalCollected / 1000000, 1);
+     $verifiedAssociations = App\Models\User::where('role', 'association')
+                                           ->where('status', 'ACTIVE')
+                                           ->count();
+
+     $completedProjects = App\Models\Project::whereHas('impactReport')->count();
     $categories = App\Models\Category::all();
         $projects = Project::where('status', 'OPEN')
         ->when($request->search, function ($query, $search) {
@@ -22,9 +29,13 @@ Route::get('/', function (Request $request) {
         })
                        ->with('association')
                        ->latest()
-                       ->get();
-return view('welcome', compact('projects', 'categories'));
-})->name('home');
+                       ->paginate(3);
+return view('welcome', compact('projects',
+        'categories',
+        'totalInMillions',
+        'verifiedAssociations',
+        'completedProjects'));
+}) ;
 
 Route::get('/dashboard', function () {
     return view('dashboard');

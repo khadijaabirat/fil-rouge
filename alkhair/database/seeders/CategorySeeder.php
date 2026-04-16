@@ -12,12 +12,14 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-       $categories = [
-            ['name' => 'Santé'],
-            ['name' => 'Éducation'],
-            ['name' => 'Solidarité & Secours'],
-            ['name' => 'Développement Durable'],
-        ];
+      $categories = [
+    ['name' => 'Développement Rural & Accès à l\'Eau'],
+    ['name' => 'Éducation & Soutien Scolaire'],
+    ['name' => 'Santé & Caravanes Médicales'],
+    ['name' => 'Aide Sociale & Lutte contre la Précarité'],
+    ['name' => 'Secours & Urgences'],
+    ['name' => 'Inclusion des Personnes Handicapées']
+];
         foreach ($categories as $cat) {
             Category::create($cat);
         }

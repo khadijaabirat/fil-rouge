@@ -17,9 +17,11 @@ class AdminController extends Controller
     $pendingAssociations=User::where('role', 'association')
     ->where('status','PENDING')
     ->get();
-    $pendingDonations=Donation::whereHas('payment', function ($query) {
-                                        $query->where('status', 'PENDING');
-                                    })
+    $pendingDonations = Donation::with(['donator', 'project', 'payment'])
+            ->whereHas('payment', function ($query) {
+                $query->where('status', 'PENDING')
+                ->whereNotNull('paymentReceipt');
+            })
     ->where('status', 'PENDING')
     ->get();
 
@@ -41,8 +43,8 @@ $managedAssociations = User::where('role', 'association')
 
 
 
- public function validateAssociation($id){
-$association = User::findOrFail($id);
+public function validateAssociation($id){
+$association = User::where('role', 'association')->findOrFail($id);
 $association->update([
             'status' => 'ACTIVE'
         ]);
@@ -53,6 +55,10 @@ $association->update([
 
  public function validateDonation($id)
     {
+        $donation = Donation::findOrFail($id);
+        if ($donation->status !== 'PENDING') {
+            return back()->with('error', 'Ce don a déjà été traité.');
+        }
         DB::transaction(function () use ($id) {
         $donation = Donation::findOrFail($id);
         $payment = Payment::where('donation_id', $donation->id)->first();
@@ -75,8 +81,11 @@ $association->update([
     public function rejectDonation($id)
     {
         $donation = Donation::findOrFail($id);
+        if ($donation->status !== 'PENDING') {
+            return back()->with('error', 'Impossible de refuser ce don car il a déjà été traité.');
+        }
         $payment = Payment::where('donation_id', $donation->id)->first();
-
+        $donation->update(['status' => 'FAILED']);
          if ($payment) {
             $payment->update(['status' => 'FAILED']);
         }
@@ -101,7 +110,7 @@ $association->update([
 
 public function banAssociation($id)
     {
-        $association = User::findOrFail($id);
+$association = User::where('role', 'association')->findOrFail($id);
 
         $association->update(['status' => 'BANNED']);
 
@@ -126,12 +135,18 @@ public function suspendProject($id)
 
      public function unbanAssociation($id)
     {
-        $association = User::findOrFail($id);
-
+$association = User::where('role', 'association')->findOrFail($id);
          $association->update(['status' => 'ACTIVE']);
 
-         $association->projects()->where('status', 'SUSPENDED')->update(['status' => 'OPEN']);
+$suspendedProjects = $association->projects()->where('status', 'SUSPENDED')->get();
 
+foreach ($suspendedProjects as $project) {
+            $project->update(['status' => 'OPEN']);
+            $project->calculateProgress();
+            if (method_exists($project, 'checkDeadline')) {
+                $project->checkDeadline();
+            }
+        }
         return back()->with('success', 'L\'association a été réactivée avec succès.');
     }
 
@@ -150,5 +165,5 @@ public function suspendProject($id)
         return back()->with('success', 'Le projet a été restauré et est de nouveau en ligne.');
     }
 
- 
+
 }

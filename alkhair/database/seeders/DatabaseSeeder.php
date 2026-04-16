@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             UserSeeder::class,
             ProjectSeeder::class,
+            DonationSeeder::class,
+            PaymentSeeder::class,
+            ImpactReportSeeder::class,
         ]);
     }
 }

@@ -52,32 +52,47 @@
         @if($projects->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($projects as $project)
-                    <div class="border rounded-lg p-5 shadow-sm hover:shadow-md transition">
-                        <h3 class="text-lg font-bold text-blue-600 mb-2">{{ $project->title }}</h3>
-                        <p class="text-sm text-gray-500 mb-2">Par : <strong>{{ $project->association->name ?? 'Association' }}</strong></p>
-                        <p class="text-gray-700 text-sm mb-4 line-clamp-3">{{ $project->description }}</p>
-
-                        <div class="mb-2">
-                            <div class="flex justify-between text-xs text-gray-600 mb-1">
-                                <span>Collecté : {{ $project->currentAmount }} DH</span>
-                                <span>Objectif : {{ $project->goalAmount }} DH</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                @php
-                                    $percentage = ($project->goalAmount > 0) ? ($project->currentAmount / $project->goalAmount) * 100 : 0;
-                                    $percentage = min($percentage, 100);
-                                @endphp
-                                <div class="bg-green-600 h-2.5 rounded-full" style="width: {{ $percentage }}%"></div>
-                            </div>
+                    <div class="border rounded-lg p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-blue-600 mb-2">
+                                <a href="{{ route('projects.show', $project->id) }}" class="hover:underline">
+                                    {{ $project->title }}
+                                </a>
+                            </h3>
+                            <p class="text-sm text-gray-500 mb-2">Par : <strong>{{ $project->association->name ?? 'Association' }}</strong></p>
+                            <p class="text-gray-700 text-sm mb-4 line-clamp-3">{{ $project->description }}</p>
                         </div>
 
-                        <div class="mt-4 text-center">
-                            <a href="{{ route('donations.create', $project->id) }}" class="inline-block w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                                Faire un don
-                            </a>
+                        <div>
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs text-gray-600 mb-1">
+                                    <span>Collecté : {{ $project->currentAmount }} DH</span>
+                                    <span>Objectif : {{ $project->goalAmount }} DH</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    @php
+                                        $percentage = ($project->goalAmount > 0) ? ($project->currentAmount / $project->goalAmount) * 100 : 0;
+                                        $percentage = min($percentage, 100);
+                                    @endphp
+                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: {{ $percentage }}%"></div>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-2">
+                                <a href="{{ route('projects.show', $project->id) }}" class="flex-1 text-center bg-gray-100 text-gray-700 px-3 py-2 rounded hover:bg-gray-200 transition font-medium border border-gray-300 text-sm">
+                                    Détails & Impact
+                                </a>
+                                <a href="{{ route('donations.create', $project->id) }}" class="flex-1 text-center bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 transition font-medium text-sm">
+                                    Faire un don
+                                </a>
+                            </div>
                         </div>
                     </div>
                 @endforeach
+
+         </div>
+         <div class="mt-8 flex justify-center">
+                {{ $projects->links() }}
             </div>
         @else
             <div class="bg-gray-50 p-6 rounded text-center text-gray-500">

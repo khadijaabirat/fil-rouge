@@ -14,7 +14,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects=Project::all();
+        $projects=Project::paginate(10);
         return view('projects.index',compact('projects'));
 
     }
@@ -69,10 +69,10 @@ return view('projects.create', compact('categories'));
      */
     public function show(string $id)
     {
-      $project = Project::with(['association', 'donations' => function($query) {
+      $project = Project::with(['association','impactReport', 'donations' => function($query) {
             $query->whereIn('status', ['VALIDATED', 'PROCESSING', 'RECEIVED', 'IMPACT'])
                   ->latest()
-                  ->take(5); 
+                  ->take(5);
         }, 'donations.donator'])->findOrFail($id);
         return view('projects.show', compact('project'));
     }
@@ -83,7 +83,10 @@ return view('projects.create', compact('categories'));
     public function edit(string $id)
     {
         $project=Project::findOrFail($id);
-
+        if ($project->association_id !== Auth::id()) {
+            abort(403, 'Accès non autorisé.');
+        }
+        return view('projects.edit', compact('project'));
     }
 
     /**

@@ -29,13 +29,14 @@ if ($request->has('search') && $request->search != '') {
         $query->where('category_id', $request->category);
     }
 
-    $projects = $query->get();
+    $projects = $query->paginate(9)->withQueryString();
     $categories = Category::all();
 
     $donator=Auth::user();
 
     $myDonations = Donation::where('donator_id', $donator->id)
                                            ->with(['project', 'payment'])
+                                           ->latest()
                                            ->get();
 return view('donator.dashboard', compact('donator', 'projects', 'myDonations', 'categories'));
 

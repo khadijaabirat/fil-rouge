@@ -16,13 +16,13 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->double('goalAmount');
-            $table->double('currentAmount')->default(0);
+            $table->decimal('currentAmount', 12, 2)->default(0);
             $table->string('videoUrl')->nullable();
             $table->dateTime('startDate');
             $table->dateTime('endDate');
             $table->enum('status',['OPEN','CLOSED','COMPLETED','SUSPENDED'])->default('OPEN');
             $table->foreignId('association_id')->constrained('users');
-            $table->foreignId('category_id')->nullable()->constrained('categories');
+            $table->foreignId('category_id')->constrained('categories');
 
             $table->timestamps();
         });
