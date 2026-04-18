@@ -19,7 +19,7 @@ return new class extends Migration
        $table->decimal('amount', 15, 2);
 $table->dateTime('paymentDate')->nullable();
          $table->enum('status', ['SUCCESS', 'FAILED', 'PENDING'])->default('PENDING');
-         $table->foreignId('donation_id')->constrained('donations')->onDelete('cascade');;
+         $table->foreignId('donation_id')->constrained('donations');
             $table->timestamps();
         });
     }

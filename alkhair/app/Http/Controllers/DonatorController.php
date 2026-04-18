@@ -7,6 +7,8 @@ use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use  App\Models\Donation;
 use App\Models\Category;
+use App\Models\User;
+
 class DonatorController extends Controller
 {
 public function dashboard(Request $request)
@@ -22,7 +24,13 @@ $query = Project::where('status', 'OPEN')
 ->with(['association', 'category']);
 
 if ($request->has('search') && $request->search != '') {
-        $query->where('title', 'like', '%' . $request->search . '%');
+    $searchTerm = '%' . $request->search . '%';
+       $query->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', $searchTerm)
+                  ->orWhereHas('association', function ($assocQuery) use ($searchTerm) {
+                      $assocQuery->where('ville', 'like', $searchTerm);
+                  });
+            });
     }
 
   if ($request->has('category') && $request->category != '') {

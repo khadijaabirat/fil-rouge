@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->double('goalAmount');
+           $table->decimal('goalAmount', 12, 2);
             $table->decimal('currentAmount', 12, 2)->default(0);
             $table->string('videoUrl')->nullable();
             $table->dateTime('startDate');

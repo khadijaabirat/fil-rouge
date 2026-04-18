@@ -16,7 +16,8 @@ return new class extends Migration
             $table->text('description');
         $table->dateTime('completionDate');
         $table->string('videoLink')->nullable();
-$table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+        $table->json('images')->nullable();
+$table->foreignId('project_id')->constrained('projects');
             $table->timestamps();
         });
     }

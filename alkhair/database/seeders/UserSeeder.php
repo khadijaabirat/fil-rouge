@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
                 'name' => $donator['name'],
                 'email' => $donator['email'],
                 'phone' => $donator['phone'],
-                'password' => Hash::make('donator'),
+                'password' => Hash::make('donateur'),
                 'role' => 'donator',
                 'status' => 'ACTIVE',
             ]);

@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use Illuminate\Support\Facades\Auth;
 class CheckRole
 {
     /**
@@ -19,6 +19,9 @@ class CheckRole
             {
                 abort(403,'accés non autorisé');
             }
+            if (Auth::user()->role === 'association' && Auth::user()->status !== 'ACTIVE') {
+    return redirect()->route('association.dashboard')->with('error', ' votre compte est bloquer  ');
+}
         return $next($request);
     }
 }

@@ -16,4 +16,11 @@ public function project()
     {
        return $this->belongsTo(Project::class);
     }
+    protected function casts(): array
+{
+    return [
+        'completionDate' => 'datetime',
+        'images' => 'array',  
+    ];
+}
 }

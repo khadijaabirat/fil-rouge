@@ -1,530 +1,618 @@
-<!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Al-Khair | Plateforme Solidaire du Futur</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <!DOCTYPE html>
+    <html lang="fr" class="scroll-smooth">
+    <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <title>Al-Khair | Plateforme Solidaire du Futur</title>
+        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 
-    <style data-purpose="custom-css">
-        /* الخط العصري Outfit بلاصة Inter */
-        body { font-family: 'Outfit', sans-serif; }
+        <style data-purpose="custom-css">
+            body { font-family: 'Outfit', sans-serif; }
 
-        :root {
-            --brand-navy: #0A1128;
-            --brand-gold: #F5A623;
-            --brand-gold-hover: #F7B74A;
-        }
+            :root {
+                --brand-navy: #0A1128;
+                --brand-gold: #F5A623;
+                --brand-gold-hover: #F7B74A;
+            }
 
-        /* تأثيرات الظهور بالسكرول (Reveal Animations) */
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+            .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+            .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* إخفاء شريط التمرير للأزرار */
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+            .scrollbar-hide::-webkit-scrollbar { display: none; }
+            .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* أشكال متحركة في الخلفية (Blobs) */
-        .blob { animation: float 10s infinite ease-in-out; }
-        @keyframes float {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
-        }
+            .blob { animation: float 10s infinite ease-in-out; }
+            @keyframes float {
+                0% { transform: translate(0px, 0px) scale(1); }
+                33% { transform: translate(30px, -50px) scale(1.1); }
+                66% { transform: translate(-20px, 20px) scale(0.9); }
+                100% { transform: translate(0px, 0px) scale(1); }
+            }
 
-        /* Glassmorphism Classes */
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); }
-    </style>
-</head>
-<body class="bg-[#F8FAFC] text-slate-800 overflow-x-hidden selection:bg-[#F5A623] selection:text-white">
+             .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+            .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); }
+             @keyframes scroll-ticker {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }  
+            }
+            .animate-ticker {
+                display: flex;
+                width: max-content;
+                animation: scroll-ticker 100s linear infinite;  
+            }
+             .ticker-container:hover .animate-ticker {
+                animation-play-state: paused;
+            }
+        
+        </style>
+    </head>
+    <body class="bg-[#F8FAFC] text-slate-800 overflow-x-hidden selection:bg-[#F5A623] selection:text-white">
 
-    <header id="main-nav" class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent py-4">
-        <nav class="container mx-auto px-4 flex justify-between items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-lg shadow-black/5">
-            <div class="flex items-center gap-3">
-                <div class="bg-gradient-to-br from-[#F5A623] to-[#FFD085] p-2 rounded-xl font-black text-[#0A1128] text-xl shadow-md">AK</div>
-                <div>
-                    <a href="{{ url('/') }}">
-                        <h1 class="text-2xl font-black text-white drop-shadow-md leading-none tracking-tight">AL-KHAIR</h1>
-                        <p class="text-[10px] text-[#F5A623] font-bold tracking-widest uppercase">Certifié 2026</p>
-                    </a>
+        <header id="main-nav" class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent py-4">
+            <nav class="container mx-auto px-4 flex justify-between items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-lg shadow-black/5">
+                <div class="flex items-center gap-3">
+                    <div class="bg-gradient-to-br from-[#F5A623] to-[#FFD085] p-2 rounded-xl font-black text-[#0A1128] text-xl shadow-md">AK</div>
+                    <div>
+                        <a href="{{ url('/') }}">
+                            <h1 class="text-2xl font-black text-white drop-shadow-md leading-none tracking-tight">AL-KHAIR</h1>
+                            <p class="text-[10px] text-[#F5A623] font-bold tracking-widest uppercase">Certifié 2026</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a class="text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="#projets">Projets</a>
+                    <a class="text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="#impact">Impact</a>
+
+                    @auth
+                        @if(Auth::user()->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}" class="text-[#F5A623] font-bold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-[#F5A623]">Dashboard Admin</a>
+                        @elseif(Auth::user()->isAssociation())
+                            <a href="{{ route('association.dashboard') }}" class="text-[#F5A623] font-bold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-[#F5A623]">Espace Association</a>
+                        @elseif(Auth::user()->isDonator())
+                            <a href="{{ route('donator.dashboard') }}" class="text-[#F5A623] font-bold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-[#F5A623]">Mon Espace</a>
+                        @endif
+
+                        <form action="{{ route('logout') }}" method="POST" class="inline ml-2">
+                            @csrf
+                            <button type="submit" class="glass hover:bg-red-500/20 text-white text-sm font-bold px-5 py-2 rounded-xl transition-all shadow-sm">Quitter</button>
+                        </form>
+                    @else
+                        <a class="text-white/90 font-medium hover:text-[#F5A623] transition" href="{{ route('login') }}">Connexion</a>
+                        <a class="bg-gradient-to-r from-[#F5A623] to-[#FFD085] hover:scale-105 text-[#0A1128] font-bold px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-[#F5A623]/30 flex items-center gap-2" href="{{ route('register') }}">
+                            S'inscrire <span class="text-lg leading-none">→</span>
+                        </a>
+                    @endauth
+                </div>
+            </nav>
+        </header>
+
+        <section class="relative min-h-[90vh] flex items-center overflow-hidden pt-20">
+            <div class="absolute inset-0 z-0">
+                <img alt="Morocco Atlas" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1542887800-faca0261c9e1?q=80&w=2000&auto=format&fit=crop"/>
+                <div class="absolute inset-0 bg-gradient-to-tr from-[#0A1128] via-[#0A1128]/90 to-transparent"></div>
+            </div>
+
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#F5A623]/20 rounded-full blur-3xl blob z-0"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl blob z-0" style="animation-delay: 2s;"></div>
+
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="max-w-3xl reveal">
+                    <div class="inline-flex items-center gap-2 glass text-white px-5 py-2 rounded-full text-xs font-bold mb-8 uppercase tracking-widest shadow-lg">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Plateforme Auditée & Sécurisée
+                    </div>
+                    <h2 class="text-6xl md:text-8xl font-black text-white mb-6 leading-[1.05] tracking-tight">
+                        L'impact <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#F5A623] to-[#FFD085]">qui change tout.</span>
+                    </h2>
+                    <p class="text-xl md:text-2xl text-blue-100/80 mb-10 leading-relaxed font-light max-w-2xl">
+                        Soutenez les projets certifiés des associations marocaines. Suivez chaque dirham, de votre carte bancaire jusqu'au sourire du bénéficiaire.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-5">
+                        <a href="#projets" class="bg-gradient-to-r from-[#F5A623] to-[#FFD085] hover:scale-105 text-[#0A1128] font-bold text-lg px-8 py-4 rounded-2xl transition-all shadow-xl shadow-[#F5A623]/30 flex items-center justify-center gap-3">
+                            Découvrir les causes
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="hidden md:flex items-center gap-8">
-                <a class="text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="#projets">Projets</a>
-                <a class="text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="#impact">Impact</a>
+        </section>
 
-                @auth
-                    @if(Auth::user()->isAdmin())
-                        <a href="{{ route('admin.dashboard') }}" class="text-[#F5A623] font-bold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-[#F5A623]">Dashboard Admin</a>
-                    @elseif(Auth::user()->isAssociation())
-                        <a href="{{ route('association.dashboard') }}" class="text-[#F5A623] font-bold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-[#F5A623]">Espace Association</a>
-                    @elseif(Auth::user()->isDonator())
-                        <a href="{{ route('donator.dashboard') }}" class="text-[#F5A623] font-bold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-[#F5A623]">Mon Espace</a>
-                    @endif
-
-                    <form action="{{ route('logout') }}" method="POST" class="inline ml-2">
-                        @csrf
-                        <button type="submit" class="glass hover:bg-red-500/20 text-white text-sm font-bold px-5 py-2 rounded-xl transition-all shadow-sm">Quitter</button>
-                    </form>
-                @else
-                    <a class="text-white/90 font-medium hover:text-[#F5A623] transition" href="{{ route('login') }}">Connexion</a>
-                    <a class="bg-gradient-to-r from-[#F5A623] to-[#FFD085] hover:scale-105 text-[#0A1128] font-bold px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-[#F5A623]/30 flex items-center gap-2" href="{{ route('register') }}">
-                        S'inscrire <span class="text-lg leading-none">→</span>
-                    </a>
-                @endauth
-            </div>
-        </nav>
-    </header>
-
-    <section class="relative min-h-[90vh] flex items-center overflow-hidden pt-20">
-        <div class="absolute inset-0 z-0">
-            <img alt="Morocco Atlas" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1542887800-faca0261c9e1?q=80&w=2000&auto=format&fit=crop"/>
-            <div class="absolute inset-0 bg-gradient-to-tr from-[#0A1128] via-[#0A1128]/90 to-transparent"></div>
-        </div>
-
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#F5A623]/20 rounded-full blur-3xl blob z-0"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl blob z-0" style="animation-delay: 2s;"></div>
-
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="max-w-3xl reveal">
-                <div class="inline-flex items-center gap-2 glass text-white px-5 py-2 rounded-full text-xs font-bold mb-8 uppercase tracking-widest shadow-lg">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    Plateforme Auditée & Sécurisée
-                </div>
-                <h2 class="text-6xl md:text-8xl font-black text-white mb-6 leading-[1.05] tracking-tight">
-                    L'impact <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#F5A623] to-[#FFD085]">qui change tout.</span>
-                </h2>
-                <p class="text-xl md:text-2xl text-blue-100/80 mb-10 leading-relaxed font-light max-w-2xl">
-                    Soutenez les projets certifiés des associations marocaines. Suivez chaque dirham, de votre carte bancaire jusqu'au sourire du bénéficiaire.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-5">
-                    <a href="#projets" class="bg-gradient-to-r from-[#F5A623] to-[#FFD085] hover:scale-105 text-[#0A1128] font-bold text-lg px-8 py-4 rounded-2xl transition-all shadow-xl shadow-[#F5A623]/30 flex items-center justify-center gap-3">
-                        Découvrir les causes
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="container mx-auto px-4 -mt-20 relative z-20 mb-24 reveal">
-        <div class="glass-card rounded-[2rem] shadow-2xl p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 md:divide-x divide-gray-200/50">
+        <section class="container mx-auto px-4 -mt-20 relative z-20 mb-24 reveal">
+            <div class="glass-card rounded-[2rem] shadow-2xl p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 md:divide-x divide-gray-200/50">
 
             <div class="text-center group">
-                <div class="text-5xl font-black text-[#0A1128] mb-2 flex justify-center items-baseline gap-1">
-                    <span class="counter" data-target="{{ $totalInMillions }}">0</span>
-                    <span class="text-3xl text-[#F5A623]">M</span>
+                    <div class="text-5xl font-black text-[#0A1128] mb-2 flex justify-center items-baseline gap-1">
+                        @if($totalCollected >= 1000000)
+                            <span class="counter" data-target="{{ $totalInMillions }}">0</span><span class="text-3xl text-[#F5A623]">M</span>
+                        @else
+                            <span class="counter" data-target="{{ $totalCollected }}">0</span><span class="text-xl text-[#F5A623] ml-1">DH</span>
+                        @endif
+                    </div>
+                    <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Dirhams collectés</div>
                 </div>
-                <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Dirhams collectés</div>
+
+                <div class="text-center group">
+                    <div class="text-5xl font-black text-[#0A1128] mb-2">
+                        <span class="counter" data-target="{{ $verifiedAssociations }}">0</span>
+                    </div>
+                    <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Assoc. Vérifiées</div>
+                </div>
+
+                <div class="text-center group">
+                    <div class="text-5xl font-black text-[#0A1128] mb-2">
+                        <span class="counter" data-target="{{ $completedProjects }}">0</span>
+                    </div>
+                    <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Projets Achevés</div>
+                </div>
+
+            </div>
+        </section>
+        <section id="projets" class="pt-10 pb-20 container mx-auto px-4 reveal">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h3 class="text-4xl font-black text-[#0A1128] mb-4 tracking-tight">Explorez par cause</h3>
+                <p class="text-slate-500 text-lg">Sélectionnez une catégorie ci-dessous pour filtrer les projets instantanément.</p>
             </div>
 
-            <div class="text-center group">
-                <div class="text-5xl font-black text-[#0A1128] mb-2">
-                    <span class="counter" data-target="{{ $verifiedAssociations }}">0</span>
+            <form id="filter-form" action="{{ url()->current() }}" method="GET" class="max-w-5xl mx-auto mb-16">
+                <div class="relative mb-8 group">
+                    <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                        <svg class="h-6 w-6 text-slate-400 group-focus-within:text-[#F5A623] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input name="search" value="{{ request('search') }}" class="w-full h-16 pl-16 pr-6 rounded-2xl border-none bg-white shadow-lg shadow-gray-200/50 focus:ring-4 focus:ring-[#F5A623]/20 text-lg transition-all" placeholder="Chercher un projet, une ville..." type="text"/>
                 </div>
-                <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Assoc. Vérifiées</div>
-            </div>
 
-            <div class="text-center group">
-                <div class="text-5xl font-black text-[#0A1128] mb-2">
-                    <span class="counter" data-target="{{ $completedProjects }}">0</span>
-                </div>
-                <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Projets Achevés</div>
-            </div>
+                <input type="hidden" name="category" id="category-input" value="{{ request('category') }}">
 
-        </div>
-    </section>
-    <section id="projets" class="pt-10 pb-20 container mx-auto px-4 reveal">
-        <div class="text-center max-w-2xl mx-auto mb-12">
-            <h3 class="text-4xl font-black text-[#0A1128] mb-4 tracking-tight">Explorez par cause</h3>
-            <p class="text-slate-500 text-lg">Sélectionnez une catégorie ci-dessous pour filtrer les projets instantanément.</p>
-        </div>
-
-        <form id="filter-form" action="{{ url()->current() }}" method="GET" class="max-w-5xl mx-auto mb-16">
-            <div class="relative mb-8 group">
-                <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-                    <svg class="h-6 w-6 text-slate-400 group-focus-within:text-[#F5A623] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                </div>
-                <input name="search" value="{{ request('search') }}" class="w-full h-16 pl-16 pr-6 rounded-2xl border-none bg-white shadow-lg shadow-gray-200/50 focus:ring-4 focus:ring-[#F5A623]/20 text-lg transition-all" placeholder="Chercher un projet, une ville..." type="text"/>
-            </div>
-
-            <input type="hidden" name="category" id="category-input" value="{{ request('category') }}">
-
-            <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide snap-x">
-                <button type="button" data-cat="" class="cat-pill snap-start whitespace-nowrap px-6 py-3 rounded-full font-bold text-sm transition-all {{ request('category') == '' ? 'bg-[#0A1128] text-white shadow-lg shadow-black/20 scale-105' : 'bg-white text-slate-600 hover:bg-gray-100 border border-gray-200' }}">
-                    🔥 Toutes les urgences
-                </button>
-                @foreach($categories as $category)
-                    <button type="button" data-cat="{{ $category->id }}" class="cat-pill snap-start whitespace-nowrap px-6 py-3 rounded-full font-bold text-sm transition-all {{ request('category') == $category->id ? 'bg-[#0A1128] text-white shadow-lg shadow-black/20 scale-105' : 'bg-white text-slate-600 hover:bg-gray-100 border border-gray-200' }}">
-                        {{ $category->name }}
+                <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide snap-x">
+                    <button type="button" data-cat="" class="cat-pill snap-start whitespace-nowrap px-6 py-3 rounded-full font-bold text-sm transition-all {{ request('category') == '' ? 'bg-[#0A1128] text-white shadow-lg shadow-black/20 scale-105' : 'bg-white text-slate-600 hover:bg-gray-100 border border-gray-200' }}">
+                        Toutes les urgences
                     </button>
-                @endforeach
-            </div>
+                    @foreach($categories as $category)
+                        <button type="button" data-cat="{{ $category->id }}" class="cat-pill snap-start whitespace-nowrap px-6 py-3 rounded-full font-bold text-sm transition-all {{ request('category') == $category->id ? 'bg-[#0A1128] text-white shadow-lg shadow-black/20 scale-105' : 'bg-white text-slate-600 hover:bg-gray-100 border border-gray-200' }}">
+                            {{ $category->name }}
+                        </button>
+                    @endforeach
+                </div>
 
-            <button type="submit" id="submit-filter" class="hidden">Filtrer</button>
-        </form>
+                <button type="submit" id="submit-filter" class="hidden">Filtrer</button>
+            </form>
 
-        @if($projects->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($projects as $project)
-                    <div class="bg-white rounded-3xl overflow-hidden shadow-lg shadow-gray-200/40 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col group reveal">
-                        <div class="relative h-60 overflow-hidden">
-                            @if(isset($project->association) && $project->association->profilePhoto)
-                                <img alt="Project" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="{{ asset('storage/' . $project->association->profilePhoto) }}"/>
-                            @else
-                                <div class="w-full h-full bg-[#0A1128] flex items-center justify-center">
-                                    <span class="text-[#F5A623] text-5xl font-black">AK</span>
+           @if($projects->count() > 0)
+          
+                <div class="ticker-container overflow-hidden relative w-full py-10">
+                    
+                    <div class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#F8FAFC] to-transparent z-10 pointer-events-none"></div>
+                    <div class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#F8FAFC] to-transparent z-10 pointer-events-none"></div>
+
+                    <div class="animate-ticker flex gap-8">
+                        
+                        @foreach($projects as $project)
+                            <div class="w-[300px] md:w-[380px] flex-shrink-0 bg-white rounded-3xl overflow-hidden shadow-lg shadow-gray-200/40 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col group">
+                                <div class="relative h-52 overflow-hidden">
+                                    @if(isset($project->association) && $project->association->profilePhoto)
+                                        <img alt="Project" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="{{ asset('storage/' . $project->association->profilePhoto) }}"/>
+                                    @else
+                                        <div class="w-full h-full bg-[#0A1128] flex items-center justify-center">
+                                            <span class="text-[#F5A623] text-5xl font-black">AK</span>
+                                        </div>
+                                    @endif
+                                    <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/80 to-transparent"></div>
+
+                                    <div class="absolute top-4 left-4 flex gap-2">
+                                        <span class="bg-white/90 backdrop-blur text-[#0A1128] text-[10px] font-black uppercase px-3 py-1.5 rounded-lg shadow-sm">
+                                            {{ $project->category->name ?? 'Solidaire' }}
+                                        </span>
+                                    </div>
+                                    <div class="absolute bottom-4 left-4 right-4 text-white">
+                                        <p class="text-xs font-bold uppercase tracking-widest text-[#F5A623] mb-1">Assoc. {{ $project->association->name ?? 'Inconnue' }}</p>
+                                        <h4 class="text-lg font-bold leading-tight">{{ Str::limit($project->title, 40) }}</h4>
+                                    </div>
                                 </div>
-                            @endif
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/80 to-transparent"></div>
 
-                            <div class="absolute top-4 left-4 flex gap-2">
-                                <span class="bg-white/90 backdrop-blur text-[#0A1128] text-[10px] font-black uppercase px-3 py-1.5 rounded-lg shadow-sm">
-                                    {{ $project->category->name ?? 'Solidaire' }}
-                                </span>
+                                <div class="p-6 flex-1 flex flex-col">
+                                    <div class="mb-6 mt-auto">
+                                        @php
+                                            $percentage = ($project->goalAmount > 0) ? ($project->currentAmount / $project->goalAmount) * 100 : 0;
+                                            $percentage = min($percentage, 100);
+                                        @endphp
+                                        <div class="flex justify-between text-sm mb-2 font-bold">
+                                            <span class="text-[#0A1128]">{{ number_format($project->currentAmount, 0, ',', ' ') }} DH</span>
+                                            <span class="text-slate-400">{{ number_format($percentage, 0) }}%</span>
+                                        </div>
+                                        <div class="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-[#F5A623] to-[#FFD085] rounded-full relative" style="width: {{ $percentage }}%"></div>
+                                        </div>
+                                    </div>
+
+                                    <a href="{{ route('projects.show', $project->id) }}" class="w-full block text-center bg-gray-50 hover:bg-[#0A1128] text-[#0A1128] hover:text-white border border-gray-200 hover:border-[#0A1128] font-bold py-3 rounded-xl transition-colors">
+                                        Soutenir
+                                    </a>
+                                </div>
                             </div>
-                            <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <p class="text-xs font-bold uppercase tracking-widest text-[#F5A623] mb-1">Assoc. {{ $project->association->name ?? 'Inconnue' }}</p>
-                                <h4 class="text-xl font-bold leading-tight">{{ $project->title }}</h4>
+                        @endforeach
+
+                        @foreach($projects as $project)
+                            <div class="w-[300px] md:w-[380px] flex-shrink-0 bg-white rounded-3xl overflow-hidden shadow-lg shadow-gray-200/40 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col group" aria-hidden="true">
+                                <div class="relative h-52 overflow-hidden">
+                                    @if(isset($project->association) && $project->association->profilePhoto)
+                                        <img alt="Project" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="{{ asset('storage/' . $project->association->profilePhoto) }}"/>
+                                    @else
+                                        <div class="w-full h-full bg-[#0A1128] flex items-center justify-center">
+                                            <span class="text-[#F5A623] text-5xl font-black">AK</span>
+                                        </div>
+                                    @endif
+                                    <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/80 to-transparent"></div>
+
+                                    <div class="absolute top-4 left-4 flex gap-2">
+                                        <span class="bg-white/90 backdrop-blur text-[#0A1128] text-[10px] font-black uppercase px-3 py-1.5 rounded-lg shadow-sm">
+                                            {{ $project->category->name ?? 'Solidaire' }}
+                                        </span>
+                                    </div>
+                                    <div class="absolute bottom-4 left-4 right-4 text-white">
+                                        <p class="text-xs font-bold uppercase tracking-widest text-[#F5A623] mb-1">Assoc. {{ $project->association->name ?? 'Inconnue' }}</p>
+                                        <h4 class="text-lg font-bold leading-tight">{{ Str::limit($project->title, 40) }}</h4>
+                                    </div>
+                                </div>
+
+                                <div class="p-6 flex-1 flex flex-col">
+                                    <div class="mb-6 mt-auto">
+                                        @php
+                                            $percentage = ($project->goalAmount > 0) ? ($project->currentAmount / $project->goalAmount) * 100 : 0;
+                                            $percentage = min($percentage, 100);
+                                        @endphp
+                                        <div class="flex justify-between text-sm mb-2 font-bold">
+                                            <span class="text-[#0A1128]">{{ number_format($project->currentAmount, 0, ',', ' ') }} DH</span>
+                                            <span class="text-slate-400">{{ number_format($percentage, 0) }}%</span>
+                                        </div>
+                                        <div class="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-[#F5A623] to-[#FFD085] rounded-full relative" style="width: {{ $percentage }}%"></div>
+                                        </div>
+                                    </div>
+
+                                    <a href="{{ route('projects.show', $project->id) }}" class="w-full block text-center bg-gray-50 hover:bg-[#0A1128] text-[#0A1128] hover:text-white border border-gray-200 hover:border-[#0A1128] font-bold py-3 rounded-xl transition-colors">
+                                        Soutenir
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
+
+                    </div>
+                </div>
+                </div> <div class="mt-12 text-center reveal">
+                    <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-3 bg-white text-[#0A1128] border-2 border-[#0A1128] font-black px-8 py-4 rounded-2xl hover:bg-[#0A1128] hover:text-[#F5A623] transition-all duration-300 shadow-lg group">
+                        Explorer tous les projets
+                        <svg class="w-6 h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            @else
+                <div class="text-center py-20 px-4 bg-white rounded-3xl shadow-sm border border-dashed border-gray-200 reveal">
+                    <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300">
+                        <svg class="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#0A1128] mb-2">Aucun projet trouvé</h3>
+                    <p class="text-slate-500 mb-6">Essayez de modifier vos critères de recherche.</p>
+                    <a href="{{ url('/') }}" class="text-[#F5A623] font-bold hover:underline">← Réinitialiser les filtres</a>
+                </div>
+            @endif
+        </section>
+    <section class="py-24 bg-white relative overflow-hidden reveal border-t border-gray-100">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="flex flex-col lg:flex-row items-center gap-16">
+                    <div class="lg:w-1/2">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold mb-6 border border-emerald-100">
+                            <span class="text-lg leading-none">📸</span> 100% Transparence
+                        </div>
+                        <h3 class="text-4xl md:text-5xl font-black text-[#0A1128] mb-6 tracking-tight leading-tight">
+                            La confiance se construit par la <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">preuve visuelle.</span>
+                        </h3>
+                        <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                            Nous ne nous contentons pas de collecter des fonds. L'association est <strong class="text-[#0A1128]">strictement tenue</strong> de soumettre un <span class="text-[#0A1128] font-bold border-b-2 border-[#F5A623]">Impact Report indépendant</span> après la réalisation du projet.
+                        </p>
+
+                        <ul class="space-y-5 mb-10">
+                            <li class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5 font-bold shadow-sm">✓</div>
+                                <div>
+                                    <h5 class="text-[#0A1128] font-bold">Photos et vidéos sur le terrain</h5>
+                                    <p class="text-slate-500 text-sm mt-1">Des preuves tangibles de l'achèvement du projet.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5 font-bold shadow-sm">✓</div>
+                                <div>
+                                    <h5 class="text-[#0A1128] font-bold">Détails des bénéficiaires</h5>
+                                    <p class="text-slate-500 text-sm mt-1">Explication claire de l'impact direct sur la communauté.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="lg:w-1/2 relative">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-emerald-100 to-[#F5A623]/20 rounded-[2.5rem] transform rotate-3 scale-105 opacity-50"></div>
+
+                        <div class="bg-white rounded-[2rem] shadow-2xl border border-gray-100 p-6 relative z-10 transform -rotate-1 hover:rotate-0 transition-transform duration-500">
+                            <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-xl">🌟</div>
+                                    <div>
+                                        <h4 class="font-bold text-[#0A1128] text-sm">Rapport d'Impact Approuvé</h4>
+                                        <p class="text-xs text-slate-400">Il y a 2 jours</p>
+                                    </div>
+                                </div>
+                                <span class="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-lg text-xs font-bold">Objectif Atteint</span>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=800&auto=format&fit=crop" alt="Preuve Visuelle" class="w-full h-48 object-cover rounded-xl mb-4 grayscale-[20%] hover:grayscale-0 transition-all">
+                            <h5 class="font-black text-[#0A1128] text-lg mb-2">Construction du puits à Zagora</h5>
+                            <p class="text-slate-500 text-sm mb-4 line-clamp-2">"Grâce à vos dons, plus de 150 familles ont désormais accès à l'eau potable au quotidien..."</p>
+                            <div class="bg-gray-50 rounded-xl p-3 flex justify-between items-center border border-gray-100">
+                                <span class="text-xs font-bold text-slate-500 uppercase">Fonds utilisés</span>
+                                <span class="font-black text-emerald-600">45 000 DH</span>
                             </div>
                         </div>
 
-                        <div class="p-6 flex-1 flex flex-col">
-                            <p class="text-slate-500 text-sm mb-6 line-clamp-3 leading-relaxed flex-1">
-                                {{ $project->description }}
-                            </p>
-
-                            <div class="mb-6">
-                                @php
-                                    $percentage = ($project->goalAmount > 0) ? ($project->currentAmount / $project->goalAmount) * 100 : 0;
-                                    $percentage = min($percentage, 100);
-                                @endphp
-                                <div class="flex justify-between text-sm mb-2 font-bold">
-                                    <span class="text-[#0A1128]">{{ number_format($project->currentAmount, 0, ',', ' ') }} DH</span>
-                                    <span class="text-slate-400">{{ number_format($percentage, 0) }}%</span>
-                                </div>
-                                <div class="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                 <div class="h-full bg-gradient-to-r from-[#F5A623] to-[#FFD085] rounded-full relative" style="width: {{ $percentage }}%"></div>
-                                </div>
-                                <div class="text-xs text-slate-400 mt-2 font-medium text-right">
-                                    Objectif: {{ number_format($project->goalAmount, 0, ',', ' ') }} DH
+                        <div class="absolute -bottom-6 -left-6 bg-[#0A1128] text-white p-4 rounded-2xl shadow-xl border border-white/10 z-20 animate-bounce" style="animation-duration: 3s;">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-[#F5A623] p-2 rounded-full text-[#0A1128]">🔒</div>
+                                <div>
+                                    <p class="text-xs text-slate-400 uppercase tracking-wider">Garantie</p>
+                                    <p class="font-bold text-sm">100% Vérifié</p>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                            <a href="{{ route('projects.show', $project->id) }}" class="w-full block text-center bg-gray-50 hover:bg-[#0A1128] text-[#0A1128] hover:text-white border border-gray-200 hover:border-[#0A1128] font-bold py-3.5 rounded-xl transition-colors">
-                                Soutenir & Détails
+        <section class="py-20 bg-[#F8FAFC] relative reveal border-t border-gray-100">
+            <div class="container mx-auto px-4">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <h3 class="text-4xl font-black text-[#0A1128] mb-4 tracking-tight">L'impact en images</h3>
+                    <p class="text-slate-500 text-lg">Découvrez les sourires et les vies changées grâce aux rapports d'impact soumis par nos associations partenaires.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+
+                    <div class="bg-white rounded-[2rem] overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 group hover:-translate-y-1 transition-transform duration-300">
+                        <div class="relative h-56 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1593113565694-c6b75c026d36?q=80&w=800&auto=format&fit=crop" alt="Impact Médical" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/90 via-[#0A1128]/20 to-transparent"></div>
+                            <div class="absolute top-4 right-4 bg-emerald-500 text-white p-2 rounded-full shadow-lg backdrop-blur-sm">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <div class="absolute bottom-4 left-4 right-4">
+                                <span class="text-[#F5A623] text-xs font-bold uppercase tracking-widest mb-1 block">Assoc. Amal Santé</span>
+                                <h4 class="text-white font-bold text-xl leading-tight">Campagne médicale rurale</h4>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-slate-600 text-sm mb-4">"Plus de 300 consultations gratuites et médicaments distribués dans 4 villages enclavés de l'Atlas."</p>
+                            <a href="#" class="inline-flex items-center gap-2 text-[#0A1128] font-bold text-sm hover:text-[#F5A623] transition-colors group/link">
+                                Lire le rapport complet
+                                <span class="group-hover/link:translate-x-1 transition-transform">→</span>
                             </a>
                         </div>
                     </div>
-                @endforeach
-            </div>
 
-            <div class="mt-16 flex justify-center w-full reveal">
-                {{ $projects->withQueryString()->links() }}
-            </div>
-        @else
-            <div class="text-center py-20 px-4 bg-white rounded-3xl shadow-sm border border-dashed border-gray-200 reveal">
-                <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300">
-                    <svg class="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                </div>
-                <h3 class="text-2xl font-bold text-[#0A1128] mb-2">Aucun projet trouvé</h3>
-                <p class="text-slate-500 mb-6">Essayez de modifier vos critères de recherche.</p>
-                <a href="{{ url('/') }}" class="text-[#F5A623] font-bold hover:underline">← Réinitialiser les filtres</a>
-            </div>
-        @endif
-    </section>
-<section class="py-24 bg-white relative overflow-hidden reveal border-t border-gray-100">
-        <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="flex flex-col lg:flex-row items-center gap-16">
-                <div class="lg:w-1/2">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold mb-6 border border-emerald-100">
-                        <span class="text-lg leading-none">📸</span> 100% Transparence
+                    <div class="bg-white rounded-[2rem] overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 group hover:-translate-y-1 transition-transform duration-300">
+                        <div class="relative h-56 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800&auto=format&fit=crop" alt="Impact Scolaire" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/90 via-[#0A1128]/20 to-transparent"></div>
+                            <div class="absolute top-4 right-4 bg-emerald-500 text-white p-2 rounded-full shadow-lg backdrop-blur-sm">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <div class="absolute bottom-4 left-4 right-4">
+                                <span class="text-[#F5A623] text-xs font-bold uppercase tracking-widest mb-1 block">Assoc. Éducation Pour Tous</span>
+                                <h4 class="text-white font-bold text-xl leading-tight">Rénovation de l'école Al-Fajr</h4>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-slate-600 text-sm mb-4">"Les 3 classes ont été repeintes, équipées de nouveaux tableaux et de 60 tables neuves pour la rentrée."</p>
+                            <a href="#" class="inline-flex items-center gap-2 text-[#0A1128] font-bold text-sm hover:text-[#F5A623] transition-colors group/link">
+                                Lire le rapport complet
+                                <span class="group-hover/link:translate-x-1 transition-transform">→</span>
+                            </a>
+                        </div>
                     </div>
-                    <h3 class="text-4xl md:text-5xl font-black text-[#0A1128] mb-6 tracking-tight leading-tight">
-                        La confiance se construit par la <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">preuve visuelle.</span>
-                    </h3>
-                    <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                        Nous ne nous contentons pas de collecter des fonds. L'association est <strong class="text-[#0A1128]">strictement tenue</strong> de soumettre un <span class="text-[#0A1128] font-bold border-b-2 border-[#F5A623]">Impact Report indépendant</span> après la réalisation du projet.
+
+                </div>
+
+                <div class="text-center mt-12">
+                    <a href="#" class="inline-block bg-white text-[#0A1128] border border-gray-200 font-bold px-8 py-3 rounded-xl hover:bg-gray-50 transition-colors shadow-sm">
+                        Voir tous les rapports d'impact
+                    </a>
+                </div>
+            </div>
+        </section>
+        <section id="impact" class="py-24 bg-[#0A1128] text-white relative overflow-hidden reveal">
+            <div class="absolute top-0 right-0 w-[500px] h-[500px] border-[40px] border-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
+
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="max-w-3xl mb-16">
+                    <h3 class="text-5xl font-black mb-4 tracking-tight">Traçabilité Absolue.</h3>
+                    <p class="text-xl text-blue-200/60 font-light leading-relaxed">
+                        De la carte bancaire à la réalisation sur le terrain. Un processus audité en 4 étapes garantit que votre don arrive à destination.
                     </p>
-
-                    <ul class="space-y-5 mb-10">
-                        <li class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5 font-bold shadow-sm">✓</div>
-                            <div>
-                                <h5 class="text-[#0A1128] font-bold">Photos et vidéos sur le terrain</h5>
-                                <p class="text-slate-500 text-sm mt-1">Des preuves tangibles de l'achèvement du projet.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5 font-bold shadow-sm">✓</div>
-                            <div>
-                                <h5 class="text-[#0A1128] font-bold">Détails des bénéficiaires</h5>
-                                <p class="text-slate-500 text-sm mt-1">Explication claire de l'impact direct sur la communauté.</p>
-                            </div>
-                        </li>
-                    </ul>
                 </div>
 
-                <div class="lg:w-1/2 relative">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-emerald-100 to-[#F5A623]/20 rounded-[2.5rem] transform rotate-3 scale-105 opacity-50"></div>
-
-                    <div class="bg-white rounded-[2rem] shadow-2xl border border-gray-100 p-6 relative z-10 transform -rotate-1 hover:rotate-0 transition-transform duration-500">
-                        <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-xl">🌟</div>
-                                <div>
-                                    <h4 class="font-bold text-[#0A1128] text-sm">Rapport d'Impact Approuvé</h4>
-                                    <p class="text-xs text-slate-400">Il y a 2 jours</p>
-                                </div>
-                            </div>
-                            <span class="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-lg text-xs font-bold">Objectif Atteint</span>
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=800&auto=format&fit=crop" alt="Preuve Visuelle" class="w-full h-48 object-cover rounded-xl mb-4 grayscale-[20%] hover:grayscale-0 transition-all">
-                        <h5 class="font-black text-[#0A1128] text-lg mb-2">Construction du puits à Zagora</h5>
-                        <p class="text-slate-500 text-sm mb-4 line-clamp-2">"Grâce à vos dons, plus de 150 familles ont désormais accès à l'eau potable au quotidien..."</p>
-                        <div class="bg-gray-50 rounded-xl p-3 flex justify-between items-center border border-gray-100">
-                            <span class="text-xs font-bold text-slate-500 uppercase">Fonds utilisés</span>
-                            <span class="font-black text-emerald-600">45 000 DH</span>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-3xl hover:-translate-y-2 transition-transform">
+                        <div class="text-[#F5A623] text-4xl font-black mb-6 opacity-50">01</div>
+                        <h4 class="text-xl font-bold mb-3">Vérification (KYC)</h4>
+                        <p class="text-sm text-blue-100/60 leading-relaxed">Chaque association est légalement auditée avant de rejoindre la plateforme.</p>
                     </div>
+                    <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-3xl hover:-translate-y-2 transition-transform">
+                        <div class="text-[#F5A623] text-4xl font-black mb-6 opacity-50">02</div>
+                        <h4 class="text-xl font-bold mb-3">Collecte Sécurisée</h4>
+                        <p class="text-sm text-blue-100/60 leading-relaxed">Vos dons sont sécurisés (Stripe) et bloqués tant que l'objectif n'est pas atteint.</p>
+                    </div>
+                    <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-3xl hover:-translate-y-2 transition-transform">
+                        <div class="text-[#F5A623] text-4xl font-black mb-6 opacity-50">03</div>
+                        <h4 class="text-xl font-bold mb-3">Transfert (Processing)</h4>
+                        <p class="text-sm text-blue-100/60 leading-relaxed">L'administrateur valide le virement vers le RIB officiel de l'association.</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-[#F5A623] to-[#FFD085] p-8 rounded-3xl text-[#0A1128] hover:-translate-y-2 transition-transform shadow-lg shadow-[#F5A623]/20">
+                        <div class="text-[#0A1128] text-4xl font-black mb-6 opacity-50">04</div>
+                        <h4 class="text-xl font-black mb-3">Preuve (Impact)</h4>
+                        <p class="text-sm font-medium leading-relaxed">Le projet est bloqué jusqu'à publication d'un rapport avec photos des réalisations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                    <div class="absolute -bottom-6 -left-6 bg-[#0A1128] text-white p-4 rounded-2xl shadow-xl border border-white/10 z-20 animate-bounce" style="animation-duration: 3s;">
-                        <div class="flex items-center gap-3">
-                            <div class="bg-[#F5A623] p-2 rounded-full text-[#0A1128]">🔒</div>
-                            <div>
-                                <p class="text-xs text-slate-400 uppercase tracking-wider">Garantie</p>
-                                <p class="font-bold text-sm">100% Vérifié</p>
-                            </div>
+        <footer class="bg-white pt-24 pb-12 border-t border-gray-100 reveal">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                    <div class="col-span-1 md:col-span-2">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="bg-[#0A1128] p-2 rounded-xl font-black text-[#F5A623] text-lg">AK</div>
+                            <h5 class="text-2xl font-black text-[#0A1128] leading-none tracking-tight">AL-KHAIR</h5>
+                        </div>
+                        <p class="text-slate-500 leading-relaxed mb-6 max-w-sm">
+                            La première plateforme marocaine (Fil Rouge 2026) garantissant une transparence totale des dons solidaires.
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs font-bold">Laravel 11</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs font-bold">Tailwind CSS</span>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="py-20 bg-[#F8FAFC] relative reveal border-t border-gray-100">
-        <div class="container mx-auto px-4">
-            <div class="text-center max-w-2xl mx-auto mb-16">
-                <h3 class="text-4xl font-black text-[#0A1128] mb-4 tracking-tight">L'impact en images</h3>
-                <p class="text-slate-500 text-lg">Découvrez les sourires et les vies changées grâce aux rapports d'impact soumis par nos associations partenaires.</p>
-            </div>
+                    <div>
+                        <h6 class="text-[#0A1128] font-black uppercase tracking-widest text-sm mb-6">Plateforme</h6>
+                        <ul class="space-y-3 text-slate-500 font-medium">
+                            <li><a class="hover:text-[#F5A623] transition-colors" href="#projets">Découvrir les projets</a></li>
+                            <li><a class="hover:text-[#F5A623] transition-colors" href="{{ route('register') }}">Devenir Donateur</a></li>
+                            <li><a class="hover:text-[#F5A623] transition-colors" href="{{ route('register') }}">Inscrire une association</a></li>
+                        </ul>
+                    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-
-                <div class="bg-white rounded-[2rem] overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 group hover:-translate-y-1 transition-transform duration-300">
-                    <div class="relative h-56 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1593113565694-c6b75c026d36?q=80&w=800&auto=format&fit=crop" alt="Impact Médical" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/90 via-[#0A1128]/20 to-transparent"></div>
-                        <div class="absolute top-4 right-4 bg-emerald-500 text-white p-2 rounded-full shadow-lg backdrop-blur-sm">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                        </div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <span class="text-[#F5A623] text-xs font-bold uppercase tracking-widest mb-1 block">Assoc. Amal Santé</span>
-                            <h4 class="text-white font-bold text-xl leading-tight">Campagne médicale rurale</h4>
+                    <div>
+                        <h6 class="text-[#0A1128] font-black uppercase tracking-widest text-sm mb-6">Contact</h6>
+                        <p class="text-slate-500 font-medium mb-2">contact@alkhair.ma</p>
+                        <p class="text-slate-500 font-medium mb-6">+212 5 00 00 00 00</p>
+                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold border border-emerald-100">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Système Opérationnel
                         </div>
                     </div>
-                    <div class="p-6">
-                        <p class="text-slate-600 text-sm mb-4">"Plus de 300 consultations gratuites et médicaments distribués dans 4 villages enclavés de l'Atlas."</p>
-                        <a href="#" class="inline-flex items-center gap-2 text-[#0A1128] font-bold text-sm hover:text-[#F5A623] transition-colors group/link">
-                            Lire le rapport complet
-                            <span class="group-hover/link:translate-x-1 transition-transform">→</span>
-                        </a>
-                    </div>
                 </div>
 
-                <div class="bg-white rounded-[2rem] overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 group hover:-translate-y-1 transition-transform duration-300">
-                    <div class="relative h-56 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800&auto=format&fit=crop" alt="Impact Scolaire" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/90 via-[#0A1128]/20 to-transparent"></div>
-                        <div class="absolute top-4 right-4 bg-emerald-500 text-white p-2 rounded-full shadow-lg backdrop-blur-sm">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                        </div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <span class="text-[#F5A623] text-xs font-bold uppercase tracking-widest mb-1 block">Assoc. Éducation Pour Tous</span>
-                            <h4 class="text-white font-bold text-xl leading-tight">Rénovation de l'école Al-Fajr</h4>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-slate-600 text-sm mb-4">"Les 3 classes ont été repeintes, équipées de nouveaux tableaux et de 60 tables neuves pour la rentrée."</p>
-                        <a href="#" class="inline-flex items-center gap-2 text-[#0A1128] font-bold text-sm hover:text-[#F5A623] transition-colors group/link">
-                            Lire le rapport complet
-                            <span class="group-hover/link:translate-x-1 transition-transform">→</span>
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="text-center mt-12">
-                <a href="#" class="inline-block bg-white text-[#0A1128] border border-gray-200 font-bold px-8 py-3 rounded-xl hover:bg-gray-50 transition-colors shadow-sm">
-                    Voir tous les rapports d'impact
-                </a>
-            </div>
-        </div>
-    </section>
-    <section id="impact" class="py-24 bg-[#0A1128] text-white relative overflow-hidden reveal">
-        <div class="absolute top-0 right-0 w-[500px] h-[500px] border-[40px] border-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
-
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="max-w-3xl mb-16">
-                <h3 class="text-5xl font-black mb-4 tracking-tight">Traçabilité Absolue.</h3>
-                <p class="text-xl text-blue-200/60 font-light leading-relaxed">
-                    De la carte bancaire à la réalisation sur le terrain. Un processus audité en 4 étapes garantit que votre don arrive à destination.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-3xl hover:-translate-y-2 transition-transform">
-                    <div class="text-[#F5A623] text-4xl font-black mb-6 opacity-50">01</div>
-                    <h4 class="text-xl font-bold mb-3">Vérification (KYC)</h4>
-                    <p class="text-sm text-blue-100/60 leading-relaxed">Chaque association est légalement auditée avant de rejoindre la plateforme.</p>
-                </div>
-                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-3xl hover:-translate-y-2 transition-transform">
-                    <div class="text-[#F5A623] text-4xl font-black mb-6 opacity-50">02</div>
-                    <h4 class="text-xl font-bold mb-3">Collecte Sécurisée</h4>
-                    <p class="text-sm text-blue-100/60 leading-relaxed">Vos dons sont sécurisés (Stripe) et bloqués tant que l'objectif n'est pas atteint.</p>
-                </div>
-                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-3xl hover:-translate-y-2 transition-transform">
-                    <div class="text-[#F5A623] text-4xl font-black mb-6 opacity-50">03</div>
-                    <h4 class="text-xl font-bold mb-3">Transfert (Processing)</h4>
-                    <p class="text-sm text-blue-100/60 leading-relaxed">L'administrateur valide le virement vers le RIB officiel de l'association.</p>
-                </div>
-                <div class="bg-gradient-to-br from-[#F5A623] to-[#FFD085] p-8 rounded-3xl text-[#0A1128] hover:-translate-y-2 transition-transform shadow-lg shadow-[#F5A623]/20">
-                    <div class="text-[#0A1128] text-4xl font-black mb-6 opacity-50">04</div>
-                    <h4 class="text-xl font-black mb-3">Preuve (Impact)</h4>
-                    <p class="text-sm font-medium leading-relaxed">Le projet est bloqué jusqu'à publication d'un rapport avec photos des réalisations.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-white pt-24 pb-12 border-t border-gray-100 reveal">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-                <div class="col-span-1 md:col-span-2">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="bg-[#0A1128] p-2 rounded-xl font-black text-[#F5A623] text-lg">AK</div>
-                        <h5 class="text-2xl font-black text-[#0A1128] leading-none tracking-tight">AL-KHAIR</h5>
-                    </div>
-                    <p class="text-slate-500 leading-relaxed mb-6 max-w-sm">
-                        La première plateforme marocaine (Fil Rouge 2026) garantissant une transparence totale des dons solidaires.
-                    </p>
-                    <div class="flex gap-2">
-                        <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs font-bold">Laravel 11</span>
-                        <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs font-bold">Tailwind CSS</span>
-                    </div>
-                </div>
-
-                <div>
-                    <h6 class="text-[#0A1128] font-black uppercase tracking-widest text-sm mb-6">Plateforme</h6>
-                    <ul class="space-y-3 text-slate-500 font-medium">
-                        <li><a class="hover:text-[#F5A623] transition-colors" href="#projets">Découvrir les projets</a></li>
-                        <li><a class="hover:text-[#F5A623] transition-colors" href="{{ route('register') }}">Devenir Donateur</a></li>
-                        <li><a class="hover:text-[#F5A623] transition-colors" href="{{ route('register') }}">Inscrire une association</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h6 class="text-[#0A1128] font-black uppercase tracking-widest text-sm mb-6">Contact</h6>
-                    <p class="text-slate-500 font-medium mb-2">contact@alkhair.ma</p>
-                    <p class="text-slate-500 font-medium mb-6">+212 5 00 00 00 00</p>
-                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold border border-emerald-100">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        Système Opérationnel
+                <div class="pt-8 border-t border-gray-100 text-center flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-400 font-medium">
+                    <p>© 2026 Al-Khair. Conçu et développé par Khadija.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="hover:text-[#0A1128] transition-colors">Confidentialité</a>
+                        <a href="#" class="hover:text-[#0A1128] transition-colors">Termes & Conditions</a>
                     </div>
                 </div>
             </div>
+        </footer>
 
-            <div class="pt-8 border-t border-gray-100 text-center flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-400 font-medium">
-                <p>© 2026 Al-Khair. Conçu et développé par Khadija.</p>
-                <div class="flex gap-4">
-                    <a href="#" class="hover:text-[#0A1128] transition-colors">Confidentialité</a>
-                    <a href="#" class="hover:text-[#0A1128] transition-colors">Termes & Conditions</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-            // 1. Navbar Scroll Effect (Glassmorphism on scroll)
-            const navbar = document.getElementById('main-nav');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('bg-[#0A1128]/80', 'backdrop-blur-xl', 'shadow-xl');
-                    navbar.classList.remove('bg-transparent', 'py-4');
-                    navbar.classList.add('py-2');
-                } else {
-                    navbar.classList.remove('bg-[#0A1128]/80', 'backdrop-blur-xl', 'shadow-xl');
-                    navbar.classList.add('bg-transparent', 'py-4');
-                    navbar.classList.remove('py-2');
-                }
-            });
-
-            // 2. Interactive Category Pills (Auto-Submit Form)
-            const catPills = document.querySelectorAll('.cat-pill');
-            const catInput = document.getElementById('category-input');
-            const form = document.getElementById('filter-form');
-
-            catPills.forEach(pill => {
-                pill.addEventListener('click', () => {
-                    // Update hidden input
-                    catInput.value = pill.getAttribute('data-cat');
-                    // Add loading state to button
-                    pill.innerHTML = `<svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
-                    // Submit form
-                    form.submit();
-                });
-            });
-
-            // 3. Scroll Reveal Animations (Intersection Observer)
-            const reveals = document.querySelectorAll('.reveal');
-            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
-
-            const revealObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target); // Run once
+                // 1. Navbar Scroll Effect (Glassmorphism on scroll)
+                const navbar = document.getElementById('main-nav');
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 50) {
+                        navbar.classList.add('bg-[#0A1128]/80', 'backdrop-blur-xl', 'shadow-xl');
+                        navbar.classList.remove('bg-transparent', 'py-4');
+                        navbar.classList.add('py-2');
+                    } else {
+                        navbar.classList.remove('bg-[#0A1128]/80', 'backdrop-blur-xl', 'shadow-xl');
+                        navbar.classList.add('bg-transparent', 'py-4');
+                        navbar.classList.remove('py-2');
                     }
                 });
-            }, observerOptions);
 
-            reveals.forEach(reveal => revealObserver.observe(reveal));
+                // 2. Interactive Category Pills (Auto-Submit Form)
+                const catPills = document.querySelectorAll('.cat-pill');
+                const catInput = document.getElementById('category-input');
+                const form = document.getElementById('filter-form');
 
-            // 4. Number Counter Animation for Stats
-            const counters = document.querySelectorAll('.counter');
-            const speed = 200; // The lower the slower
+                catPills.forEach(pill => {
+                    pill.addEventListener('click', () => {
+                        catInput.value = pill.getAttribute('data-cat');
+                        pill.innerHTML = `<svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+                        form.submit();
+                    });
+                });
 
-            const counterObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const counter = entry.target;
-                        const updateCount = () => {
-                            const target = +counter.getAttribute('data-target');
-                            const count = +counter.innerText;
-                            const inc = target / speed;
-                            if (count < target) {
-                                counter.innerText = (count + inc).toFixed(target % 1 !== 0 ? 1 : 0);
-                                setTimeout(updateCount, 10);
-                            } else {
-                                counter.innerText = target;
-                            }
-                        };
-                        updateCount();
-                        observer.unobserve(counter);
+                // 3. Scroll Reveal Animations (Intersection Observer)
+                const reveals = document.querySelectorAll('.reveal');
+                const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+
+                const revealObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            observer.unobserve(entry.target);  
+                        }
+                    });
+                }, observerOptions);
+
+                reveals.forEach(reveal => revealObserver.observe(reveal));
+
+
+
+            // 4. Number Counter Animation for Stats (Avec Zéros à gauche)
+                const counters = document.querySelectorAll('.counter');
+                const animationDuration = 2500; 
+
+                let maxDigits = 0;
+                counters.forEach(c => {
+                    const targetVal = parseFloat(c.getAttribute('data-target')) || 0;
+                    const targetLength = Math.floor(targetVal).toString().length;
+                    if (targetLength > maxDigits) {
+                        maxDigits = targetLength;
                     }
                 });
-            }, { threshold: 0.5 });
 
-            counters.forEach(counter => counterObserver.observe(counter));
-        });
-    </script>
-</body>
-</html>
+                if (maxDigits < 2) maxDigits = 2;
+
+                const counterObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const counter = entry.target;
+                            const target = parseFloat(counter.getAttribute('data-target'));
+                            let startTime = null;
+
+                            const updateCount = (currentTime) => {
+                                if (!startTime) startTime = currentTime;
+                                const progress = currentTime - startTime;
+                                
+                                const percentage = Math.min(progress / animationDuration, 1);
+                                const easeOut = 1 - Math.pow(1 - percentage, 3);
+                                const currentVal = target * easeOut;
+                                
+                                if (target % 1 !== 0) {
+                                    let val = currentVal.toFixed(1);
+                                    counter.innerText = val.padStart(maxDigits + 2, '0');
+                                } else {
+                                    let val = Math.floor(currentVal).toString();
+                                    counter.innerText = val.padStart(maxDigits, '0');
+                                }
+
+                                if (progress < animationDuration) {
+                                    requestAnimationFrame(updateCount);
+                                } else {
+                                    if (target % 1 !== 0) {
+                                        counter.innerText = target.toFixed(1).padStart(maxDigits + 2, '0');
+                                    } else {
+                                        counter.innerText = target.toString().padStart(maxDigits, '0');
+                                    }
+                                }
+                            };
+                            
+                            requestAnimationFrame(updateCount);
+                            observer.unobserve(counter);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                counters.forEach(counter => counterObserver.observe(counter));
+            });
+        </script>
+    </body>
+    </html>

@@ -45,8 +45,15 @@ class Project extends Model
     }
     public function checkDeadline()
     {
-        if (\Carbon\Carbon::now()->greaterThan($this->endDate) && $this->status === 'OPEN') {
+        if (now()->greaterThan($this->endDate) && $this->status === 'OPEN') {
             $this->update(['status' => 'CLOSED']);
         }
     }
+    protected function casts(): array
+{
+    return [
+        'startDate' => 'datetime',
+        'endDate' => 'datetime',
+    ];
+}
 }
