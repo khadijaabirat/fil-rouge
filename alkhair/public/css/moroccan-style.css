@@ -1,0 +1,136 @@
+/* Moroccan Inspired Custom Styles - AL-KHAIR 2026 */
+
+:root {
+    --moroccan-red: #C1272D;
+    --moroccan-green: #006233;
+    --moroccan-gold: #F5A623;
+    --moroccan-navy: #0A1128;
+}
+
+.moroccan-pattern {
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(245, 166, 35, 0.03) 10px, rgba(245, 166, 35, 0.03) 20px),
+        repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(245, 166, 35, 0.03) 10px, rgba(245, 166, 35, 0.03) 20px);
+}
+
+.zellige-tile {
+    position: relative;
+    overflow: hidden;
+}
+
+.zellige-tile::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(245, 166, 35, 0.1) 50%, transparent 70%);
+    animation: zellige-shine 3s infinite;
+}
+
+@keyframes zellige-shine {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #F5A623 0%, #FFD085 100%);
+    border-radius: 10px;
+    border: 2px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #FFD085 0%, #F5A623 100%);
+}
+
+.glow-gold {
+    box-shadow: 0 0 20px rgba(245, 166, 35, 0.3);
+}
+
+.glow-gold:hover {
+    box-shadow: 0 0 30px rgba(245, 166, 35, 0.5);
+}
+
+@keyframes pulse-gold {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(245, 166, 35, 0);
+    }
+}
+
+.pulse-gold {
+    animation: pulse-gold 2s infinite;
+}
+
+.card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.text-gradient-moroccan {
+    background: linear-gradient(135deg, #C1272D 0%, #F5A623 50%, #006233 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.btn-moroccan {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #F5A623 0%, #FFD085 100%);
+    color: #0A1128;
+    font-weight: 700;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-moroccan::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.btn-moroccan:hover::before {
+    left: 100%;
+}
+
+.btn-moroccan:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(245, 166, 35, 0.4);
+}

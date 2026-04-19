@@ -30,13 +30,15 @@ class HomeController extends Controller
         } else {
             $projects = ProjectSearchService::search($filters)->limit(6)->get();
         }
-
-        return view('welcome', compact(
-            'projects',
-            'categories',
-            'formattedTotal' => number_format($statistics['totalCollected'], 2, ',', ' '),
-            'verifiedAssociations' => $statistics['activeAssociations'],
-            'completedProjects' => $statistics['completedProjects']
-        ));
+        $total = $statistics['totalCollected'];
+return view('welcome', array_merge(
+    compact('projects', 'categories'),
+    [
+         'totalCollected' => $total,  
+        'totalInMillions' => $total / 1000000,
+        'verifiedAssociations' => $statistics['activeAssociations'],
+        'completedProjects' => $statistics['completedProjects']
+    ]
+));
     }
 }
