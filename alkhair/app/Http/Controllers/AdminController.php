@@ -10,6 +10,8 @@ use App\Models\Category;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+ use App\Notifications\DonationStatusChanged;
+use App\Notifications\AssociationStatusChanged;
 
 class AdminController extends Controller
 {
@@ -44,12 +46,13 @@ $managedAssociations = User::where('role', 'association')
 
 
 public function validateAssociation($id){
-$association = User::where('role', 'association')->findOrFail($id);
-$association->update([
-            'status' => 'ACTIVE'
-        ]);
-        return back()->with('success', 'Le compte de l association a été validé');
-    }
+    $association = User::where('role', 'association')->findOrFail($id);
+    
+    $association->update(['status' => 'ACTIVE']);
+    $association->notify(new AssociationStatusChanged('ACTIVE'));
+    
+    return back()->with('success', 'Le compte de l association a été validé');
+}
 
 
 
@@ -59,19 +62,24 @@ $association->update([
         if ($donation->status !== 'PENDING') {
             return back()->with('error', 'Ce don a déjà été traité.');
         }
-        DB::transaction(function () use ($id) {
-        $donation = Donation::findOrFail($id);
-        $payment = Payment::where('donation_id', $donation->id)->first();
-
-        $donation->update(['status' => 'VALIDATED']);
-        if ($payment) {
+        
+        DB::transaction(function () use ($donation) {
+            $payment = Payment::where('donation_id', $donation->id)->first();
+       
+            $donation->update(['status' => 'VALIDATED']);
+            if ($payment) {
                 $payment->update(['status' => 'SUCCESS']);
             }
-        $project = Project::findOrFail($donation->project_id);
-        $project->increment('currentAmount', $donation->amount);
-
-        $project->calculateProgress();
+            
+            $project = Project::findOrFail($donation->project_id);
+            $project->increment('currentAmount', $donation->amount);
+            $project->calculateProgress();
+            
+            if ($donation->donator) {
+                $donation->donator->notify(new DonationStatusChanged($donation, 'VALIDATED'));
+            }
         });
+        
         return back()->with('success', 'Le don manuel a été validé et le montant a été ajouté au projet !');
     }
 
@@ -84,16 +92,23 @@ $association->update([
         if ($donation->status !== 'PENDING') {
             return back()->with('error', 'Impossible de refuser ce don car il a déjà été traité.');
         }
+        
         $payment = Payment::where('donation_id', $donation->id)->first();
+       
+        
         $donation->update(['status' => 'FAILED']);
-         if ($payment) {
+        if ($payment) {
             $payment->update(['status' => 'FAILED']);
         }
-
-         if ($payment && $payment->paymentReceipt) {
+        
+        if ($payment && $payment->paymentReceipt && Storage::disk('public')->exists($payment->paymentReceipt)) {
             Storage::disk('public')->delete($payment->paymentReceipt);
         }
-
+        
+        if ($donation->donator) {
+            $donation->donator->notify(new DonationStatusChanged($donation, 'FAILED'));
+        }
+        
         return back()->with('error', 'Le don a été refusé car le reçu est invalide.');
     }
 
@@ -110,12 +125,12 @@ $association->update([
 
 public function banAssociation($id)
     {
-$association = User::where('role', 'association')->findOrFail($id);
-
+        $association = User::where('role', 'association')->findOrFail($id);
+        
         $association->update(['status' => 'BANNED']);
-
-         $association->projects()->update(['status' => 'SUSPENDED']);
-
+        $association->projects()->update(['status' => 'SUSPENDED']);
+        $association->notify(new AssociationStatusChanged('BANNED'));
+        
         return back()->with('success', 'L\'association a été bannie et tous ses projets ont été suspendus.');
     }
 

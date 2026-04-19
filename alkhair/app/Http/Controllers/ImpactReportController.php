@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\ImpactReport;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\ImpactReportPublished;
 
 class ImpactReportController extends Controller
 {
@@ -50,6 +51,16 @@ if ($project->impactReport()->exists()) {
         ]);
 
         $project->donations()->where('status', 'RECEIVED')->update(['status' => 'IMPACT']);
+        
+        $project->donations()->where('status', 'IMPACT')
+            ->whereNotNull('donator_id')
+            ->with('donator')
+            ->get()
+            ->each(function ($donation) use ($project) {
+                if ($donation->donator) {
+                    $donation->donator->notify(new ImpactReportPublished($project));
+                }
+            });
 
         return redirect()->route('association.dashboard')->with('success', 'Félicitations ! Le rapport d\'impact a été publié avec succès.');
     }

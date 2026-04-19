@@ -52,16 +52,13 @@ class LoginRequest extends FormRequest
         $user = Auth::user();
         if ($user->status === 'BANNED') {
             Auth::logout();
+            request()->session()->invalidate(); 
+           request()->session()->regenerateToken();
             throw ValidationException::withMessages([
                 'email' => 'Accès refusé : Votre compte a été banni par l\'administration pour non-respect des règles.',
             ]);
         }
-        if ($user->role === 'association' && $user->status === 'PENDING') {
-            Auth::logout();
-            throw ValidationException::withMessages([
-                'email' => 'Votre compte est en cours d\'examen. Vous recevrez un email une fois validé par l\'administration.',
-            ]);
-        }
+ 
         RateLimiter::clear($this->throttleKey());
     }
 

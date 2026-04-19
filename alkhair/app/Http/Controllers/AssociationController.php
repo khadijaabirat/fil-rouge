@@ -11,15 +11,6 @@ use Illuminate\Support\Facades\Storage;
     public function dashboard()
     {
         $association = Auth::user();
-        Project::where('association_id', $association->id)
-               ->where('status', 'OPEN')
-               ->where('endDate', '<', now())
-               ->update(['status' => 'CLOSED']);
-
-        Project::where('association_id', $association->id)
-               ->where('status', 'OPEN')
-               ->whereColumn('currentAmount', '>=', 'goalAmount')
-               ->update(['status' => 'COMPLETED']);
 
        $projects = Project::where('association_id', $association->id)
                            ->with('category')

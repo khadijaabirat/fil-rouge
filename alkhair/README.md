@@ -1,59 +1,329 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🌟 AL-KHAIR - Plateforme Solidaire de Collecte de Dons
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/Laravel-11-red)
+![PHP](https://img.shields.io/badge/PHP-8.1+-blue)
+![Tests](https://img.shields.io/badge/Tests-30+-green)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-## About Laravel
+## 📖 À propos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+AL-KHAIR est une plateforme web solidaire qui connecte les donateurs avec des associations marocaines locales, garantissant une transparence totale sur l'utilisation des dons grâce à un suivi rigoureux et traçable de leur cycle de vie.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🎯 Objectifs
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- ✅ Faciliter la collecte de dons en ligne
+- ✅ Garantir la traçabilité complète des dons
+- ✅ Offrir une transparence totale à tous les acteurs
+- ✅ Centraliser la gestion des associations, projets et dons
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## ✨ Fonctionnalités Principales
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Pour les Donateurs
+- 🎁 Effectuer des dons (minimum 100 DH)
+- 🕵️ Option de don anonyme
+- 💬 Ajouter des messages d'encouragement
+- 📄 Télécharger des reçus PDF
+- 📊 Suivre l'historique des dons
+- 🔔 Recevoir des notifications en temps réel
 
-## Laravel Sponsors
+### Pour les Associations
+- 📝 Inscription avec vérification KYC
+- 🚀 Créer et gérer des projets
+- 💰 Suivre les dons reçus
+- 📈 Publier des rapports d'impact
+- 💳 Demander le retrait des fonds
+- 🔔 Notifications sur les mises à jour
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Pour les Administrateurs
+- ✅ Valider les comptes associations
+- 🔍 Vérifier les dons manuels
+- 🛡️ Modérer les contenus
+- 📊 Accéder aux statistiques globales
+- 🚫 Suspendre/Bannir des comptes
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🛠️ Technologies Utilisées
 
-## Contributing
+### Backend
+- **PHP 8.1+** - Langage de programmation
+- **Laravel 11** - Framework MVC
+- **MySQL** - Base de données
+- **Eloquent ORM** - Gestion des données
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Frontend
+- **Blade Templates** - Moteur de templates
+- **Tailwind CSS** - Framework CSS
+- **JavaScript** - Interactivité
+- **Alpine.js** - Composants réactifs
 
-## Code of Conduct
+### Outils & Services
+- **Stripe** - Paiement en ligne (simulation)
+- **DomPDF** - Génération de PDF
+- **Laravel Queue** - Gestion des tâches asynchrones
+- **Laravel Scheduler** - Tâches planifiées
+- **PHPUnit/Pest** - Tests automatisés
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 📦 Installation
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Prérequis
+- PHP >= 8.1
+- Composer
+- MySQL
+- Node.js & NPM
 
-## License
+### Étapes d'installation
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+# 1. Cloner le projet
+git clone https://github.com/votre-repo/alkhair.git
+cd alkhair
+
+# 2. Installer les dépendances PHP
+composer install
+
+# 3. Installer les dépendances JavaScript
+npm install
+
+# 4. Copier le fichier d'environnement
+cp .env.example .env
+
+# 5. Générer la clé d'application
+php artisan key:generate
+
+# 6. Configurer la base de données dans .env
+DB_DATABASE=alkhair
+DB_USERNAME=root
+DB_PASSWORD=
+
+# 7. Exécuter les migrations
+php artisan migrate
+
+# 8. Exécuter les seeders (optionnel)
+php artisan db:seed
+
+# 9. Créer le lien symbolique pour le storage
+php artisan storage:link
+
+# 10. Compiler les assets
+npm run build
+
+# 11. Démarrer le serveur
+php artisan serve
+```
+
+---
+
+## ⚙️ Configuration
+
+### Configuration Email (.env)
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=votre-email@gmail.com
+MAIL_PASSWORD=votre-mot-de-passe-app
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=votre-email@gmail.com
+MAIL_FROM_NAME="AL-KHAIR"
+```
+
+### Configuration Stripe (.env)
+```env
+STRIPE_KEY=pk_test_votre_cle_publique
+STRIPE_SECRET=sk_test_votre_cle_secrete
+```
+
+### Configuration Queue (.env)
+```env
+QUEUE_CONNECTION=database
+```
+
+### Configuration Cache (.env)
+```env
+CACHE_DRIVER=file  # ou redis pour de meilleures performances
+```
+
+---
+
+## 🚀 Utilisation
+
+### Démarrer le serveur de développement
+```bash
+php artisan serve
+```
+
+### Démarrer le worker de queue
+```bash
+php artisan queue:work
+```
+
+### Exécuter le scheduler (en production)
+Ajouter dans crontab:
+```bash
+* * * * * cd /chemin-vers-projet && php artisan schedule:run >> /dev/null 2>&1
+```
+
+### Vérifier les projets expirés manuellement
+```bash
+php artisan projects:check-expired
+```
+
+---
+
+## 🧪 Tests
+
+### Exécuter tous les tests
+```bash
+php artisan test
+```
+
+### Exécuter des tests spécifiques
+```bash
+php artisan test --filter AuthenticationTest
+```
+
+### Exécuter avec couverture
+```bash
+php artisan test --coverage
+```
+
+### Tests disponibles (30+ tests)
+- ✅ AuthenticationTest (5 tests)
+- ✅ DonationTest (5 tests)
+- ✅ ProjectTest (5 tests)
+- ✅ AdminTest (5 tests)
+- ✅ AssociationTest (5 tests)
+- ✅ SearchTest (4 tests)
+- ✅ NotificationTest (2 tests)
+
+---
+
+## 📁 Structure du Projet
+
+```
+alkhair/
+├── app/
+│   ├── Console/
+│   │   └── Commands/          # Commandes Artisan
+│   ├── Http/
+│   │   ├── Controllers/       # Contrôleurs
+│   │   ├── Middleware/        # Middlewares
+│   │   └── Requests/          # Form Requests
+│   ├── Models/                # Modèles Eloquent
+│   ├── Notifications/         # Notifications
+│   ├── Observers/             # Observers
+│   ├── Policies/              # Policies
+│   ├── Repositories/          # Repositories
+│   └── Services/              # Services
+├── database/
+│   ├── factories/             # Factories
+│   ├── migrations/            # Migrations
+│   └── seeders/               # Seeders
+├── resources/
+│   ├── views/                 # Vues Blade
+│   └── css/                   # Styles
+├── routes/
+│   ├── web.php                # Routes web
+│   └── auth.php               # Routes authentification
+├── tests/
+│   └── Feature/               # Tests fonctionnels
+└── storage/
+    └── app/
+        ├── public/            # Fichiers publics
+        └── private/           # Fichiers privés (KYC)
+```
+
+---
+
+## 🔐 Sécurité
+
+### Mesures de sécurité implémentées
+- ✅ Protection CSRF
+- ✅ Protection XSS
+- ✅ Protection SQL Injection
+- ✅ Hashage des mots de passe (Bcrypt)
+- ✅ Vérification d'email obligatoire
+- ✅ Middleware d'authentification
+- ✅ RBAC (Role-Based Access Control)
+- ✅ Validation des fichiers uploadés
+- ✅ SoftDeletes pour l'intégrité des données
+
+---
+
+## 📊 Statistiques du Projet
+
+- **Lignes de code**: ~15,000+
+- **Fichiers**: 150+
+- **Tests**: 30+
+- **Couverture**: 40%+
+- **Modèles**: 7
+- **Controllers**: 10+
+- **Migrations**: 10+
+- **Services**: 5+
+- **Repositories**: 2+
+
+---
+
+## 🤝 Contribution
+
+Les contributions sont les bienvenues! Veuillez suivre ces étapes:
+
+1. Fork le projet
+2. Créer une branche (`git checkout -b feature/AmazingFeature`)
+3. Commit vos changements (`git commit -m 'Add AmazingFeature'`)
+4. Push vers la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrir une Pull Request
+
+---
+
+## 📝 Licence
+
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+---
+
+## 👥 Auteurs
+
+- **Votre Nom** - Développeur Principal
+
+---
+
+## 📞 Contact
+
+- **Email**: contact@alkhair.ma
+- **Site Web**: https://alkhair.ma
+- **GitHub**: https://github.com/votre-username
+
+---
+
+## 🙏 Remerciements
+
+- Laravel Framework
+- Tailwind CSS
+- Stripe
+- Tous les contributeurs open-source
+
+---
+
+## 📸 Captures d'écran
+
+### Page d'accueil
+![Home](screenshots/home.png)
+
+### Tableau de bord Donateur
+![Donator Dashboard](screenshots/donator-dashboard.png)
+
+### Tableau de bord Association
+![Association Dashboard](screenshots/association-dashboard.png)
+
+### Tableau de bord Admin
+![Admin Dashboard](screenshots/admin-dashboard.png)
+
+---
+
+**Développé avec ❤️ pour le Maroc**

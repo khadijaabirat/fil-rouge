@@ -6,17 +6,20 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
-
+use Illuminate\Support\Facades\Gate;
+use App\Services\ProjectSearchService;
 class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects=Project::paginate(10);
-        return view('projects.index',compact('projects'));
-
+        $filters = $request->only(['search', 'category_id', 'ville', 'sort']);
+        $projects = ProjectSearchService::search($filters)->paginate(12);
+        $categories = Category::all();
+        
+        return view('projects.index', compact('projects', 'categories', 'filters'));
     }
 
     /**
@@ -83,9 +86,7 @@ return view('projects.create', compact('categories'));
     public function edit(string $id)
     {
         $project=Project::findOrFail($id);
-        if ($project->association_id !== Auth::id()) {
-            abort(403, 'Accès non autorisé.');
-        }
+        Gate::authorize('update', $project);
         return view('projects.edit', compact('project'));
     }
 
@@ -96,10 +97,8 @@ return view('projects.create', compact('categories'));
     {
         $project = Project::findOrFail($id);
 
-        if ($project->association_id !== Auth::id()) {
-            abort(403, 'Accès non autorisé.');
-        }
-
+       Gate::authorize('update', $project);
+       
          $validate = $request->validate([
             'title' => 'required|string|max:250',
             'description' => 'required|string',

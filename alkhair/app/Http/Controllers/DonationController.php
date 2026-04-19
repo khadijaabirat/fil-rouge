@@ -11,6 +11,9 @@ use Illuminate\Support\Str;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use App\Notifications\DonationStatusChanged;
+
 class DonationController extends Controller
 {
     public function create($id)
@@ -67,8 +70,7 @@ public function store(Request $request, $id)
         }
 
         if ($request->paymentMethod === 'ONLINE') {
-            Stripe::setApiKey(env('STRIPE_SECRET'));
-
+Stripe::setApiKey(config('services.stripe.secret'));
             try {
                  DB::beginTransaction();
 
@@ -140,7 +142,7 @@ public function success(Request $request, $id)
         if (!$sessionId) {
             abort(403, 'Session de paiement introuvable ou invalide.');
         }
-         Stripe::setApiKey(env('STRIPE_SECRET'));
+Stripe::setApiKey(config('services.stripe.secret'));
         try {
             $session =  Session::retrieve($sessionId);
 
@@ -152,14 +154,16 @@ public function success(Request $request, $id)
         }
 
         DB::transaction(function () use ($donation) {
-       $payment = Payment::where('donation_id', $donation->id)->firstOrFail();
+            $payment = Payment::where('donation_id', $donation->id)->firstOrFail();
 
-         $donation->update(['status' => 'VALIDATED']);
-        $payment->update(['status' => 'SUCCESS']);
+            $donation->update(['status' => 'VALIDATED']);
+            $payment->update(['status' => 'SUCCESS']);
 
-         $project = Project::findOrFail($donation->project_id);
-        $project->increment('currentAmount', $donation->amount);
-        $project->calculateProgress();
+            $project = Project::findOrFail($donation->project_id);
+            $project->increment('currentAmount', $donation->amount);
+            $project->calculateProgress();
+            
+            $donation->donator->notify(new DonationStatusChanged($donation, 'VALIDATED'));
         });
         return redirect()->route('donator.dashboard')->with('success', 'Merci, Votre don en ligne a été validé.');
     }
@@ -170,14 +174,18 @@ public function success(Request $request, $id)
  public function cancel($id)
     {
         $donation = Donation::findOrFail($id);
-        if ($donation->donator_id !== Auth::id()) {
-            abort(403, 'Accès non autorisé. Vous ne pouvez pas annuler le don d\'une autre personne.');
+       if ($donation->status === 'PENDING') {
+        $payment = Payment::where('donation_id', $donation->id)->first();
+        
+         if ($payment && $payment->paymentReceipt && Storage::disk('public')->exists($payment->paymentReceipt)) {
+            Storage::disk('public')->delete($payment->paymentReceipt);
         }
-        if ($donation->status === 'PENDING') {
-             Payment::where('donation_id', $donation->id)->delete();
-
-            $donation->delete();
+        
+        if ($payment) {
+            $payment->delete();
         }
+        $donation->delete();
+    }
          return redirect()->route('donator.dashboard')->with('error', 'Vous avez annulé le paiement en ligne.');
     }
 }

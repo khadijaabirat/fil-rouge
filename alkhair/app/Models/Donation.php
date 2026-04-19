@@ -13,10 +13,32 @@ class Donation extends Model
         'amount', 'message', 'donationDate', 'isAnonymous',
         'status', 'donator_id', 'project_id'
     ];
+    
     /** @use HasFactory<\Database\Factories\DonationFactory> */
     use HasFactory;
+    
+    protected function casts(): array
+    {
+        return [
+            'donationDate' => 'datetime',
+            'isAnonymous' => 'boolean',
+        ];
+    }
+    
     public function donator(){
         return $this->belongsTo(User::class,'donator_id');
+    }
+    
+    public function association()
+    {
+        return $this->hasOneThrough(
+            User::class,
+            Project::class,
+            'id',
+            'id',
+            'project_id',
+            'association_id'
+        );
     }
    public function project()
     {

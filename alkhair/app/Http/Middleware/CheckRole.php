@@ -19,9 +19,9 @@ class CheckRole
             {
                 abort(403,'accés non autorisé');
             }
-            if (Auth::user()->role === 'association' && Auth::user()->status !== 'ACTIVE') {
-    return redirect()->route('association.dashboard')->with('error', ' votre compte est bloquer  ');
-}
+       if ($request->user()->role === 'association' && $request->user()->status !== 'ACTIVE') {
+            return redirect()->route('home')->with('error', 'Votre compte est en attente de validation ou bloqué.');
+        }
         return $next($request);
     }
 }

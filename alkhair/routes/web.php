@@ -9,8 +9,7 @@ use App\Http\Controllers\DonatorController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ImpactReportController;
 use App\Http\Controllers\CategoryController;
-use App\Models\Project;
-use Illuminate\Http\Request;
+ 
 require __DIR__.'/auth.php'; 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/projets', [ProjectController::class, 'index'])->name('projects.index');
@@ -71,4 +70,7 @@ Route::post('/projects/{id}/donate', [DonationController::class, 'store'])->name
 //  Stripe
 Route::get('/donations/{id}/success', [DonationController::class, 'success'])->name('donations.success');
 Route::get('/donations/{id}/cancel', [DonationController::class, 'cancel'])->name('donations.cancel');
+
+// PDF Receipt
+Route::get('/donations/{id}/receipt', [\App\Http\Controllers\PdfController::class, 'downloadDonationReceipt'])->name('donations.receipt');
 });

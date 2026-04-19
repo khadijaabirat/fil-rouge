@@ -27,14 +27,8 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
-        $url= match($request->user()->role){
-            'admin'=>route('admin.dashboard',absolute:false),
-            'association'=>route('association.dashboard',absolute:false),
-            'donator'=>route('donator.dashboard',absolute:false),
-            default=>route('dashboard',absolute:false),
-        };
-        return redirect()->intended($url);
+ 
+        return redirect()->intended($request->user()->getRedirectRoute());
     }
 
     /**

@@ -6,31 +6,37 @@ use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\Category;
+use App\Services\ProjectSearchService;
+use App\Services\CacheService;
 
 class HomeController extends Controller
 {
+    protected $cacheService;
+
+    public function __construct(CacheService $cacheService)
+    {
+        $this->cacheService = $cacheService;
+    }
+
     public function index(Request $request)
     {
-        $totalCollected = Project::sum('currentAmount');
-         $formattedTotal = number_format($totalCollected, 2, ',', ' '); 
+        $statistics = $this->cacheService->getStatistics();
+        $categories = $this->cacheService->getCategories();
 
-        $verifiedAssociations = User::where('role', 'association')->count();
-        $completedProjects = Project::count();
-        $categories = Category::all();
+        $filters = $request->only(['search', 'category_id', 'ville', 'sort']);
+        
+        if (empty($filters['search']) && empty($filters['category_id']) && empty($filters['ville'])) {
+            $projects = $this->cacheService->getOpenProjects();
+        } else {
+            $projects = ProjectSearchService::search($filters)->limit(6)->get();
+        }
 
-        $projects = Project::where('status', 'OPEN')
-            ->when($request->search, function ($query, $search) {
-                return $query->where('title', 'like', "%{$search}%")
-                    ->orWhereHas('association', function ($assocQuery) use ($search) {
-                        $assocQuery->where('ville', 'like', "%{$search}%");
-                    });
-            })
-            ->when($request->category, function ($query, $category) {
-                return $query->where('category_id', $category);
-            })
-            ->with('association')
-            ->get();
-
-        return view('welcome', compact('projects', 'categories', 'formattedTotal', 'verifiedAssociations', 'completedProjects'));
+        return view('welcome', compact(
+            'projects',
+            'categories',
+            'formattedTotal' => number_format($statistics['totalCollected'], 2, ',', ' '),
+            'verifiedAssociations' => $statistics['activeAssociations'],
+            'completedProjects' => $statistics['completedProjects']
+        ));
     }
 }
