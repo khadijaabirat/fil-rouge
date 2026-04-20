@@ -20,6 +20,7 @@ class Project extends Model
         'goalAmount',
         'currentAmount',
         'videoUrl',
+        'image',
         'startDate',
         'endDate',
         'status',

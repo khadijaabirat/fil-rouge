@@ -95,8 +95,13 @@
                 {{ $projects->links() }}
             </div>
         @else
-            <div class="bg-gray-50 p-6 rounded text-center text-gray-500">
-                Aucun projet n'est ouvert aux dons pour le moment.
+            <div class="bg-white p-12 rounded-2xl text-center border-2 border-dashed border-gray-300 shadow-sm">
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Aucun projet disponible</h3>
+                <p class="text-gray-500 mb-4">Il n'y a aucun projet ouvert aux dons pour le moment.</p>
+                <p class="text-sm text-gray-400">Revenez bientôt pour découvrir de nouvelles causes solidaires !</p>
             </div>
         @endif
 <h2 class="text-2xl font-bold text-gray-800 mt-12 mb-6">Mon Historique de Dons</h2>
@@ -159,8 +164,13 @@
                 </div>
             </div>
         @else
-            <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-200 text-center mb-10">
-                <p class="text-gray-500 text-lg">Vous n'avez pas encore fait de don. Explorez les projets ci-dessus !</p>
+            <div class="bg-white p-12 rounded-2xl text-center border-2 border-dashed border-gray-300 shadow-sm mb-10">
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Aucun don effectué</h3>
+                <p class="text-gray-500 mb-4">Vous n'avez pas encore fait de don.</p>
+                <p class="text-sm text-gray-400">Explorez les projets ci-dessus et soutenez une cause qui vous tient à cœur !</p>
             </div>
         @endif
     </div>

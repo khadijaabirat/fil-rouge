@@ -60,7 +60,22 @@ return view('projects.create', compact('categories'));
             'endDate'=>'required|date|after:startDate',
             'category_id' => 'required|exists:categories,id',
             'videoUrl' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:5120',
+        ], [
+            'title.required' => 'Le titre du projet est obligatoire.',
+            'description.required' => 'La description du projet est obligatoire.',
+            'goalAmount.min' => 'L\'objectif financier doit être supérieur à 0.',
+            'endDate.after' => 'La date de fin doit être après la date de début.',
+            'category_id.required' => 'Veuillez sélectionner une catégorie.',
+            'videoUrl.url' => 'Le lien vidéo doit être une URL valide.',
+            'image.image' => 'Le fichier doit être une image.',
+            'image.max' => 'L\'image ne peut pas dépasser 5 Mo.',
         ]);
+        
+        if ($request->hasFile('image')) {
+            $validate['image'] = $request->file('image')->store('projects', 'public');
+        }
+        
         $user=Auth::user();
         $validate['association_id']=$user->id;
          Project::create($validate);
@@ -103,7 +118,21 @@ return view('projects.create', compact('categories'));
             'title' => 'required|string|max:250',
             'description' => 'required|string',
             'videoUrl' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:5120',
+        ], [
+            'title.required' => 'Le titre du projet est obligatoire.',
+            'description.required' => 'La description du projet est obligatoire.',
+            'videoUrl.url' => 'Le lien vidéo doit être une URL valide.',
+            'image.image' => 'Le fichier doit être une image.',
+            'image.max' => 'L\'image ne peut pas dépasser 5 Mo.',
         ]);
+
+        if ($request->hasFile('image')) {
+            if ($project->image && \Storage::disk('public')->exists($project->image)) {
+                \Storage::disk('public')->delete($project->image);
+            }
+            $validate['image'] = $request->file('image')->store('projects', 'public');
+        }
 
         $project->update($validate);
 
@@ -141,6 +170,9 @@ return view('projects.create', compact('categories'));
         }
         $request->validate([
             'newEndDate' => 'required|date|after:' . $project->endDate,
+        ], [
+            'newEndDate.required' => 'La nouvelle date de fin est obligatoire.',
+            'newEndDate.after' => 'La nouvelle date doit être après la date de fin actuelle (' . $project->endDate->format('d/m/Y') . ').',
         ]);
 
          $project->update([

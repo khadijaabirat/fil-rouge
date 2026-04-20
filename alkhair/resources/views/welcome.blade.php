@@ -6,6 +6,8 @@
         <title>Al-Khair | Plateforme Solidaire du Futur</title>
         <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+        <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
         <style data-purpose="custom-css">
             body { font-family: 'Outfit', sans-serif; }
@@ -30,6 +32,48 @@
                 100% { transform: translate(0px, 0px) scale(1); }
             }
 
+            /* Preloader */
+            #preloader {
+                position: fixed;
+                inset: 0;
+                background: linear-gradient(135deg, #0A1128 0%, #1a2744 100%);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: opacity 0.5s, visibility 0.5s;
+            }
+            #preloader.hidden {
+                opacity: 0;
+                visibility: hidden;
+            }
+            .loader-ring {
+                width: 80px;
+                height: 80px;
+                border: 4px solid rgba(245, 166, 35, 0.1);
+                border-top-color: #F5A623;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+            }
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+
+            /* Parallax */
+            .parallax {
+                transition: transform 0.1s ease-out;
+            }
+
+            /* Gradient Text Animation */
+            @keyframes gradient-shift {
+                0%, 100% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+            }
+            .gradient-animate {
+                background-size: 200% 200%;
+                animation: gradient-shift 3s ease infinite;
+            }
+
              .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
             .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); }
              @keyframes scroll-ticker {
@@ -48,6 +92,17 @@
         </style>
     </head>
     <body class="bg-[#F8FAFC] text-slate-800 overflow-x-hidden selection:bg-[#F5A623] selection:text-white">
+
+        <!-- Preloader -->
+        <div id="preloader">
+            <div class="text-center">
+                <div class="loader-ring mx-auto mb-4"></div>
+                <div class="flex items-center gap-2">
+                    <div class="bg-gradient-to-br from-[#F5A623] to-[#FFD085] p-2 rounded-xl font-black text-[#0A1128] text-xl shadow-md">AK</div>
+                    <h1 class="text-2xl font-black text-white">AL-KHAIR</h1>
+                </div>
+            </div>
+        </div>
 
         <header id="main-nav" class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent py-4">
             <nav class="container mx-auto px-4 flex justify-between items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-lg shadow-black/5">
@@ -88,8 +143,11 @@
         </header>
 
         <section class="relative min-h-[90vh] flex items-center overflow-hidden pt-20">
+            <!-- Particles Background -->
+            <div id="particles-js" class="absolute inset-0 z-0"></div>
+            
             <div class="absolute inset-0 z-0">
-                <img alt="Morocco Atlas" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1542887800-faca0261c9e1?q=80&w=2000&auto=format&fit=crop"/>
+                <img alt="Morocco Atlas" class="w-full h-full object-cover parallax" data-speed="0.5" src="https://images.unsplash.com/photo-1542887800-faca0261c9e1?q=80&w=2000&auto=format&fit=crop"/>
                 <div class="absolute inset-0 bg-gradient-to-tr from-[#0A1128] via-[#0A1128]/90 to-transparent"></div>
             </div>
 
@@ -103,7 +161,7 @@
                         Plateforme Auditée & Sécurisée
                     </div>
                     <h2 class="text-6xl md:text-8xl font-black text-white mb-6 leading-[1.05] tracking-tight">
-                        L'impact <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#F5A623] to-[#FFD085]">qui change tout.</span>
+                        L'impact <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#F5A623] via-[#FFD085] to-[#F5A623] gradient-animate">qui change tout.</span>
                     </h2>
                     <p class="text-xl md:text-2xl text-blue-100/80 mb-10 leading-relaxed font-light max-w-2xl">
                         Soutenez les projets certifiés des associations marocaines. Suivez chaque dirham, de votre carte bancaire jusqu'au sourire du bénéficiaire.
@@ -636,6 +694,144 @@
             </div>
         </section>
 
+        <!-- FAQ Section -->
+        <section class="py-24 bg-white relative overflow-hidden reveal">
+            <div class="absolute top-0 left-0 w-96 h-96 bg-[#F5A623]/5 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl"></div>
+            
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-[#F5A623]/10 border border-[#F5A623]/20 text-[#F5A623] rounded-full text-xs font-bold mb-6 uppercase tracking-widest">
+                        <span class="text-lg leading-none">❓</span> Questions Fréquentes
+                    </div>
+                    <h3 class="text-4xl md:text-5xl font-black text-[#0A1128] mb-4 tracking-tight">Vous avez des questions?</h3>
+                    <p class="text-slate-500 text-lg">Nous avons les réponses. Découvrez comment AL-KHAIR fonctionne.</p>
+                </div>
+
+                <div class="max-w-3xl mx-auto space-y-4">
+                    <!-- FAQ Item 1 -->
+                    <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center gap-4 group">
+                            <span class="font-bold text-[#0A1128] text-lg group-hover:text-[#F5A623] transition-colors">Comment puis-je être sûr que mon don arrive à destination?</span>
+                            <svg class="w-6 h-6 text-[#F5A623] transform transition-transform duration-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                            <div class="p-6 pt-0 text-slate-600 leading-relaxed">
+                                <p class="mb-3">AL-KHAIR garantit une <strong class="text-[#0A1128]">traçabilité absolue</strong> en 4 étapes:</p>
+                                <ul class="space-y-2 ml-4">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-[#F5A623] font-bold">1.</span>
+                                        <span>Vérification KYC de l'association avant inscription</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-[#F5A623] font-bold">2.</span>
+                                        <span>Paiement sécurisé via Stripe (cryptage SSL)</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-[#F5A623] font-bold">3.</span>
+                                        <span>Transfert validé par l'administrateur vers le RIB officiel</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-[#F5A623] font-bold">4.</span>
+                                        <span>Rapport d'impact obligatoire avec photos/vidéos du projet réalisé</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 2 -->
+                    <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center gap-4 group">
+                            <span class="font-bold text-[#0A1128] text-lg group-hover:text-[#F5A623] transition-colors">Quel est le montant minimum pour faire un don?</span>
+                            <svg class="w-6 h-6 text-[#F5A623] transform transition-transform duration-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                            <div class="p-6 pt-0 text-slate-600 leading-relaxed">
+                                Le montant minimum est de <strong class="text-[#F5A623] text-xl">100 DH</strong>. Ce seuil permet de couvrir les frais de transaction et garantit un impact réel sur le terrain. Chaque dirham compte!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 3 -->
+                    <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center gap-4 group">
+                            <span class="font-bold text-[#0A1128] text-lg group-hover:text-[#F5A623] transition-colors">Puis-je faire un don anonyme?</span>
+                            <svg class="w-6 h-6 text-[#F5A623] transform transition-transform duration-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                            <div class="p-6 pt-0 text-slate-600 leading-relaxed">
+                                Oui, absolument! Lors du processus de don, vous pouvez cocher l'option <strong class="text-[#0A1128]">"Don anonyme"</strong>. Votre nom ne sera pas affiché publiquement dans la liste des contributeurs, mais vous recevrez toujours votre reçu et les notifications de suivi.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 4 -->
+                    <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center gap-4 group">
+                            <span class="font-bold text-[#0A1128] text-lg group-hover:text-[#F5A623] transition-colors">Comment les associations sont-elles vérifiées?</span>
+                            <svg class="w-6 h-6 text-[#F5A623] transform transition-transform duration-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                            <div class="p-6 pt-0 text-slate-600 leading-relaxed">
+                                Chaque association doit passer par un <strong class="text-[#0A1128]">processus KYC (Know Your Customer)</strong> rigoureux:
+                                <ul class="mt-3 space-y-2 ml-4">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-emerald-500">✓</span>
+                                        <span>Upload du document légal (récépissé, statuts...)</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-emerald-500">✓</span>
+                                        <span>Vérification du numéro de licence officiel</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-emerald-500">✓</span>
+                                        <span>Validation manuelle par l'administrateur</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-emerald-500">✓</span>
+                                        <span>Vérification du RIB bancaire officiel</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 5 -->
+                    <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300">
+                        <button class="faq-question w-full text-left p-6 flex justify-between items-center gap-4 group">
+                            <span class="font-bold text-[#0A1128] text-lg group-hover:text-[#F5A623] transition-colors">Que se passe-t-il si un projet n'atteint pas son objectif?</span>
+                            <svg class="w-6 h-6 text-[#F5A623] transform transition-transform duration-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                            <div class="p-6 pt-0 text-slate-600 leading-relaxed">
+                                L'association a deux options:
+                                <div class="mt-3 space-y-3">
+                                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                                        <strong class="text-blue-900">Option 1: Prolongation</strong>
+                                        <p class="text-sm text-blue-700 mt-1">L'association peut prolonger la date limite depuis son tableau de bord pour donner une chance supplémentaire de collecter les fonds restants.</p>
+                                    </div>
+                                    <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded">
+                                        <strong class="text-emerald-900">Option 2: Clôture et transfert</strong>
+                                        <p class="text-sm text-emerald-700 mt-1">Le montant collecté (même incomplet) est transféré. L'association doit utiliser les fonds pour réaliser ce qui peut l'être et publier un rapport d'impact justifié.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-12">
+                    <p class="text-slate-500 mb-4">Vous avez d'autres questions?</p>
+                    <a href="mailto:contact@alkhair.ma" class="inline-flex items-center gap-2 bg-[#0A1128] hover:bg-[#F5A623] text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg group">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        Contactez-nous
+                        <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <footer class="bg-gradient-to-br from-gray-50 to-white pt-24 pb-12 border-t border-gray-200 reveal relative overflow-hidden">
             <!-- Moroccan Pattern Background -->
             <div class="absolute top-0 right-0 w-64 h-64 bg-[#F5A623]/5 rounded-full blur-3xl"></div>
@@ -848,6 +1044,119 @@
                     });
                 }, { threshold: 0.5 });
                 counters.forEach(counter => counterObserver.observe(counter));
+
+                // 5. Preloader
+                window.addEventListener('load', () => {
+                    setTimeout(() => {
+                        document.getElementById('preloader').classList.add('hidden');
+                    }, 800);
+                });
+
+                // 6. Particles.js Configuration
+                if (typeof particlesJS !== 'undefined') {
+                    particlesJS('particles-js', {
+                        particles: {
+                            number: { value: 60, density: { enable: true, value_area: 800 } },
+                            color: { value: '#F5A623' },
+                            shape: { type: 'circle' },
+                            opacity: { value: 0.3, random: true },
+                            size: { value: 3, random: true },
+                            line_linked: {
+                                enable: true,
+                                distance: 150,
+                                color: '#F5A623',
+                                opacity: 0.2,
+                                width: 1
+                            },
+                            move: {
+                                enable: true,
+                                speed: 1.5,
+                                direction: 'none',
+                                random: false,
+                                straight: false,
+                                out_mode: 'out',
+                                bounce: false
+                            }
+                        },
+                        interactivity: {
+                            detect_on: 'canvas',
+                            events: {
+                                onhover: { enable: true, mode: 'grab' },
+                                onclick: { enable: true, mode: 'push' },
+                                resize: true
+                            },
+                            modes: {
+                                grab: { distance: 140, line_linked: { opacity: 0.5 } },
+                                push: { particles_nb: 4 }
+                            }
+                        },
+                        retina_detect: true
+                    });
+                }
+
+                // 7. FAQ Accordion
+                const faqItems = document.querySelectorAll('.faq-item');
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question');
+                    const answer = item.querySelector('.faq-answer');
+                    const icon = question.querySelector('svg');
+
+                    question.addEventListener('click', () => {
+                        const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+                        
+                        faqItems.forEach(otherItem => {
+                            if (otherItem !== item) {
+                                const otherAnswer = otherItem.querySelector('.faq-answer');
+                                const otherIcon = otherItem.querySelector('.faq-question svg');
+                                otherAnswer.style.maxHeight = '0';
+                                otherIcon.style.transform = 'rotate(0deg)';
+                            }
+                        });
+
+                        if (isOpen) {
+                            answer.style.maxHeight = '0';
+                            icon.style.transform = 'rotate(0deg)';
+                        } else {
+                            answer.style.maxHeight = answer.scrollHeight + 'px';
+                            icon.style.transform = 'rotate(180deg)';
+                        }
+                    });
+                });
+
+                // 8. Smooth Scroll
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        const href = this.getAttribute('href');
+                        if (href !== '#' && document.querySelector(href)) {
+                            e.preventDefault();
+                            document.querySelector(href).scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    });
+                });
+
+                // 9. Back to Top Button
+                const backToTop = document.createElement('button');
+                backToTop.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>`;
+                backToTop.className = 'fixed bottom-8 right-8 bg-[#F5A623] hover:bg-[#0A1128] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 z-50 opacity-0 invisible hover:scale-110';
+                backToTop.id = 'back-to-top';
+                document.body.appendChild(backToTop);
+
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 500) {
+                        backToTop.classList.remove('opacity-0', 'invisible');
+                        backToTop.classList.add('opacity-100', 'visible');
+                    } else {
+                        backToTop.classList.add('opacity-0', 'invisible');
+                        backToTop.classList.remove('opacity-100', 'visible');
+                    }
+                });
+
+                backToTop.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
             });
         </script>
     </body>

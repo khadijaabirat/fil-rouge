@@ -58,7 +58,13 @@
                 </tbody>
             </table>
         @else
-            <p class="text-gray-500">Aucune association en attente pour le moment.</p>
+            <div class="bg-white p-12 rounded-2xl text-center border-2 border-dashed border-gray-300 shadow-sm">
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Aucune association en attente</h3>
+                <p class="text-gray-500">Toutes les demandes d'inscription ont été traitées.</p>
+            </div>
         @endif
 <h2 class="text-xl font-semibold mt-10 mb-3">Dons manuels en attente de validation</h2>
 
@@ -115,8 +121,14 @@
                 </table>
             </div>
         @else
-            <p class="text-gray-500 bg-gray-50 p-4 rounded border">Aucun don manuel en attente.</p>
-        @endif
+            <div class="bg-white p-12 rounded-2xl text-center border-2 border-dashed border-gray-300 shadow-sm mb-10">
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Aucun don manuel en attente</h3>
+                <p class="text-gray-500">Tous les dons manuels ont été traités.</p>
+            </div>
+        @else
         <h2 class="text-xl font-semibold mt-10 mb-3 text-blue-700">Demandes de retrait de fonds (Associations)</h2>
 
         @if(isset($withdrawalRequests) && $withdrawalRequests->count() > 0)
@@ -152,7 +164,13 @@
                 </table>
             </div>
         @else
-            <p class="text-gray-500 bg-gray-50 p-4 rounded border mb-10">Aucune demande de retrait en attente.</p>
+            <div class="bg-white p-12 rounded-2xl text-center border-2 border-dashed border-gray-300 shadow-sm mb-10">
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Aucune demande de retrait</h3>
+                <p class="text-gray-500">Aucune association n'a demandé le retrait de fonds pour le moment.</p>
+            </div>
         @endif
 
         <h2 class="text-xl font-semibold mt-10 mb-3 text-red-700">Modération : Projets (Actifs & Suspendus)</h2>
@@ -196,7 +214,13 @@
                 </table>
             </div>
         @else
-            <p class="text-gray-500 mb-6">Aucun projet à modérer.</p>
+            <div class="bg-white p-12 rounded-2xl text-center border-2 border-dashed border-gray-300 shadow-sm mb-6">
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Aucun projet à modérer</h3>
+                <p class="text-gray-500">Tous les projets sont en règle.</p>
+            </div>
         @endif
 
         <h2 class="text-xl font-semibold mt-6 mb-3 text-red-700">Modération : Associations (Actives & Bannies)</h2>
@@ -240,7 +264,13 @@
                 </table>
             </div>
         @else
-            <p class="text-gray-500 mb-10">Aucune association à modérer.</p>
+            <div class="bg-white p-12 rounded-2xl text-center border-2 border-dashed border-gray-300 shadow-sm mb-10">
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Aucune association à modérer</h3>
+                <p class="text-gray-500">Toutes les associations sont en règle.</p>
+            </div>
         @endif
 
         <form method="POST" action="{{ route('logout') }}" class="mt-8">

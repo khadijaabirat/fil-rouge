@@ -40,4 +40,16 @@ class RegisterUserRequest extends FormRequest
         }
        return $rules;
     }
+
+    public function messages(): array
+    {
+        return [
+            'description.min' => 'La description de l\'association doit contenir au moins 50 caractères pour être validée.',
+            'amount.min' => 'Le montant minimum du don est de 100 DH.',
+            'documentKYC.max' => 'Le document KYC ne peut pas dépasser 5 Mo.',
+            'profilePhoto.max' => 'La photo de profil ne peut pas dépasser 5 Mo.',
+            'paymentReceipt.max' => 'Le reçu de paiement ne peut pas dépasser 5 Mo.',
+            'message.max' => 'Votre message ne peut pas dépasser 500 caractères.',
+        ];
+    }
 }

@@ -37,6 +37,13 @@ public function store(Request $request, $id)
             'isAnonymous' => 'nullable',
             'paymentMethod' => 'required|in:ONLINE,MANUAL',
             'paymentReceipt' => 'required_if:paymentMethod,MANUAL|file|mimes:pdf,jpg,png|max:5120',
+        ], [
+            'amount.min' => 'Le montant minimum du don est de 100 DH.',
+            'amount.required' => 'Le montant du don est obligatoire.',
+            'message.max' => 'Votre message ne peut pas dépasser 500 caractères.',
+            'paymentReceipt.required_if' => 'Le reçu de paiement est obligatoire pour un don manuel.',
+            'paymentReceipt.max' => 'Le reçu de paiement ne peut pas dépasser 5 Mo.',
+            'paymentReceipt.mimes' => 'Le reçu doit être au format PDF, JPG ou PNG.',
         ]);
 
          if ($request->paymentMethod === 'MANUAL') {
