@@ -8,12 +8,11 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\ImpactReport;
 use App\Models\Donation;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
     /** @use HasFactory<\Database\Factories\ProjectFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory;
     protected $fillable = [
         'title',
         'description',
