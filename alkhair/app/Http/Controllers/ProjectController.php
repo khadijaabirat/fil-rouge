@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
 use Illuminate\Support\Facades\Gate;
 use App\Services\ProjectSearchService;
+use Illuminate\Support\Facades\Storage;
+
 class ProjectController extends Controller
 {
     /**
@@ -15,7 +17,7 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $filters = $request->only(['search', 'category_id', 'ville', 'sort']);
+        $filters = $request->only(['search', 'category_id', 'ville', 'sort', 'date_from', 'date_to', 'deadline_before']);
         $projects = ProjectSearchService::search($filters)->paginate(12);
         $categories = Category::all();
         
@@ -61,6 +63,8 @@ return view('projects.create', compact('categories'));
             'category_id' => 'required|exists:categories,id',
             'videoUrl' => 'nullable|url',
             'image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:5120',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
         ], [
             'title.required' => 'Le titre du projet est obligatoire.',
             'description.required' => 'La description du projet est obligatoire.',
@@ -70,6 +74,8 @@ return view('projects.create', compact('categories'));
             'videoUrl.url' => 'Le lien vidéo doit être une URL valide.',
             'image.image' => 'Le fichier doit être une image.',
             'image.max' => 'L\'image ne peut pas dépasser 5 Mo.',
+            'latitude.between' => 'La latitude doit être entre -90 et 90.',
+            'longitude.between' => 'La longitude doit être entre -180 et 180.',
         ]);
         
         if ($request->hasFile('image')) {
@@ -128,8 +134,8 @@ return view('projects.create', compact('categories'));
         ]);
 
         if ($request->hasFile('image')) {
-            if ($project->image && \Storage::disk('public')->exists($project->image)) {
-                \Storage::disk('public')->delete($project->image);
+            if ($project->image && Storage::disk('public')->exists($project->image)) {
+                Storage::disk('public')->delete($project->image);
             }
             $validate['image'] = $request->file('image')->store('projects', 'public');
         }

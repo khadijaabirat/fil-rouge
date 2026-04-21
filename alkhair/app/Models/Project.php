@@ -26,7 +26,8 @@ class Project extends Model
         'status',
         'association_id',
         'category_id',
-
+        'latitude',
+        'longitude',
     ];
     public function association(){
         return $this->belongsTo(User::class,'association_id');

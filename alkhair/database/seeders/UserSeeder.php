@@ -2,185 +2,74 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
+        // ============ ADMIN ============
         User::create([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('admin'),
+            'name' => 'Admin AlKhair',
+            'email' => 'admin@alkhair.ma',
+            'password' => Hash::make('password'),
+            'phone' => '0600000000',
             'role' => 'admin',
+            'ville' => 'Rabat',
+            'email_verified_at' => now(),
+            'status' => 'ACTIVE',
         ]);
 
+        // ============ ASSOCIATIONS (IDs 2-13) ============
+        $associations = [
+            ['name' => 'Association Al Nour pour l\'Éducation', 'email' => 'contact@alnour.ma', 'phone' => '0661111111', 'ville' => 'Casablanca', 'licenseNumber' => 'RC-2024-CS-001', 'address' => '12 Boulevard Hassan II, Casablanca', 'rib' => '011780000001234567890123', 'description' => 'Association pionnière dans le domaine de l\'éducation fondée en 2010, elle œuvre pour offrir des bourses scolaires et construire des écoles dans les zones rurales du Maroc.', 'status' => 'ACTIVE', 'category_id' => 1],
+            ['name' => 'Fondation Achifaa pour la Santé', 'email' => 'info@achifaa.ma', 'phone' => '0662222222', 'ville' => 'Rabat', 'licenseNumber' => 'RC-2023-RB-045', 'address' => '45 Rue Prince Moulay Abdallah, Rabat', 'rib' => '022110000009876543210987', 'description' => 'Fondation caritative spécialisée dans les soins de santé gratuits pour les familles démunies et le financement d\'opérations chirurgicales.', 'status' => 'ACTIVE', 'category_id' => 2],
+            ['name' => 'Association Kafil Al Yatim', 'email' => 'contact@kafilyatim.ma', 'phone' => '0663333333', 'ville' => 'Fès', 'licenseNumber' => 'RC-2022-FS-112', 'address' => '78 Derb Tawil, Fès El Bali', 'rib' => '033220000005678901234567', 'description' => 'Association spécialisée dans le parrainage d\'orphelins et la création d\'un environnement familial stable avec éducation et soins.', 'status' => 'ACTIVE', 'category_id' => 3],
+            ['name' => 'Association Akhdar pour l\'Environnement', 'email' => 'green@akhdar.ma', 'phone' => '0664444444', 'ville' => 'Marrakech', 'licenseNumber' => 'RC-2024-MK-078', 'address' => '23 Avenue Mohammed V, Guéliz', 'rib' => '044330000001122334455667', 'description' => 'Association environnementale œuvrant pour la protection de l\'environnement, la plantation d\'arbres et la sensibilisation écologique.', 'status' => 'ACTIVE', 'category_id' => 4],
+            ['name' => 'Comité de Secours Marocain', 'email' => 'urgence@ighatha.ma', 'phone' => '0665555555', 'ville' => 'Tanger', 'licenseNumber' => 'RC-2021-TG-033', 'address' => '56 Boulevard Mohammed VI, Tanger', 'rib' => '055440000007788990011223', 'description' => 'Organisme spécialisé dans les secours d\'urgence et l\'aide aux victimes de catastrophes naturelles.', 'status' => 'ACTIVE', 'category_id' => 5],
+            ['name' => 'Association Al Bounyan pour le Développement', 'email' => 'info@bounyan.ma', 'phone' => '0666666666', 'ville' => 'Agadir', 'licenseNumber' => 'RC-2023-AG-091', 'address' => '34 Avenue des FAR, Agadir', 'rib' => '066550000003344556677889', 'description' => 'Association œuvrant pour la construction et la rénovation des infrastructures dans les zones rurales de Souss-Massa.', 'status' => 'ACTIVE', 'category_id' => 6],
+            ['name' => 'Coopérative Nissa Al Khair', 'email' => 'contact@nissakkhair.ma', 'phone' => '0667777777', 'ville' => 'Meknès', 'licenseNumber' => 'RC-2023-MK-055', 'address' => '15 Rue Rouamzine, Meknès', 'rib' => '077660000009900112233445', 'description' => 'Coopérative féminine dédiée à l\'autonomisation des femmes à travers la formation professionnelle et les projets générateurs de revenus.', 'status' => 'ACTIVE', 'category_id' => 7],
+            ['name' => 'Association Chabab Al Moustaqbal', 'email' => 'sport@chabab.ma', 'phone' => '0668888888', 'ville' => 'Kénitra', 'licenseNumber' => 'RC-2024-KN-029', 'address' => '90 Avenue Mohammed V, Kénitra', 'rib' => '088770000001122334455667', 'description' => 'Association sportive et culturelle pour les jeunes des quartiers défavorisés.', 'status' => 'ACTIVE', 'category_id' => 8],
+            ['name' => 'Fondation Atlas pour l\'Éducation', 'email' => 'atlas@education.ma', 'phone' => '0669999999', 'ville' => 'Béni Mellal', 'licenseNumber' => 'RC-2022-BM-067', 'address' => '22 Rue Tarik Ibn Ziad, Béni Mellal', 'rib' => '099880000005566778899001', 'description' => 'Fondation spécialisée dans l\'éducation en milieu rural et la lutte contre l\'abandon scolaire dans la région Béni Mellal-Khénifra.', 'status' => 'ACTIVE', 'category_id' => 1],
+            ['name' => 'Association Hayat pour la Santé', 'email' => 'hayat@sante.ma', 'phone' => '0661010101', 'ville' => 'Oujda', 'licenseNumber' => 'RC-2023-OJ-041', 'address' => '67 Boulevard Derfoufi, Oujda', 'rib' => '011990000007788990011223', 'description' => 'Association médicale proposant des consultations gratuites et des campagnes de sensibilisation sanitaire dans l\'Oriental.', 'status' => 'ACTIVE', 'category_id' => 2],
+            ['name' => 'Association Amal Bladi', 'email' => 'contact@amalbladi.ma', 'phone' => '0662020202', 'ville' => 'Oujda', 'licenseNumber' => 'RC-2024-OJ-015', 'address' => '89 Rue Baraka, Oujda', 'rib' => '022110000003344556677889', 'description' => 'Association polyvalente s\'occupant de l\'éducation et de la santé dans la région de l\'Oriental.', 'status' => 'PENDING', 'category_id' => 1],
+            ['name' => 'Fondation Rif Solidaire', 'email' => 'rif@solidaire.ma', 'phone' => '0663030303', 'ville' => 'Al Hoceïma', 'licenseNumber' => 'RC-2024-AH-008', 'address' => '12 Rue Calabonita, Al Hoceïma', 'rib' => '033220000009900112233445', 'description' => 'Fondation dédiée au développement de la région du Rif avec des projets d\'infrastructure et d\'aide sociale.', 'status' => 'PENDING', 'category_id' => 6],
+        ];
 
+        foreach ($associations as $assoc) {
+            User::create(array_merge($assoc, [
+                'password' => Hash::make('password'),
+                'role' => 'association',
+                'email_verified_at' => now(),
+            ]));
+        }
 
-        
-
-
-       $donators = [
-            ['name' => 'Ahmed Amine', 'email' => 'ahmed@gmail.com', 'phone' => '0611223344'],
-            ['name' => 'Fatima Zahra', 'email' => 'fatima@gmail.com', 'phone' => '0622334455'],
-            ['name' => 'Youssef El Fassi', 'email' => 'youssef@gmail.com', 'phone' => '0633445566'],
-            ['name' => 'Khadija Mansour', 'email' => 'khadija@gmail.com', 'phone' => '0644556677'],
-            ['name' => 'Omar Benjelloun', 'email' => 'omar@gmail.com', 'phone' => '0655667788'],
+        // ============ DONATEURS (IDs 14-28) ============
+        $donators = [
+            ['name' => 'Ahmed Benali', 'email' => 'ahmed@gmail.com', 'phone' => '0670111111', 'ville' => 'Casablanca'],
+            ['name' => 'Fatima Zahra Alaoui', 'email' => 'fatima@gmail.com', 'phone' => '0670222222', 'ville' => 'Rabat'],
+            ['name' => 'Youssef Marrakchi', 'email' => 'youssef@gmail.com', 'phone' => '0670333333', 'ville' => 'Marrakech'],
+            ['name' => 'Khadija Benmoussa', 'email' => 'khadija@gmail.com', 'phone' => '0670444444', 'ville' => 'Fès'],
+            ['name' => 'Mohamed Tazi', 'email' => 'mohamed@gmail.com', 'phone' => '0670555555', 'ville' => 'Tanger'],
+            ['name' => 'Sara Idrissi', 'email' => 'sara@gmail.com', 'phone' => '0670666666', 'ville' => 'Meknès'],
+            ['name' => 'Omar Benchekroun', 'email' => 'omar@gmail.com', 'phone' => '0670777777', 'ville' => 'Agadir'],
+            ['name' => 'Nadia Fassi', 'email' => 'nadia@gmail.com', 'phone' => '0670888888', 'ville' => 'Casablanca'],
+            ['name' => 'Rachid El Mansouri', 'email' => 'rachid@gmail.com', 'phone' => '0670999999', 'ville' => 'Rabat'],
+            ['name' => 'Laila Bouzidi', 'email' => 'laila@gmail.com', 'phone' => '0671111111', 'ville' => 'Fès'],
+            ['name' => 'Hassan Ouazzani', 'email' => 'hassan@gmail.com', 'phone' => '0671222222', 'ville' => 'Tanger'],
+            ['name' => 'Amina Chraibi', 'email' => 'amina@gmail.com', 'phone' => '0671333333', 'ville' => 'Marrakech'],
+            ['name' => 'Karim Senhaji', 'email' => 'karim@gmail.com', 'phone' => '0671444444', 'ville' => 'Oujda'],
+            ['name' => 'Zineb El Amrani', 'email' => 'zineb@gmail.com', 'phone' => '0671555555', 'ville' => 'Kénitra'],
+            ['name' => 'Driss Belhaj', 'email' => 'driss@gmail.com', 'phone' => '0671666666', 'ville' => 'Béni Mellal'],
         ];
 
         foreach ($donators as $donator) {
-            User::create([
-                'name' => $donator['name'],
-                'email' => $donator['email'],
-                'phone' => $donator['phone'],
-                'password' => Hash::make('donateur'),
+            User::create(array_merge($donator, [
+                'password' => Hash::make('password'),
                 'role' => 'donator',
-                'status' => 'ACTIVE',
-            ]);
-        }
-
-
-
-
-
-        $associations = [
-            [
-                'name' => 'Association Sakia Al Khair',
-                'email' => 'association1@gmail.com',
-                'phone' => '0600112233',
-                'ville' => 'Zagora',
-                'address' => 'Quartier Administratif, Zagora',
-                'description' => 'Œuvre pour le creusement de puits et l\'approvisionnement en eau potable dans les villages isolés du sud marocain.',
-                'rib' => '011810000000000000000001',
-                'category_id' => 1,
-            ],
-            [
-                'name' => 'Fondation Atlas pour le Développement',
-                'email' => 'association2@gmail.com',
-                'phone' => '0600112244',
-                'ville' => 'Azilal',
-                'address' => 'Centre Ville, Azilal',
-                'description' => 'Désenclavement des zones montagneuses et développement des infrastructures rurales.',
-                'rib' => '011810000000000000000002',
-                'category_id' => 1,
-            ],
-
-            [
-                'name' => 'Association Iqraa pour l\'Éducation',
-                'email' => 'association3@gmail.com',
-                'phone' => '0600223344',
-                'ville' => 'Errachidia',
-                'address' => 'Avenue Mohammed V, Errachidia',
-                'description' => 'Lutte contre l\'abandon scolaire et distribution de fournitures pour les enfants démunis.',
-                'rib' => '011810000000000000000003',
-                'category_id' => 2,
-            ],
-            [
-                'name' => 'Fondation Sanad pour le Soutien',
-                'email' => 'association4@gmail.com',
-                'phone' => '0600223355',
-                'ville' => 'Casablanca',
-                'address' => 'Quartier Maarif, Casablanca',
-                'description' => 'Soutien scolaire gratuit et aménagement de bibliothèques dans les écoles publiques.',
-                'rib' => '011810000000000000000004',
-                'category_id' => 2,
-            ],
-
-            [
-                'name' => 'Association Chifaa Médicale',
-                'email' => 'association5@gmail.com',
-                'phone' => '0600334455',
-                'ville' => 'Marrakech',
-                'address' => 'Gueliz, Marrakech',
-                'description' => 'Organisation de caravanes médicales multidisciplinaires dans les régions enclavées.',
-                'rib' => '011810000000000000000005',
-                'category_id' => 3,
-            ],
-            [
-                'name' => 'Médecins de l\'Espoir Maroc',
-                'email' => 'association6@gmail.com',
-                'phone' => '0600334466',
-                'ville' => 'Oujda',
-                'address' => 'Boulevard Mohammed VI, Oujda',
-                'description' => 'Prise en charge des opérations chirurgicales pour les familles sans couverture médicale.',
-                'rib' => '011810000000000000000006',
-                'category_id' => 3,
-            ],
-
-            [
-                'name' => 'Association Amal pour les Orphelins',
-                'email' => 'association7@gmail.com',
-                'phone' => '0600445566',
-                'ville' => 'Fès',
-                'address' => 'Médina, Fès',
-                'description' => 'Soutien financier et psychologique aux veuves et prise en charge des orphelins.',
-                'rib' => '011810000000000000000007',
-                'category_id' => 4,
-            ],
-            [
-                'name' => 'Fondation Al Ikhlass',
-                'email' => 'association8@gmail.com',
-                'phone' => '0600445577',
-                'ville' => 'Tanger',
-                'address' => 'Place des Nations, Tanger',
-                'description' => 'Distribution de couffins alimentaires et aide aux sans-abris.',
-                'rib' => '011810000000000000000008',
-                'category_id' => 4,
-            ],
-
-            [
-                'name' => 'Secours Populaire Marocain',
-                'email' => 'association9@gmail.com',
-                'phone' => '0600556677',
-                'ville' => 'Rabat',
-                'address' => 'Agdal, Rabat',
-                'description' => 'Intervention rapide lors des catastrophes naturelles et distribution de tentes et couvertures.',
-                'rib' => '011810000000000000000009',
-                'category_id' => 5,
-            ],
-            [
-                'name' => 'Association Mounqid',
-                'email' => 'association10@gmail.com',
-                'phone' => '0600556688',
-                'ville' => 'Agadir',
-                'address' => 'Talborjt, Agadir',
-                'description' => 'Aide d\'urgence et reconstruction des habitations détruites.',
-                'rib' => '011810000000000000000010',
-                'category_id' => 5,
-            ],
-
-            [
-                'name' => 'Association Basma pour l\'Inclusion',
-                'email' => 'association11@gmail.com',
-                'phone' => '0600667788',
-                'ville' => 'Tétouan',
-                'address' => 'Avenue Hassan II, Tétouan',
-                'description' => 'Achat de chaises roulantes et accompagnement professionnel des personnes à mobilité réduite.',
-                'rib' => '011810000000000000000011',
-                'category_id' => 6,
-            ],
-            [
-                'name' => 'Fondation Nour pour les Non-Voyants',
-                'email' => 'association12@gmail.com',
-                'phone' => '0600667799',
-                'ville' => 'Meknès',
-                'address' => 'Ville Nouvelle, Meknès',
-                'description' => 'Soutien à la scolarisation en braille et insertion sociale des non-voyants.',
-                'rib' => '011810000000000000000012',
-                'category_id' => 6,
-            ],
-        ];
-       foreach ($associations as $assoc) {
-            User::create(array_merge($assoc, [
-                'password' =>Hash::make('association'),
-                'role' => 'association',
-                'status' => 'ACTIVE',
-                'licenseNumber' => 'LIC-' . rand(1000, 9999),
+                'email_verified_at' => now(),
             ]));
         }
     }

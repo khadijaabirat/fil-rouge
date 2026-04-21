@@ -5,17 +5,67 @@
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <title>Al-Khair | Plateforme Solidaire du Futur</title>
         <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
         <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
         <style data-purpose="custom-css">
-            body { font-family: 'Outfit', sans-serif; }
+            body { 
+                font-family: 'Inter', sans-serif;
+                background: #e8ecf3;
+            }
+            
+            h1, h2, h3, h4, h5, h6 {
+                font-family: 'Poppins', sans-serif;
+            }
 
             :root {
                 --brand-navy: #0A1128;
                 --brand-gold: #F5A623;
                 --brand-gold-hover: #F7B74A;
+                --neu-bg: #e8ecf3;
+                --neu-shadow-dark: #c5cad5;
+                --neu-shadow-light: #ffffff;
+            }
+            
+            /* Neumorphism Shadows */
+            .neu-flat {
+                background: #e8ecf3;
+                box-shadow: 8px 8px 16px #c5cad5, -8px -8px 16px #ffffff;
+            }
+            
+            .neu-pressed {
+                background: #e8ecf3;
+                box-shadow: inset 6px 6px 12px #c5cad5, inset -6px -6px 12px #ffffff;
+            }
+            
+            .neu-float {
+                background: #e8ecf3;
+                box-shadow: 12px 12px 24px #c5cad5, -12px -12px 24px #ffffff;
+            }
+            
+            .neu-card {
+                background: linear-gradient(145deg, #f0f4f8, #e8ecf3);
+                box-shadow: 10px 10px 20px #c5cad5, -10px -10px 20px #ffffff;
+                border-radius: 30px;
+            }
+            
+            .neu-card:hover {
+                box-shadow: 15px 15px 30px #c5cad5, -15px -15px 30px #ffffff;
+            }
+            
+            .neu-button {
+                background: linear-gradient(145deg, #f0f4f8, #e0e5ec);
+                box-shadow: 6px 6px 12px #c5cad5, -6px -6px 12px #ffffff;
+                transition: all 0.3s ease;
+            }
+            
+            .neu-button:hover {
+                box-shadow: 8px 8px 16px #c5cad5, -8px -8px 16px #ffffff;
+            }
+            
+            .neu-button:active {
+                box-shadow: inset 4px 4px 8px #c5cad5, inset -4px -4px 8px #ffffff;
             }
 
             .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
@@ -36,7 +86,7 @@
             #preloader {
                 position: fixed;
                 inset: 0;
-                background: linear-gradient(135deg, #0A1128 0%, #1a2744 100%);
+                background: linear-gradient(135deg, #e8ecf3 0%, #f0f4f8 100%);
                 z-index: 9999;
                 display: flex;
                 align-items: center;
@@ -76,6 +126,7 @@
 
              .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
             .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); }
+            .counter { font-family: 'Courier New', monospace; letter-spacing: 0.1em; }
              @keyframes scroll-ticker {
                 0% { transform: translateX(0); }
                 100% { transform: translateX(-50%); }  
@@ -91,7 +142,7 @@
         
         </style>
     </head>
-    <body class="bg-[#F8FAFC] text-slate-800 overflow-x-hidden selection:bg-[#F5A623] selection:text-white">
+    <body class="bg-[#e8ecf3] text-slate-700 overflow-x-hidden selection:bg-[#F5A623] selection:text-white">
 
         <!-- Preloader -->
         <div id="preloader">
@@ -180,26 +231,22 @@
             <div class="glass-card rounded-[2rem] shadow-2xl p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 md:divide-x divide-gray-200/50">
 
             <div class="text-center group">
-                    <div class="text-5xl font-black text-[#0A1128] mb-2 flex justify-center items-baseline gap-1">
-                        @if($totalCollected >= 1000000)
-                            <span class="counter" data-target="{{ number_format($totalCollected, 2, ',', ' ')}}">0</span><span class="text-3xl text-[#F5A623]">M</span>
-                        @else
-                            <span class="counter" data-target="{{ number_format($totalCollected, 2, ',', ' ') }}">0</span><span class="text-xl text-[#F5A623] ml-1">DH</span>
-                        @endif
+                    <div class="text-5xl font-black text-[#0A1128] mb-2">
+                        <span class="counter" data-target="{{ $totalCollected }}">000000</span>
                     </div>
                     <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Dirhams collectés</div>
                 </div>
 
                 <div class="text-center group">
                     <div class="text-5xl font-black text-[#0A1128] mb-2">
-                        <span class="counter" data-target="{{ $verifiedAssociations }}">0</span>
+                        <span class="counter" data-target="{{ $verifiedAssociations }}">000000</span>
                     </div>
                     <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Assoc. Vérifiées</div>
                 </div>
 
                 <div class="text-center group">
                     <div class="text-5xl font-black text-[#0A1128] mb-2">
-                        <span class="counter" data-target="{{ $completedProjects }}">0</span>
+                        <span class="counter" data-target="{{ $completedProjects }}">000000</span>
                     </div>
                     <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Projets Achevés</div>
                 </div>
@@ -248,11 +295,16 @@
                         @foreach($projects as $project)
                             <div class="w-[300px] md:w-[380px] flex-shrink-0 bg-white rounded-3xl overflow-hidden shadow-lg shadow-gray-200/40 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col group">
                                 <div class="relative h-52 overflow-hidden">
-                                    @if(isset($project->association) && $project->association->profilePhoto)
-                                        <img alt="Project" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="{{ asset('storage/' . $project->association->profilePhoto) }}"/>
+                                    @if($project->image)
+                                        <img alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="{{ asset('storage/' . $project->image) }}"/>
+                                    @elseif(isset($project->association) && $project->association->profilePhoto)
+                                        <img alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="{{ asset('storage/' . $project->association->profilePhoto) }}"/>
                                     @else
-                                        <div class="w-full h-full bg-[#0A1128] flex items-center justify-center">
-                                            <span class="text-[#F5A623] text-5xl font-black">AK</span>
+                                        <div class="w-full h-full bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center">
+                                            <div class="text-center">
+                                                <span class="text-[#F5A623] text-5xl font-black block mb-2">AK</span>
+                                                <span class="text-white text-xs font-bold uppercase tracking-widest">{{ $project->category->name ?? 'Projet' }}</span>
+                                            </div>
                                         </div>
                                     @endif
                                     <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/80 to-transparent"></div>
@@ -293,11 +345,16 @@
                         @foreach($projects as $project)
                             <div class="w-[300px] md:w-[380px] flex-shrink-0 bg-white rounded-3xl overflow-hidden shadow-lg shadow-gray-200/40 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col group" aria-hidden="true">
                                 <div class="relative h-52 overflow-hidden">
-                                    @if(isset($project->association) && $project->association->profilePhoto)
-                                        <img alt="Project" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="{{ asset('storage/' . $project->association->profilePhoto) }}"/>
+                                    @if($project->image)
+                                        <img alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="{{ asset('storage/' . $project->image) }}"/>
+                                    @elseif(isset($project->association) && $project->association->profilePhoto)
+                                        <img alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="{{ asset('storage/' . $project->association->profilePhoto) }}"/>
                                     @else
-                                        <div class="w-full h-full bg-[#0A1128] flex items-center justify-center">
-                                            <span class="text-[#F5A623] text-5xl font-black">AK</span>
+                                        <div class="w-full h-full bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center">
+                                            <div class="text-center">
+                                                <span class="text-[#F5A623] text-5xl font-black block mb-2">AK</span>
+                                                <span class="text-white text-xs font-bold uppercase tracking-widest">{{ $project->category->name ?? 'Projet' }}</span>
+                                            </div>
                                         </div>
                                     @endif
                                     <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/80 to-transparent"></div>
@@ -425,63 +482,111 @@
             </div>
         </section>
 
-        <section class="py-20 bg-[#F8FAFC] relative reveal border-t border-gray-100">
-            <div class="container mx-auto px-4">
-                <div class="text-center max-w-2xl mx-auto mb-16">
-                    <h3 class="text-4xl font-black text-[#0A1128] mb-4 tracking-tight">L'impact en images</h3>
-                    <p class="text-slate-500 text-lg">Découvrez les sourires et les vies changées grâce aux rapports d'impact soumis par nos associations partenaires.</p>
+        <section class="py-20 lg:py-32 bg-gradient-to-br from-[#e8ecf3] via-white to-[#e8ecf3] relative reveal border-t border-gray-200 overflow-hidden">
+            <!-- Animated Background Blobs -->
+            <div class="absolute top-20 left-10 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-[#F5A623]/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+            
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="text-center max-w-3xl mx-auto mb-20">
+                    <div class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-50 to-emerald-100 border-2 border-emerald-200 text-emerald-700 rounded-full text-sm font-black mb-8 uppercase tracking-widest shadow-lg shadow-emerald-200/50 animate-bounce" style="animation-duration: 2s;">
+                        <span class="text-2xl leading-none">📸</span> Impact Réel & Vérifié
+                    </div>
+                    <h3 class="text-5xl md:text-7xl font-black text-[#0A1128] mb-8 tracking-tight leading-[1.1]">
+                        L'impact en <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 animate-pulse">images</span>
+                    </h3>
+                    <p class="text-slate-600 text-xl md:text-2xl font-light leading-relaxed">Découvrez les <strong class="text-[#0A1128] font-bold">sourires</strong> et les <strong class="text-[#0A1128] font-bold">vies changées</strong> grâce aux rapports d'impact soumis par nos associations partenaires.</p>
+                    <div class="mt-8 flex items-center justify-center gap-3">
+                        <div class="flex -space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 border-2 border-white shadow-lg"></div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white shadow-lg"></div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#F5A623] to-[#FFD085] border-2 border-white shadow-lg"></div>
+                        </div>
+                        <p class="text-sm text-slate-500 font-bold">+150 rapports d'impact publiés</p>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Staggered Overlapping Cards Layout with Enhanced Animations -->
+                <div class="max-w-7xl mx-auto px-6 lg:px-8 relative" style="min-height: 900px;">
+                    @php
+                        $completedProjects = $projects->take(8);
+                        $positions = [
+                            ['top' => '0', 'right' => '0', 'left' => 'auto', 'rotate' => 'rotate-2', 'z' => 'z-10', 'size' => 'w-72 lg:w-80'],
+                            ['top' => '8rem', 'left' => '0', 'right' => 'auto', 'rotate' => '-rotate-3', 'z' => 'z-10', 'size' => 'w-72 lg:w-80'],
+                            ['top' => '5rem', 'right' => '25%', 'left' => 'auto', 'rotate' => 'rotate-1', 'z' => 'z-20', 'size' => 'w-80 lg:w-96', 'featured' => true],
+                            ['top' => '20rem', 'left' => '2.5rem', 'right' => 'auto', 'rotate' => 'rotate-2', 'z' => 'z-15', 'size' => 'w-72 lg:w-80'],
+                            ['top' => '24rem', 'right' => '2.5rem', 'left' => 'auto', 'rotate' => '-rotate-2', 'z' => 'z-12', 'size' => 'w-72 lg:w-80', 'hidden' => 'hidden lg:block'],
+                            ['bottom' => '8rem', 'left' => '25%', 'right' => 'auto', 'rotate' => 'rotate-3', 'z' => 'z-18', 'size' => 'w-72 lg:w-80', 'hidden' => 'hidden md:block'],
+                            ['bottom' => '2.5rem', 'right' => '8rem', 'left' => 'auto', 'rotate' => '-rotate-1', 'z' => 'z-16', 'size' => 'w-72', 'hidden' => 'hidden lg:block'],
+                            ['bottom' => '12rem', 'left' => '8rem', 'right' => 'auto', 'rotate' => 'rotate-1', 'z' => 'z-14', 'size' => 'w-72', 'hidden' => 'hidden xl:block'],
+                        ];
+                    @endphp
 
-                    <div class="bg-white rounded-[2rem] overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 group hover:-translate-y-1 transition-transform duration-300">
-                        <div class="relative h-56 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1593113565694-c6b75c026d36?q=80&w=800&auto=format&fit=crop" alt="Impact Médical" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/90 via-[#0A1128]/20 to-transparent"></div>
-                            <div class="absolute top-4 right-4 bg-emerald-500 text-white p-2 rounded-full shadow-lg backdrop-blur-sm">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                            </div>
-                            <div class="absolute bottom-4 left-4 right-4">
-                                <span class="text-[#F5A623] text-xs font-bold uppercase tracking-widest mb-1 block">Assoc. Amal Santé</span>
-                                <h4 class="text-white font-bold text-xl leading-tight">Campagne médicale rurale</h4>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-slate-600 text-sm mb-4">"Plus de 300 consultations gratuites et médicaments distribués dans 4 villages enclavés de l'Atlas."</p>
-                            <a href="#" class="inline-flex items-center gap-2 text-[#0A1128] font-bold text-sm hover:text-[#F5A623] transition-colors group/link">
-                                Lire le rapport complet
-                                <span class="group-hover/link:translate-x-1 transition-transform">→</span>
-                            </a>
-                        </div>
-                    </div>
+                    @foreach($completedProjects as $index => $project)
+                        @php
+                            $pos = $positions[$index] ?? $positions[0];
+                            $isFeatured = isset($pos['featured']) && $pos['featured'];
+                        @endphp
+                        <a href="{{ route('projects.show', $project->id) }}" class="absolute {{ $pos['size'] }} neu-{{ $isFeatured ? 'float' : 'card' }} p-{{ $isFeatured ? '6' : '5' }} transform {{ $pos['rotate'] }} hover:rotate-0 hover:z-40 hover:scale-110 transition-all duration-500 cursor-pointer {{ $pos['z'] }} {{ $pos['hidden'] ?? '' }} group"
+                             style="{{ isset($pos['top']) ? 'top: ' . $pos['top'] : '' }}; {{ isset($pos['bottom']) ? 'bottom: ' . $pos['bottom'] : '' }}; {{ isset($pos['left']) ? 'left: ' . $pos['left'] : '' }}; {{ isset($pos['right']) ? 'right: ' . $pos['right'] : '' }};">
+                            
+                            @if($isFeatured)
+                                <div class="absolute -top-3 -right-3 bg-gradient-to-br from-[#F5A623] to-[#FFD085] text-white px-4 py-2 rounded-xl text-xs font-black shadow-lg z-10 animate-bounce" style="animation-duration: 2s;">
+                                    ⭐ POPULAIRE
+                                </div>
+                            @endif
 
-                    <div class="bg-white rounded-[2rem] overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 group hover:-translate-y-1 transition-transform duration-300">
-                        <div class="relative h-56 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800&auto=format&fit=crop" alt="Impact Scolaire" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/90 via-[#0A1128]/20 to-transparent"></div>
-                            <div class="absolute top-4 right-4 bg-emerald-500 text-white p-2 rounded-full shadow-lg backdrop-blur-sm">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                            <div class="relative overflow-hidden rounded-2xl mb-4">
+                                @if($project->image)
+                                    <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" class="w-full h-{{ $isFeatured ? '56' : '48' }} object-cover group-hover:scale-110 transition-transform duration-700">
+                                @else
+                                    <div class="w-full h-{{ $isFeatured ? '56' : '48' }} bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center">
+                                        <span class="text-[#F5A623] text-4xl font-black">{{ $project->category->name ?? 'AK' }}</span>
+                                    </div>
+                                @endif
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/{{ $isFeatured ? '60' : '50' }} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
-                            <div class="absolute bottom-4 left-4 right-4">
-                                <span class="text-[#F5A623] text-xs font-bold uppercase tracking-widest mb-1 block">Assoc. Éducation Pour Tous</span>
-                                <h4 class="text-white font-bold text-xl leading-tight">Rénovation de l'école Al-Fajr</h4>
+
+                            <div class="flex justify-between items-start mb-{{ $isFeatured ? '3' : '2' }}">
+                                <h4 class="text-{{ $isFeatured ? '2xl' : 'xl' }} font-black text-[#0A1128] group-hover:text-[#F5A623] transition-colors">{{ Str::limit($project->title, 30) }}</h4>
+                                <div class="neu-pressed px-3 py-1.5 rounded-lg text-xs font-bold text-[#F5A623] shadow-sm">{{ $project->category->name ?? 'Projet' }}</div>
                             </div>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-slate-600 text-sm mb-4">"Les 3 classes ont été repeintes, équipées de nouveaux tableaux et de 60 tables neuves pour la rentrée."</p>
-                            <a href="#" class="inline-flex items-center gap-2 text-[#0A1128] font-bold text-sm hover:text-[#F5A623] transition-colors group/link">
-                                Lire le rapport complet
-                                <span class="group-hover/link:translate-x-1 transition-transform">→</span>
-                            </a>
-                        </div>
-                    </div>
+
+                            <p class="text-sm text-slate-600 leading-relaxed mb-{{ $isFeatured ? '4' : '3' }}">{{ Str::limit($project->description, 60) }}</p>
+
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2 text-{{ $isFeatured ? 'sm' : 'xs' }} text-emerald-600">
+                                    <svg class="w-{{ $isFeatured ? '5' : '4' }} h-{{ $isFeatured ? '5' : '4' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="font-bold">{{ $isFeatured ? 'Impact Vérifié' : 'Vérifié' }}</span>
+                                </div>
+                                <span class="text-{{ $isFeatured ? 'sm' : 'xs' }} font-black text-{{ $isFeatured ? '[#F5A623]' : 'slate-400' }}">{{ number_format($project->currentAmount, 0, ',', ' ') }} DH</span>
+                            </div>
+                        </a>
+                    @endforeach
 
                 </div>
 
-                <div class="text-center mt-12">
-                    <a href="#" class="inline-block bg-white text-[#0A1128] border border-gray-200 font-bold px-8 py-3 rounded-xl hover:bg-gray-50 transition-colors shadow-sm">
-                        Voir tous les rapports d'impact
+                <div class="text-center mt-24 lg:mt-32">
+                    <p class="text-slate-500 mb-6 text-lg">Chaque projet est vérifié avec des preuves visuelles et des rapports détaillés</p>
+                    <a href="#" class="inline-flex items-center gap-3 neu-button text-[#0A1128] font-black text-lg px-12 py-6 rounded-2xl group hover:shadow-2xl">
+                        <svg class="w-6 h-6 text-[#F5A623]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        <span>Voir tous les rapports d'impact</span>
+                        <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </a>
+                    <div class="mt-8 flex items-center justify-center gap-8 text-sm">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                            <span class="text-slate-600 font-bold">100% Vérifié</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+                            <span class="text-slate-600 font-bold">Photos Réelles</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-[#F5A623] rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+                            <span class="text-slate-600 font-bold">Impact Mesuré</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -989,26 +1094,16 @@
 
 
 
-            // 4. Number Counter Animation for Stats (Avec Zéros à gauche)
+            // 4. Number Counter Animation for Stats (6 digits with leading zeros)
                 const counters = document.querySelectorAll('.counter');
-                const animationDuration = 2500; 
-
-                let maxDigits = 0;
-                counters.forEach(c => {
-                    const targetVal = parseFloat(c.getAttribute('data-target')) || 0;
-                    const targetLength = Math.floor(targetVal).toString().length;
-                    if (targetLength > maxDigits) {
-                        maxDigits = targetLength;
-                    }
-                });
-
-                if (maxDigits < 2) maxDigits = 2;
+                const animationDuration = 2500;
+                const targetDigits = 6;
 
                 const counterObserver = new IntersectionObserver((entries, observer) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             const counter = entry.target;
-                            const target = parseFloat(counter.getAttribute('data-target'));
+                            const target = parseFloat(counter.getAttribute('data-target')) || 0;
                             let startTime = null;
 
                             const updateCount = (currentTime) => {
@@ -1017,24 +1112,14 @@
                                 
                                 const percentage = Math.min(progress / animationDuration, 1);
                                 const easeOut = 1 - Math.pow(1 - percentage, 3);
-                                const currentVal = target * easeOut;
+                                const currentVal = Math.floor(target * easeOut);
                                 
-                                if (target % 1 !== 0) {
-                                    let val = currentVal.toFixed(1);
-                                    counter.innerText = val.padStart(maxDigits + 2, '0');
-                                } else {
-                                    let val = Math.floor(currentVal).toString();
-                                    counter.innerText = val.padStart(maxDigits, '0');
-                                }
+                                counter.innerText = currentVal.toString().padStart(targetDigits, '0');
 
                                 if (progress < animationDuration) {
                                     requestAnimationFrame(updateCount);
                                 } else {
-                                    if (target % 1 !== 0) {
-                                        counter.innerText = target.toFixed(1).padStart(maxDigits + 2, '0');
-                                    } else {
-                                        counter.innerText = target.toString().padStart(maxDigits, '0');
-                                    }
+                                    counter.innerText = Math.floor(target).toString().padStart(targetDigits, '0');
                                 }
                             };
                             

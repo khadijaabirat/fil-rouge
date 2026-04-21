@@ -41,7 +41,7 @@
             </div>
         @endif
 
-        <form action="{{ route('projects.update', $project->id) }}" method="POST">
+        <form action="{{ route('projects.update', $project->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT') <div class="mb-6">
                 <label for="title" class="block text-gray-700 font-bold mb-2">Titre du projet <span class="text-red-500">*</span></label>
@@ -52,6 +52,24 @@
                 <label for="videoUrl" class="block text-gray-700 font-bold mb-2">Lien de la vidéo de campagne (Optionnel)</label>
                 <input type="url" id="videoUrl" name="videoUrl" value="{{ old('videoUrl', $project->videoUrl) }}" placeholder="https://youtube.com/..." class="w-full border-gray-300 rounded-lg p-3 border focus:ring-blue-500 focus:border-blue-500 bg-gray-50 transition shadow-sm text-blue-600">
                 <p class="text-xs text-gray-500 mt-2 font-medium">Ajouter une vidéo augmente vos chances de recevoir des dons.</p>
+            </div>
+
+            <div class="mb-6">
+                <label for="image" class="block text-gray-700 font-bold mb-2">Image du Projet (Optionnel)</label>
+                @if($project->image)
+                    <div class="mb-3">
+                        <p class="text-sm text-gray-600 mb-2">Image actuelle:</p>
+                        <img src="{{ asset('storage/' . $project->image) }}" alt="Image actuelle" class="w-full h-48 object-cover rounded-lg border border-gray-200">
+                    </div>
+                @endif
+                <div class="flex items-center gap-4">
+                    <input type="file" id="image" name="image" accept="image/jpeg,image/jpg,image/png,image/webp" class="w-full border-gray-300 rounded-lg p-3 border focus:ring-blue-500 focus:border-blue-500 bg-gray-50 transition shadow-sm">
+                </div>
+                <p class="text-xs text-gray-500 mt-2 font-medium">Formats acceptés: JPG, PNG, WEBP (Max: 5 Mo)</p>
+                <div id="imagePreview" class="mt-3 hidden">
+                    <p class="text-sm text-gray-600 mb-2">Nouvelle image:</p>
+                    <img id="preview" class="w-full h-48 object-cover rounded-lg border border-gray-200" alt="Aperçu">
+                </div>
             </div>
 
             <div class="mb-8">
@@ -70,6 +88,20 @@
         </form>
 
     </div>
+
+    <script>
+        document.getElementById('image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                    document.getElementById('imagePreview').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 
 </body>
 </html>

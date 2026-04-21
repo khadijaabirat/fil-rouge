@@ -2,327 +2,67 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Project;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+
 class ProjectSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $now = Carbon::now();
-      $projects = [
-            [
-                'title' => 'Creusement d\'un puits à Douar Tinzouline',
-                'description' => 'Ce projet vise à creuser un puits équipé d\'une pompe solaire pour fournir de l\'eau potable à plus de 150 familles isolées.',
-                'goalAmount' => 45000,
-                'currentAmount' => 12500,
-                'startDate' => $now->copy()->subDays(10),
-                'endDate' => $now->copy()->addDays(30),
-                'status' => 'OPEN',
-                'videoUrl' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                'category_id' => 1,
-                'association_id' => 1,
-            ],
-            [
-                'title' => 'Canalisation d\'eau pour l\'école du village',
-                'description' => 'Acheminement de l\'eau courante vers l\'école rurale locale pour améliorer l\'hygiène des élèves.',
-                'goalAmount' => 20000,
-                'currentAmount' => 20000,
-                'startDate' => $now->copy()->subDays(40),
-                'endDate' => $now->copy()->subDays(5),
-                'status' => 'COMPLETED',
-                'videoUrl' => null,
-                'category_id' => 1,
-                'association_id' => 1,
-            ],
+        $projects = [
+            // === Association Al Nour (ID=2, cat=1 Éducation) ===
+            ['title' => 'Construction d\'une école à Ait Hamou', 'description' => 'Construction d\'une école primaire de 6 classes et sanitaires dans le douar Ait Hamou, province d\'Azilal, pour permettre à plus de 200 enfants d\'accéder à l\'éducation.', 'goalAmount' => 500000, 'currentAmount' => 320000, 'startDate' => '2026-01-15', 'endDate' => '2026-07-30', 'status' => 'OPEN', 'association_id' => 2, 'category_id' => 1],
+            ['title' => 'Bourses universitaires 2026', 'description' => 'Programme de bourses pour 50 étudiants issus de familles défavorisées couvrant inscription, logement et alimentation.', 'goalAmount' => 250000, 'currentAmount' => 250000, 'startDate' => '2025-09-01', 'endDate' => '2026-06-30', 'status' => 'COMPLETED', 'association_id' => 2, 'category_id' => 1],
+            ['title' => 'Distribution de cartables scolaires', 'description' => 'Distribution de 2000 cartables équipés aux élèves du primaire dans les zones rurales de Béni Mellal-Khénifra.', 'goalAmount' => 120000, 'currentAmount' => 85000, 'startDate' => '2026-07-01', 'endDate' => '2026-09-15', 'status' => 'OPEN', 'association_id' => 2, 'category_id' => 1],
+            ['title' => 'Bibliothèque communautaire à Ouarzazate', 'description' => 'Création d\'une bibliothèque communautaire équipée de livres, ordinateurs et accès internet pour les jeunes de Ouarzazate.', 'goalAmount' => 150000, 'currentAmount' => 60000, 'startDate' => '2026-03-01', 'endDate' => '2026-11-30', 'status' => 'OPEN', 'association_id' => 2, 'category_id' => 1],
 
-            [
-                'title' => 'Éclairage Solaire pour 50 foyers',
-                'description' => 'Installation de kits de panneaux solaires individuels pour les familles vivant hors réseau électrique dans le Haut Atlas.',
-                'goalAmount' => 60000,
-                'currentAmount' => 5000,
-                'startDate' => $now->copy()->subDays(2),
-                'endDate' => $now->copy()->addDays(60),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 1,
-                'association_id' => 2,
-            ],
-            [
-                'title' => 'Construction d\'un petit pont piétonnier',
-                'description' => 'Construction d\'un pont sûr pour permettre aux enfants de traverser la rivière en hiver pour aller à l\'école.',
-                'goalAmount' => 35000,
-                'currentAmount' => 15000,
-                'startDate' => $now->copy()->subDays(15),
-                'endDate' => $now->copy()->addDays(45),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 1,
-                'association_id' => 2,
-            ],
+            // === Fondation Achifaa (ID=3, cat=2 Santé) ===
+            ['title' => 'Caravane médicale dans l\'Atlas', 'description' => 'Organisation d\'une caravane médicale multidisciplinaire pour les habitants des douars isolés du Haut Atlas avec distribution gratuite de médicaments.', 'goalAmount' => 180000, 'currentAmount' => 145000, 'startDate' => '2026-03-01', 'endDate' => '2026-05-31', 'status' => 'OPEN', 'association_id' => 3, 'category_id' => 2],
+            ['title' => 'Équipement centre d\'hémodialyse', 'description' => 'Achat et installation de 10 appareils d\'hémodialyse au centre de santé de Khouribga pour les patients démunis.', 'goalAmount' => 800000, 'currentAmount' => 350000, 'startDate' => '2026-02-01', 'endDate' => '2026-12-31', 'status' => 'OPEN', 'association_id' => 3, 'category_id' => 2],
+            ['title' => 'Chirurgies cardiaques pour enfants', 'description' => 'Financement de 20 opérations cardiaques pour enfants atteints de malformations congénitales issus de familles démunies.', 'goalAmount' => 600000, 'currentAmount' => 600000, 'startDate' => '2025-06-01', 'endDate' => '2026-03-31', 'status' => 'COMPLETED', 'association_id' => 3, 'category_id' => 2],
+            ['title' => 'Campagne de dépistage du diabète', 'description' => 'Campagne de dépistage gratuit du diabète dans 20 communes rurales de la région Rabat-Salé-Kénitra avec suivi médical.', 'goalAmount' => 95000, 'currentAmount' => 95000, 'startDate' => '2025-11-01', 'endDate' => '2026-02-28', 'status' => 'COMPLETED', 'association_id' => 3, 'category_id' => 2],
 
-            [
-                'title' => 'Sacs à dos et fournitures pour la rentrée',
-                'description' => 'Distribution de 500 cartables complets pour lutter contre la déperdition scolaire dans la région.',
-                'goalAmount' => 25000,
-                'currentAmount' => 25000,
-                'startDate' => $now->copy()->subMonths(6),
-                'endDate' => $now->copy()->subMonths(4),
-                'status' => 'CLOSED',
-                'videoUrl' => null,
-                'category_id' => 2,
-                'association_id' => 3,
-            ],
-            [
-                'title' => 'Achat d\'un Minibus de Transport Scolaire',
-                'description' => 'Acquisition d\'un minibus pour transporter les filles des villages avoisinants vers le collège rural.',
-                'goalAmount' => 120000,
-                'currentAmount' => 45000,
-                'startDate' => $now->copy()->subDays(5),
-                'endDate' => $now->copy()->addDays(80),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 2,
-                'association_id' => 3,
-            ],
+            // === Kafil Al Yatim (ID=4, cat=3 Orphelins) ===
+            ['title' => 'Parrainage de 100 orphelins pour un an', 'description' => 'Programme complet de parrainage de 100 orphelins incluant éducation, alimentation, vêtements et soins de santé.', 'goalAmount' => 360000, 'currentAmount' => 210000, 'startDate' => '2026-01-01', 'endDate' => '2026-12-31', 'status' => 'OPEN', 'association_id' => 4, 'category_id' => 3],
+            ['title' => 'Rénovation de l\'orphelinat de Fès', 'description' => 'Rénovation et équipement de l\'orphelinat de Fès accueillant 60 orphelins : toiture, cuisine, dortoirs et sanitaires.', 'goalAmount' => 280000, 'currentAmount' => 280000, 'startDate' => '2025-10-01', 'endDate' => '2026-02-28', 'status' => 'COMPLETED', 'association_id' => 4, 'category_id' => 3],
+            ['title' => 'Colonie de vacances pour orphelins', 'description' => 'Organisation d\'une colonie de vacances d\'été de 15 jours à Ifrane pour 80 orphelins avec activités éducatives et sportives.', 'goalAmount' => 120000, 'currentAmount' => 45000, 'startDate' => '2026-05-01', 'endDate' => '2026-08-31', 'status' => 'OPEN', 'association_id' => 4, 'category_id' => 3],
 
-            [
-                'title' => 'Rénovation d\'une école à la périphérie',
-                'description' => 'Peinture, réparation des fenêtres et aménagement d\'un espace de jeux pour une école publique.',
-                'goalAmount' => 40000,
-                'currentAmount' => 12000,
-                'startDate' => $now->copy()->subDays(20),
-                'endDate' => $now->copy()->addDays(20),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 2,
-                'association_id' => 4,
-            ],
-            [
-                'title' => 'Bibliothèque éducative pour tous',
-                'description' => 'Aménagement d\'une salle de lecture avec achat de 1000 livres et contes pour enfants.',
-                'goalAmount' => 15000,
-                'currentAmount' => 8000,
-                'startDate' => $now->copy()->subDays(10),
-                'endDate' => $now->copy()->addDays(50),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 2,
-                'association_id' => 4,
-            ],
+            // === Akhdar Environnement (ID=5, cat=4 Environnement) ===
+            ['title' => 'Plantation de 10 000 arganiers', 'description' => 'Plantation de 10 000 arganiers dans la région de Souss-Massa pour lutter contre la désertification et préserver ce patrimoine UNESCO.', 'goalAmount' => 200000, 'currentAmount' => 130000, 'startDate' => '2026-02-15', 'endDate' => '2026-08-30', 'status' => 'OPEN', 'association_id' => 5, 'category_id' => 4],
+            ['title' => 'Nettoyage de la plage d\'Essaouira', 'description' => 'Campagne de nettoyage et sensibilisation à la propreté des plages avec installation de poubelles intelligentes.', 'goalAmount' => 50000, 'currentAmount' => 50000, 'startDate' => '2026-01-01', 'endDate' => '2026-04-15', 'status' => 'COMPLETED', 'association_id' => 5, 'category_id' => 4],
+            ['title' => 'Programme de recyclage à Marrakech', 'description' => 'Mise en place d\'un programme de tri sélectif et recyclage dans 10 quartiers de Marrakech avec formation des habitants.', 'goalAmount' => 180000, 'currentAmount' => 70000, 'startDate' => '2026-04-01', 'endDate' => '2026-12-31', 'status' => 'OPEN', 'association_id' => 5, 'category_id' => 4],
 
-            [
-                'title' => 'Caravane Médicale Ophtalmologique',
-                'description' => 'Organisation d\'une caravane pour réaliser 100 opérations gratuites de la cataracte pour les personnes âgées.',
-                'goalAmount' => 80000,
-                'currentAmount' => 60000,
-                'startDate' => $now->copy()->subDays(25),
-                'endDate' => $now->copy()->addDays(15),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 3,
-                'association_id' => 5,
-            ],
-            [
-                'title' => 'Équipement d\'un dispensaire de quartier',
-                'description' => 'Achat de matériel de premiers secours, tensiomètres et lecteur de glycémie.',
-                'goalAmount' => 30000,
-                'currentAmount' => 30000,
-                'startDate' => $now->copy()->subMonths(2),
-                'endDate' => $now->copy()->subMonths(1),
-                'status' => 'COMPLETED',
-                'videoUrl' => null,
-                'category_id' => 3,
-                'association_id' => 5,
-            ],
+            // === Comité de Secours (ID=6, cat=5 Aide d'urgence) ===
+            ['title' => 'Aide aux victimes des inondations', 'description' => 'Fourniture d\'aide d\'urgence à 500 familles touchées par les inondations à Tétouan : tentes, couvertures, nourriture et eau.', 'goalAmount' => 400000, 'currentAmount' => 280000, 'startDate' => '2026-03-10', 'endDate' => '2026-06-10', 'status' => 'OPEN', 'association_id' => 6, 'category_id' => 5],
+            ['title' => 'Paniers alimentaires du Ramadan', 'description' => 'Distribution de 3000 paniers alimentaires aux familles démunies pendant le Ramadan dans les villes du Nord.', 'goalAmount' => 300000, 'currentAmount' => 300000, 'startDate' => '2026-02-01', 'endDate' => '2026-03-30', 'status' => 'COMPLETED', 'association_id' => 6, 'category_id' => 5],
+            ['title' => 'Couvertures et vêtements d\'hiver', 'description' => 'Distribution de 2000 couvertures et lots de vêtements chauds aux familles des zones montagneuses avant l\'hiver.', 'goalAmount' => 160000, 'currentAmount' => 110000, 'startDate' => '2026-09-01', 'endDate' => '2026-12-15', 'status' => 'OPEN', 'association_id' => 6, 'category_id' => 5],
 
-            [
-                'title' => 'Prise en charge d\'opérations cardiaques (Enfants)',
-                'description' => 'Soutien financier pour sauver la vie de 3 enfants nécessitant des chirurgies cardiaques urgentes.',
-                'goalAmount' => 150000,
-                'currentAmount' => 45000,
-                'startDate' => $now->copy()->subDays(5),
-                'endDate' => $now->copy()->addDays(40),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 3,
-                'association_id' => 6,
-            ],
-            [
-                'title' => 'Achat de médicaments pour maladies chroniques',
-                'description' => 'Fourniture mensuelle d\'insuline et traitements pour 50 patients démunis.',
-                'goalAmount' => 20000,
-                'currentAmount' => 15000,
-                'startDate' => $now->copy()->subDays(10),
-                'endDate' => $now->copy()->addDays(20),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 3,
-                'association_id' => 6,
-            ],
+            // === Al Bounyan (ID=7, cat=6 Infrastructure) ===
+            ['title' => 'Forage de 5 puits à Souss', 'description' => 'Forage de 5 puits équipés de pompes solaires dans la province de Taroudant pour fournir de l\'eau potable à 2000 habitants.', 'goalAmount' => 350000, 'currentAmount' => 175000, 'startDate' => '2026-04-01', 'endDate' => '2026-10-31', 'status' => 'OPEN', 'association_id' => 7, 'category_id' => 6],
+            ['title' => 'Construction d\'une mosquée à Tizi', 'description' => 'Construction d\'une mosquée de 300 places au douar Tizi N\'Tichka avec salle de Coran et logement de l\'imam.', 'goalAmount' => 450000, 'currentAmount' => 290000, 'startDate' => '2026-01-20', 'endDate' => '2026-09-30', 'status' => 'OPEN', 'association_id' => 7, 'category_id' => 6],
+            ['title' => 'Route rurale à Tafraout', 'description' => 'Aménagement d\'une route rurale de 8 km reliant 3 douars isolés à la route principale de Tafraout.', 'goalAmount' => 600000, 'currentAmount' => 600000, 'startDate' => '2025-08-01', 'endDate' => '2026-04-30', 'status' => 'COMPLETED', 'association_id' => 7, 'category_id' => 6],
 
-            [
-                'title' => 'Parrainage de 20 Orphelins (Annuel)',
-                'description' => 'Assurer les frais de scolarité, nourriture et vêtements pour 20 enfants ayant perdu leurs parents.',
-                'goalAmount' => 60000,
-                'currentAmount' => 10000,
-                'startDate' => $now->copy()->subDays(2),
-                'endDate' => $now->copy()->addDays(90),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 4,
-                'association_id' => 7,
-            ],
-            [
-                'title' => 'Projet "Kafalat Ar-Armala"',
-                'description' => 'Aide au lancement de petits projets générateurs de revenus (couture, pâtisserie) pour 5 veuves.',
-                'goalAmount' => 25000,
-                'currentAmount' => 25000,
-                'startDate' => $now->copy()->subMonths(3),
-                'endDate' => $now->copy()->subMonths(2),
-                'status' => 'CLOSED',
-                'videoUrl' => null,
-                'category_id' => 4,
-                'association_id' => 7,
-            ],
+            // === Nissa Al Khair (ID=8, cat=7 Femmes et Famille) ===
+            ['title' => 'Formation couture pour 50 femmes', 'description' => 'Programme de formation en couture et stylisme pour 50 femmes au chômage à Meknès avec fourniture de machines à coudre.', 'goalAmount' => 200000, 'currentAmount' => 120000, 'startDate' => '2026-02-01', 'endDate' => '2026-08-31', 'status' => 'OPEN', 'association_id' => 8, 'category_id' => 7],
+            ['title' => 'Coopérative d\'huile d\'argan', 'description' => 'Création d\'une coopérative féminine d\'huile d\'argan à Essaouira pour 30 femmes avec formation et équipement.', 'goalAmount' => 250000, 'currentAmount' => 250000, 'startDate' => '2025-07-01', 'endDate' => '2026-01-31', 'status' => 'COMPLETED', 'association_id' => 8, 'category_id' => 7],
+            ['title' => 'Alphabétisation des femmes rurales', 'description' => 'Programme d\'alphabétisation pour 200 femmes dans 10 douars de la région de Meknès-Fès.', 'goalAmount' => 80000, 'currentAmount' => 35000, 'startDate' => '2026-04-15', 'endDate' => '2026-12-31', 'status' => 'OPEN', 'association_id' => 8, 'category_id' => 7],
 
-            [
-                'title' => 'Couffins Alimentaires de Ramadan',
-                'description' => 'Distribution de 1000 paniers alimentaires contenant les nécessités de base pour le mois sacré.',
-                'goalAmount' => 100000,
-                'currentAmount' => 85000,
-                'startDate' => $now->copy()->subDays(15),
-                'endDate' => $now->copy()->addDays(15),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 4,
-                'association_id' => 8,
-            ],
-            [
-                'title' => 'Abris et vêtements chauds pour l\'hiver',
-                'description' => 'Campagne de maraude nocturne pour fournir repas chauds et manteaux aux sans-abris de la ville.',
-                'goalAmount' => 30000,
-                'currentAmount' => 12000,
-                'startDate' => $now->copy()->subDays(8),
-                'endDate' => $now->copy()->addDays(50),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 4,
-                'association_id' => 8,
-            ],
+            // === Chabab Al Moustaqbal (ID=9, cat=8 Culture et Sport) ===
+            ['title' => 'Terrain de football à Kénitra', 'description' => 'Aménagement d\'un terrain de football synthétique dans le quartier Bir Rami pour les jeunes de Kénitra.', 'goalAmount' => 350000, 'currentAmount' => 180000, 'startDate' => '2026-03-01', 'endDate' => '2026-10-31', 'status' => 'OPEN', 'association_id' => 9, 'category_id' => 8],
+            ['title' => 'Festival culturel de la jeunesse', 'description' => 'Organisation d\'un festival culturel de 3 jours avec ateliers d\'art, musique, théâtre et expositions pour les jeunes.', 'goalAmount' => 100000, 'currentAmount' => 100000, 'startDate' => '2025-10-01', 'endDate' => '2026-03-31', 'status' => 'COMPLETED', 'association_id' => 9, 'category_id' => 8],
+            ['title' => 'Centre de formation artistique', 'description' => 'Création d\'un centre de formation en arts plastiques, musique et théâtre pour 100 jeunes de Kénitra.', 'goalAmount' => 280000, 'currentAmount' => 90000, 'startDate' => '2026-05-01', 'endDate' => '2026-12-31', 'status' => 'OPEN', 'association_id' => 9, 'category_id' => 8],
 
-            [
-                'title' => 'Tentes et logistique post-séisme',
-                'description' => 'Fonds d\'urgence pour l\'achat et l\'installation de tentes robustes pour les sinistrés.',
-                'goalAmount' => 200000,
-                'currentAmount' => 195000,
-                'startDate' => $now->copy()->subDays(5),
-                'endDate' => $now->copy()->addDays(10),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 5,
-                'association_id' => 9,
-            ],
-            [
-                'title' => 'Campagne Grand Froid Atlas',
-                'description' => 'Achat massif de couvertures épaisses et de bois de chauffage pour les villages encerclés par la neige.',
-                'goalAmount' => 50000,
-                'currentAmount' => 50000,
-                'startDate' => $now->copy()->subMonths(5),
-                'endDate' => $now->copy()->subMonths(4),
-                'status' => 'COMPLETED',
-                'videoUrl' => null,
-                'category_id' => 5,
-                'association_id' => 9,
-            ],
+            // === Fondation Atlas (ID=10, cat=1 Éducation) ===
+            ['title' => 'Cours de soutien scolaire gratuits', 'description' => 'Programme de cours de soutien scolaire gratuits pour 500 élèves du collège et lycée à Béni Mellal.', 'goalAmount' => 90000, 'currentAmount' => 90000, 'startDate' => '2025-09-01', 'endDate' => '2026-06-30', 'status' => 'COMPLETED', 'association_id' => 10, 'category_id' => 1],
+            ['title' => 'Équipement informatique pour 5 écoles', 'description' => 'Fourniture de 100 ordinateurs et connexion internet pour 5 écoles rurales dans la province de Khénifra.', 'goalAmount' => 300000, 'currentAmount' => 150000, 'startDate' => '2026-01-15', 'endDate' => '2026-09-30', 'status' => 'OPEN', 'association_id' => 10, 'category_id' => 1],
 
-            [
-                'title' => 'Reconstruction d\'habitations endommagées',
-                'description' => 'Achat de matériaux de construction pour aider 10 familles à rebâtir leurs maisons après les inondations.',
-                'goalAmount' => 150000,
-                'currentAmount' => 40000,
-                'startDate' => $now->copy()->subDays(12),
-                'endDate' => $now->copy()->addDays(48),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 5,
-                'association_id' => 10,
-            ],
-            [
-                'title' => 'Convoi alimentaire d\'urgence',
-                'description' => 'Envoi de camions remplis de denrées non périssables vers les zones déclarées sinistrées.',
-                'goalAmount' => 45000,
-                'currentAmount' => 20000,
-                'startDate' => $now->copy()->subDays(3),
-                'endDate' => $now->copy()->addDays(27),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 5,
-                'association_id' => 10,
-            ],
-
-            [
-                'title' => 'Achat de 50 Chaises Roulantes',
-                'description' => 'Offrir des chaises roulantes manuelles et électriques pour faciliter la mobilité des personnes en situation de handicap.',
-                'goalAmount' => 75000,
-                'currentAmount' => 32000,
-                'startDate' => $now->copy()->subDays(18),
-                'endDate' => $now->copy()->addDays(42),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 6,
-                'association_id' => 11,
-            ],
-            [
-                'title' => 'Aménagement d\'un centre de rééducation',
-                'description' => 'Équiper une salle de kinésithérapie avec le matériel nécessaire pour des séances de rééducation gratuites.',
-                'goalAmount' => 120000,
-                'currentAmount' => 15000,
-                'startDate' => $now->copy()->subDays(1),
-                'endDate' => $now->copy()->addDays(60),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 6,
-                'association_id' => 11,
-            ],
-
-            [
-                'title' => 'Machines d\'écriture Braille pour Étudiants',
-                'description' => 'Financement de 20 machines Perkins pour aider les étudiants malvoyants à poursuivre leurs études universitaires.',
-                'goalAmount' => 80000,
-                'currentAmount' => 80000,
-                'startDate' => $now->copy()->subMonths(4),
-                'endDate' => $now->copy()->subMonths(3),
-                'status' => 'COMPLETED',
-                'videoUrl' => null,
-                'category_id' => 6,
-                'association_id' => 12,
-            ],
-            [
-                'title' => 'Achat de Cannes Blanches Électroniques',
-                'description' => 'Fournir des cannes équipées de capteurs à ultrasons pour garantir la sécurité des déplacements en ville.',
-                'goalAmount' => 40000,
-                'currentAmount' => 18000,
-                'startDate' => $now->copy()->subDays(7),
-                'endDate' => $now->copy()->addDays(23),
-                'status' => 'OPEN',
-                'videoUrl' => null,
-                'category_id' => 6,
-                'association_id' => 12,
-            ],
+            // === Association Hayat (ID=11, cat=2 Santé) ===
+            ['title' => 'Lunettes gratuites pour 500 élèves', 'description' => 'Campagne de dépistage visuel et distribution de lunettes correctives gratuites à 500 élèves de l\'Oriental.', 'goalAmount' => 150000, 'currentAmount' => 85000, 'startDate' => '2026-02-01', 'endDate' => '2026-07-31', 'status' => 'OPEN', 'association_id' => 11, 'category_id' => 2],
+            ['title' => 'Ambulance pour la commune d\'Ain Beni Mathar', 'description' => 'Acquisition d\'une ambulance équipée pour la commune d\'Ain Beni Mathar qui ne dispose d\'aucun moyen de transport médical.', 'goalAmount' => 400000, 'currentAmount' => 220000, 'startDate' => '2026-03-01', 'endDate' => '2026-11-30', 'status' => 'OPEN', 'association_id' => 11, 'category_id' => 2],
         ];
 
         foreach ($projects as $project) {
-            DB::table('projects')->insert(array_merge($project, [
-                'created_at' => $now,
-                'updated_at' => $now,
-            ]));
+            Project::create($project);
         }
-
     }
 }

@@ -13,7 +13,7 @@
             <a href="{{ route('association.dashboard') }}" class="text-gray-500 hover:text-gray-700 underline">Retour au tableau de bord</a>
         </div>
 
-        <form action="{{ route('projects.store') }}" method="POST">
+        <form action="{{ route('projects.store') }}" method="POST" enctype="multipart/form-data">
             @csrf <div class="mb-4">
                 <label for="title" class="block text-gray-700 font-medium mb-2">Titre du projet *</label>
                 <input type="text" id="title" name="title" value="{{ old('title') }}" required class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
@@ -58,10 +58,35 @@
                 </div>
             </div>
 
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label for="latitude" class="block text-gray-700 font-medium mb-2">Latitude</label>
+                    <input type="number" id="latitude" name="latitude" step="0.00000001" value="{{ old('latitude') }}" placeholder="31.7917" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
+                    @error('latitude') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div>
+                    <label for="longitude" class="block text-gray-700 font-medium mb-2">Longitude</label>
+                    <input type="number" id="longitude" name="longitude" step="0.00000001" value="{{ old('longitude') }}" placeholder="-7.0926" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
+                    @error('longitude') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+            </div>
+
             <div class="mb-6">
                 <label for="videoUrl" class="block text-gray-700 font-medium mb-2">Lien Vidéo (Optionnel)</label>
                 <input type="url" id="videoUrl" name="videoUrl" value="{{ old('videoUrl') }}" placeholder="https://youtube.com/..." class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
                 @error('videoUrl') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+            </div>
+
+            <div class="mb-6">
+                <label for="image" class="block text-gray-700 font-medium mb-2">Image du Projet (Optionnel)</label>
+                <div class="flex items-center gap-4">
+                    <input type="file" id="image" name="image" accept="image/jpeg,image/jpg,image/png,image/webp" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <p class="text-xs text-gray-500 mt-1">Formats acceptés: JPG, PNG, WEBP (Max: 5 Mo)</p>
+                @error('image') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                <div id="imagePreview" class="mt-3 hidden">
+                    <img id="preview" class="w-full h-48 object-cover rounded-lg border border-gray-200" alt="Aperçu">
+                </div>
             </div>
 
             <div class="flex justify-end">
@@ -71,6 +96,20 @@
             </div>
         </form>
     </div>
+
+    <script>
+        document.getElementById('image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                    document.getElementById('imagePreview').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 
 </body>
 </html>

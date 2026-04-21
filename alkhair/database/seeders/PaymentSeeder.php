@@ -2,29 +2,41 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Payment;
 use App\Models\Donation;
+
 class PaymentSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-         $donations = Donation::all();
+        // Get all VALIDATED donations and create SUCCESS payments for them
+        $validatedDonations = Donation::where('status', 'VALIDATED')->get();
 
-        foreach ($donations as $donation) {
-             $methods = ['ONLINE', 'MANUAL'];
-            $method = $methods[array_rand($methods)];
-
+        foreach ($validatedDonations as $index => $donation) {
             Payment::create([
-                'paymentMethod' => $method,
+                'transactionId' => 'TXN-' . str_pad($index + 1, 6, '0', STR_PAD_LEFT),
+                'paymentMethod' => $index % 3 === 0 ? 'MANUAL' : 'ONLINE',
+                'paymentReceipt' => $index % 3 === 0 ? 'receipts/receipt_' . ($index + 1) . '.pdf' : null,
+                'amount' => $donation->amount,
+                'paymentDate' => $donation->donationDate,
                 'status' => 'SUCCESS',
-                 'paymentReceipt' => $method === 'MANUAL' ? 'receipts/dummy_receipt.pdf' : null,
                 'donation_id' => $donation->id,
-                'amount' =>  fake()->numberBetween(100, 5000),
+            ]);
+        }
+
+        // Get PENDING donations and create PENDING payments for them
+        $pendingDonations = Donation::where('status', 'PENDING')->get();
+
+        foreach ($pendingDonations as $index => $donation) {
+            Payment::create([
+                'transactionId' => 'TXN-PEND-' . str_pad($index + 1, 4, '0', STR_PAD_LEFT),
+                'paymentMethod' => 'ONLINE',
+                'paymentReceipt' => null,
+                'amount' => $donation->amount,
+                'paymentDate' => null,
+                'status' => 'PENDING',
+                'donation_id' => $donation->id,
             ]);
         }
     }

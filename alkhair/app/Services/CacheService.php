@@ -15,8 +15,11 @@ class CacheService
         return Cache::remember('statistics', self::CACHE_TTL, function () {
             return [
                 'totalCollected' => Project::sum('currentAmount'),
-                'activeAssociations' => User::where('role', 'association')->where('status', 'ACTIVE')->count(),
-                'completedProjects' => Project::whereIn('status', ['COMPLETED', 'CLOSED'])->count(),
+                'activeAssociations' => User::where('role', 'association')
+                    ->whereNotNull('kyc_verified_at')
+                    ->whereNull('deleted_at')
+                    ->count(),
+                'completedProjects' => Project::where('status', 'COMPLETED')->count(),
                 'openProjects' => Project::where('status', 'OPEN')->count(),
             ];
         });

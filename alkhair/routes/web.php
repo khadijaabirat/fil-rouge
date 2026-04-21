@@ -11,7 +11,7 @@ use App\Http\Controllers\ImpactReportController;
 use App\Http\Controllers\CategoryController;
  
 require __DIR__.'/auth.php'; 
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('welcome');
 Route::get('/projets', [ProjectController::class, 'index'])->name('projects.index');
 Route::get('/projects/{id}', [ProjectController::class, 'show'])->whereNumber('id')->name('projects.show');
 
