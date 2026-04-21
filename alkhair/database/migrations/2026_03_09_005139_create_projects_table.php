@@ -24,7 +24,8 @@ return new class extends Migration
             $table->enum('status',['OPEN','CLOSED','COMPLETED','SUSPENDED'])->default('OPEN');
             $table->foreignId('association_id')->constrained('users');
             $table->foreignId('category_id')->constrained('categories');
-
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
             $table->timestamps();
         });
     }
