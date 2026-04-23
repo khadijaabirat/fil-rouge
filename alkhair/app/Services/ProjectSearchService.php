@@ -10,7 +10,8 @@ class ProjectSearchService
     public static function search(array $filters): Builder
     {
         $query = Project::with(['association', 'category'])
-            ->where('status', 'OPEN');
+            ->where('status', 'OPEN')
+            ->whereColumn('currentAmount', '<', 'goalAmount');
 
         // Search by title or description
         if (!empty($filters['search'])) {

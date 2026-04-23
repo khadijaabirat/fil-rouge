@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Créer un Projet - AL-KHAIR</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body class="bg-gray-100 p-8">
 
@@ -58,17 +61,16 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label for="latitude" class="block text-gray-700 font-medium mb-2">Latitude</label>
-                    <input type="number" id="latitude" name="latitude" step="0.00000001" value="{{ old('latitude') }}" placeholder="31.7917" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
-                    @error('latitude') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
-                <div>
-                    <label for="longitude" class="block text-gray-700 font-medium mb-2">Longitude</label>
-                    <input type="number" id="longitude" name="longitude" step="0.00000001" value="{{ old('longitude') }}" placeholder="-7.0926" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500">
-                    @error('longitude') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
+       <div class="mb-6">
+                <label class="block text-gray-700 font-medium mb-2">Localisation du projet sur la carte *</label>
+                <p class="text-sm text-gray-500 mb-2">Cliquez sur la carte pour sélectionner l'emplacement exact du projet.</p>
+                
+                <div id="map" class="w-full h-64 rounded-md border border-gray-300 shadow-sm z-0 relative mb-2"></div>
+                
+                <input type="hidden" id="latitude" name="latitude" value="{{ old('latitude') }}">
+                <input type="hidden" id="longitude" name="longitude" value="{{ old('longitude') }}">
+                
+                @error('latitude') <span class="text-red-500 text-sm">Veuillez sélectionner un emplacement sur la carte.</span> @enderror
             </div>
 
             <div class="mb-6">
@@ -109,7 +111,50 @@
                 reader.readAsDataURL(file);
             }
         });
-    </script>
+ 
+         
+        document.getElementById('image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                    document.getElementById('imagePreview').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+ 
+        var map = L.map('map').setView([31.7917, -7.0926], 6);
 
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker;
+
+         var oldLat = document.getElementById('latitude').value;
+        var oldLng = document.getElementById('longitude').value;
+        
+        if(oldLat && oldLng) {
+            marker = L.marker([oldLat, oldLng]).addTo(map);
+            map.setView([oldLat, oldLng], 10); 
+        }
+
+         map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+
+             if (marker) {
+                map.removeLayer(marker);
+            }
+
+             marker = L.marker([lat, lng]).addTo(map);
+
+                 document.getElementById('latitude').value = lat.toFixed(8);
+            document.getElementById('longitude').value = lng.toFixed(8);
+        });
+    </script>
 </body>
 </html>

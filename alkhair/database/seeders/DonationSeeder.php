@@ -9,8 +9,7 @@ class DonationSeeder extends Seeder
 {
     public function run(): void
     {
-        // Donateurs IDs: 14-28 (15 donateurs)
-        // Projects IDs: 1-30
+         
         $donations = [
             // === Project 1: Construction école (320000) ===
             ['amount' => 50000, 'message' => 'Bonne chance pour la construction', 'donationDate' => '2026-01-20', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 14, 'project_id' => 1],

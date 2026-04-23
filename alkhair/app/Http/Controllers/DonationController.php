@@ -19,6 +19,9 @@ class DonationController extends Controller
     public function create($id)
     {
         $project = Project::findOrFail($id);
+        if ($project->status !== 'OPEN') {
+            return redirect()->route('projects.show', $id)->with('error', 'Ce projet n\'accepte plus de dons.');
+        }
         return view('donator.donate', compact('project'));
     }
 

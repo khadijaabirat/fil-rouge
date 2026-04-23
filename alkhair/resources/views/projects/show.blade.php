@@ -413,32 +413,36 @@ Recent Donors
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+         const hasCoordinates = {{ ($project->latitude && $project->longitude) ? 'true' : 'false' }};
+        
         const latitude = {{ $project->latitude ?? 31.7917 }};
         const longitude = {{ $project->longitude ?? -7.0926 }};
         
-        const map = L.map('map').setView([latitude, longitude], {{ $project->latitude && $project->longitude ? 13 : 6 }});
+         const map = L.map('map').setView([latitude, longitude], hasCoordinates ? 13 : 6);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 19,
         }).addTo(map);
         
-        const customIcon = L.divIcon({
-            className: 'custom-marker',
-            html: '<div style="background-color: #7c5800; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 3px solid white;"><span style="color: white; font-size: 24px;">📍</span></div>',
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-        });
-        
-        const marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
-        
-        marker.bindPopup(`
-            <div style="text-align: center; padding: 8px;">
-                <strong style="font-size: 14px; color: #000;">{{ $project->title }}</strong><br>
-                <span style="font-size: 12px; color: #666;">{{ $project->ville ?? 'Morocco' }}</span><br>
-                <span style="font-size: 11px; color: #7c5800; font-weight: bold;">{{ ucfirst(strtolower($project->status)) }}</span>
-            </div>
-        `).openPopup();
+         if (hasCoordinates) {
+            const customIcon = L.divIcon({
+                className: 'custom-marker',
+                html: '<div style="background-color: #7c5800; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 3px solid white;"><span style="color: white; font-size: 24px;">📍</span></div>',
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+            });
+            
+            const marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
+            
+            marker.bindPopup(`
+                <div style="text-align: center; padding: 8px;">
+                    <strong style="font-size: 14px; color: #000;">{{ $project->title }}</strong><br>
+                    <span style="font-size: 12px; color: #666;">{{ $project->ville ?? 'Morocco' }}</span><br>
+                    <span style="font-size: 11px; color: #7c5800; font-weight: bold;">{{ ucfirst(strtolower($project->status)) }}</span>
+                </div>
+            `).openPopup();
+        }
         
         window.addEventListener('resize', function() {
             map.invalidateSize();

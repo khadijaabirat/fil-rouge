@@ -5,13 +5,12 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Payment;
 use App\Models\Donation;
-
+use Illuminate\Support\Str; 
 class PaymentSeeder extends Seeder
 {
-    public function run(): void
+  public function run(): void
     {
-        // Get all VALIDATED donations and create SUCCESS payments for them
-        $validatedDonations = Donation::where('status', 'VALIDATED')->get();
+         $validatedDonations = Donation::where('status', 'VALIDATED')->get();
 
         foreach ($validatedDonations as $index => $donation) {
             Payment::create([
@@ -25,16 +24,17 @@ class PaymentSeeder extends Seeder
             ]);
         }
 
-        // Get PENDING donations and create PENDING payments for them
-        $pendingDonations = Donation::where('status', 'PENDING')->get();
+         $pendingDonations = Donation::where('status', 'PENDING')->get();
 
         foreach ($pendingDonations as $index => $donation) {
+             $isManual = $index % 2 === 0; 
+
             Payment::create([
-                'transactionId' => 'TXN-PEND-' . str_pad($index + 1, 4, '0', STR_PAD_LEFT),
-                'paymentMethod' => 'ONLINE',
-                'paymentReceipt' => null,
+                'transactionId' => $isManual ? Str::uuid()->toString() : 'TXN-PEND-' . str_pad($index + 1, 4, '0', STR_PAD_LEFT),
+                'paymentMethod' => $isManual ? 'MANUAL' : 'ONLINE',
+                'paymentReceipt' => $isManual ? 'receipts/dummy_receipt_pending.pdf' : null,
                 'amount' => $donation->amount,
-                'paymentDate' => null,
+                'paymentDate' => null,  
                 'status' => 'PENDING',
                 'donation_id' => $donation->id,
             ]);

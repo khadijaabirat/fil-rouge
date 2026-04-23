@@ -98,7 +98,10 @@ return view('projects.create', compact('categories'));
                   ->latest()
                   ->take(5);
         }, 'donations.donator'])->findOrFail($id);
-        return view('projects.show', compact('project'));
+        
+         $canDonate = $project->status === 'OPEN';
+        
+        return view('projects.show', compact('project', 'canDonate'));
     }
 
     /**

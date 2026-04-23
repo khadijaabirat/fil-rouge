@@ -19,11 +19,11 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             CategorySeeder::class,
-            UserSeeder::class,
-            ProjectSeeder::class,
-            DonationSeeder::class,
-            PaymentSeeder::class,
-            ImpactReportSeeder::class,
-        ]);
+        UserSeeder::class,
+        ProjectSeeder::class,
+        DonationSeeder::class,
+        PaymentSeeder::class,
+        ImpactReportSeeder::class,
+          ]);
     }
 }

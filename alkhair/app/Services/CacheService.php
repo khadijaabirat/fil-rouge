@@ -17,7 +17,6 @@ class CacheService
                 'totalCollected' => Project::sum('currentAmount'),
                 'activeAssociations' => User::where('role', 'association')
                     ->whereNotNull('kyc_verified_at')
-                    ->whereNull('deleted_at')
                     ->count(),
                 'completedProjects' => Project::where('status', 'COMPLETED')->count(),
                 'openProjects' => Project::where('status', 'OPEN')->count(),
@@ -29,9 +28,9 @@ class CacheService
     {
         return Cache::remember('open_projects', self::CACHE_TTL, function () {
             return Project::where('status', 'OPEN')
+                ->whereColumn('currentAmount', '<', 'goalAmount')
                 ->with(['association', 'category'])
                 ->latest()
-                ->limit(6)
                 ->get();
         });
     }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\ImpactReport;
 use App\Services\ProjectSearchService;
 use App\Services\CacheService;
 
@@ -29,7 +30,8 @@ class HomeController extends Controller
             $projects = $this->cacheService->getOpenProjects();
         } else {
             $query = Project::with(['association', 'category'])
-                ->where('status', 'OPEN');
+                ->where('status', 'OPEN')
+                ->whereColumn('currentAmount', '<', 'goalAmount');
             
             if (!empty($filters['search'])) {
                 $query->where(function($q) use ($filters) {
@@ -41,14 +43,21 @@ class HomeController extends Controller
             if (!empty($filters['category'])) {
                 $query->where('category_id', $filters['category']);
             }
+
+            if (!empty($filters['ville'])) {
+                $query->whereHas('association', function($q) use ($filters) {
+                    $q->where('ville', $filters['ville']);
+                });
+            }
             
-            $projects = $query->limit(12)->get();
+            $projects = $query->latest()->limit(12)->get();
         }
         
         $total = $statistics['totalCollected'];
+        $impactReports = ImpactReport::with(['project', 'project.category'])->latest()->take(13)->get();
         
         return view('welcome', array_merge(
-            compact('projects', 'categories'),
+            compact('projects', 'categories', 'impactReports'),
             [
                 'totalCollected' => $total,  
                 'totalInMillions' => $total / 1000000,

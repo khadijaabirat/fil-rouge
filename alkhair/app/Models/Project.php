@@ -28,6 +28,8 @@ class Project extends Model
         'latitude',
         'longitude',
     ];
+
+
     public function association(){
         return $this->belongsTo(User::class,'association_id');
     }
@@ -53,10 +55,10 @@ class Project extends Model
         }
     }
     protected function casts(): array
-{
-    return [
-        'startDate' => 'datetime',
-        'endDate' => 'datetime',
-    ];
-}
+    {
+        return [
+            'startDate' => 'datetime',
+            'endDate'   => 'datetime',
+        ];
+    }
 }

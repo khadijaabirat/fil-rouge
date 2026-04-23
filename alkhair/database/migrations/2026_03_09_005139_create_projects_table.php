@@ -17,8 +17,8 @@ return new class extends Migration
             $table->text('description');
            $table->decimal('goalAmount', 12, 2);
             $table->decimal('currentAmount', 12, 2)->default(0);
-            $table->string('videoUrl')->nullable();
-             $table->json('images')->nullable();
+             $table->string('videoUrl')->nullable();
+             $table->string('image')->nullable();
             $table->dateTime('startDate');
             $table->dateTime('endDate');
             $table->enum('status',['OPEN','CLOSED','COMPLETED','SUSPENDED'])->default('OPEN');

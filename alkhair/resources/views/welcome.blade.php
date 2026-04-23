@@ -506,64 +506,66 @@
                     </div>
                 </div>
 
-                <!-- Staggered Overlapping Cards Layout with Enhanced Animations -->
-                <div class="max-w-7xl mx-auto px-6 lg:px-8 relative" style="min-height: 900px;">
+                <!-- Polaroid Scattered Pile Layout (Full Width) -->
+                <div class="relative w-full mx-auto h-[600px] md:h-[800px] flex items-center justify-center mt-12 mb-20 overflow-visible">
                     @php
-                        $completedProjects = $projects->take(8);
-                        $positions = [
-                            ['top' => '0', 'right' => '0', 'left' => 'auto', 'rotate' => 'rotate-2', 'z' => 'z-10', 'size' => 'w-72 lg:w-80'],
-                            ['top' => '8rem', 'left' => '0', 'right' => 'auto', 'rotate' => '-rotate-3', 'z' => 'z-10', 'size' => 'w-72 lg:w-80'],
-                            ['top' => '5rem', 'right' => '25%', 'left' => 'auto', 'rotate' => 'rotate-1', 'z' => 'z-20', 'size' => 'w-80 lg:w-96', 'featured' => true],
-                            ['top' => '20rem', 'left' => '2.5rem', 'right' => 'auto', 'rotate' => 'rotate-2', 'z' => 'z-15', 'size' => 'w-72 lg:w-80'],
-                            ['top' => '24rem', 'right' => '2.5rem', 'left' => 'auto', 'rotate' => '-rotate-2', 'z' => 'z-12', 'size' => 'w-72 lg:w-80', 'hidden' => 'hidden lg:block'],
-                            ['bottom' => '8rem', 'left' => '25%', 'right' => 'auto', 'rotate' => 'rotate-3', 'z' => 'z-18', 'size' => 'w-72 lg:w-80', 'hidden' => 'hidden md:block'],
-                            ['bottom' => '2.5rem', 'right' => '8rem', 'left' => 'auto', 'rotate' => '-rotate-1', 'z' => 'z-16', 'size' => 'w-72', 'hidden' => 'hidden lg:block'],
-                            ['bottom' => '12rem', 'left' => '8rem', 'right' => 'auto', 'rotate' => 'rotate-1', 'z' => 'z-14', 'size' => 'w-72', 'hidden' => 'hidden xl:block'],
+                        $scatter = [
+                            // Extrême Gauche (Nouvelle carte pour équilibrer)
+                            ['classes' => 'rotate-[4deg] -translate-x-24 md:-translate-x-[26rem] lg:-translate-x-[42rem] translate-y-16 z-[5] hidden xl:block'],
+                            // Extrême Gauche
+                            ['classes' => '-rotate-[8deg] -translate-x-16 md:-translate-x-[20rem] lg:-translate-x-[34rem] -translate-y-12 z-10 hidden lg:block'],
+                            ['classes' => 'rotate-[6deg] -translate-x-20 md:-translate-x-[16rem] lg:-translate-x-[28rem] translate-y-24 z-20 hidden md:block'],
+                            // Milieu Gauche
+                            ['classes' => '-rotate-[5deg] -translate-x-12 md:-translate-x-[12rem] lg:-translate-x-[20rem] -translate-y-20 z-30 hidden sm:block'],
+                            ['classes' => 'rotate-[4deg] -translate-x-8 md:-translate-x-[8rem] lg:-translate-x-[12rem] translate-y-32 z-40'],
+                            
+                            // Centre
+                            ['classes' => '-rotate-[2deg] -translate-x-4 md:-translate-x-[4rem] lg:-translate-x-[4rem] -translate-y-8 z-50'],
+                            ['classes' => 'rotate-[3deg] translate-x-4 md:translate-x-[2rem] lg:translate-x-[3rem] translate-y-12 z-[60]'],
+                            ['classes' => '-rotate-[3deg] translate-x-8 md:translate-x-[8rem] lg:translate-x-[10rem] -translate-y-24 z-[55]'],
+                            
+                            // Milieu Droite
+                            ['classes' => 'rotate-[5deg] translate-x-12 md:translate-x-[14rem] lg:translate-x-[18rem] translate-y-28 z-40'],
+                            ['classes' => '-rotate-[6deg] translate-x-16 md:translate-x-[20rem] lg:translate-x-[26rem] -translate-y-12 z-30 hidden sm:block'],
+                            // Extrême Droite
+                            ['classes' => 'rotate-[8deg] translate-x-20 md:translate-x-[26rem] lg:translate-x-[32rem] translate-y-8 z-20 hidden lg:block'],
+                            ['classes' => '-rotate-[4deg] translate-x-24 md:translate-x-[30rem] lg:translate-x-[38rem] -translate-y-28 z-10 hidden xl:block'],
+                            ['classes' => 'rotate-[7deg] translate-x-28 md:translate-x-[34rem] lg:translate-x-[44rem] translate-y-20 z-[15] hidden 2xl:block'],
                         ];
                     @endphp
 
-                    @foreach($completedProjects as $index => $project)
+                    @foreach($impactReports->take(13) as $index => $report)
                         @php
-                            $pos = $positions[$index] ?? $positions[0];
-                            $isFeatured = isset($pos['featured']) && $pos['featured'];
+                            $project = $report->project;
+                            $style = $scatter[$index % 13]['classes'];
                         @endphp
-                        <a href="{{ route('projects.show', $project->id) }}" class="absolute {{ $pos['size'] }} neu-{{ $isFeatured ? 'float' : 'card' }} p-{{ $isFeatured ? '6' : '5' }} transform {{ $pos['rotate'] }} hover:rotate-0 hover:z-40 hover:scale-110 transition-all duration-500 cursor-pointer {{ $pos['z'] }} {{ $pos['hidden'] ?? '' }} group"
-                             style="{{ isset($pos['top']) ? 'top: ' . $pos['top'] : '' }}; {{ isset($pos['bottom']) ? 'bottom: ' . $pos['bottom'] : '' }}; {{ isset($pos['left']) ? 'left: ' . $pos['left'] : '' }}; {{ isset($pos['right']) ? 'right: ' . $pos['right'] : '' }};">
+                        
+                        <a href="{{ route('projects.show', $project->id) }}" 
+                           class="absolute w-60 sm:w-72 md:w-80 bg-white p-3 pb-8 sm:p-4 sm:pb-12 rounded-lg shadow-2xl border border-gray-200 transform {{ $style }} hover:rotate-0 hover:z-[60] hover:scale-110 transition-all duration-500 cursor-pointer group">
                             
-                            @if($isFeatured)
-                                <div class="absolute -top-3 -right-3 bg-gradient-to-br from-[#F5A623] to-[#FFD085] text-white px-4 py-2 rounded-xl text-xs font-black shadow-lg z-10 animate-bounce" style="animation-duration: 2s;">
-                                    ⭐ POPULAIRE
-                                </div>
-                            @endif
+                            <!-- Epingle à cheveux / Tape / Visual flair -->
+                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-white/40 backdrop-blur-md border border-white/60 shadow-sm transform -rotate-2 z-10 opacity-70 group-hover:opacity-0 transition-opacity"></div>
 
-                            <div class="relative overflow-hidden rounded-2xl mb-4">
-                                @if($project->image)
-                                    <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" class="w-full h-{{ $isFeatured ? '56' : '48' }} object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="relative overflow-hidden rounded mb-4 shadow-inner bg-gray-100 h-48 sm:h-56 md:h-64">
+                                @if($report->image)
+                                    <img src="{{ asset('storage/' . $report->image) }}" alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                @elseif($project->image)
+                                    <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                                 @else
-                                    <div class="w-full h-{{ $isFeatured ? '56' : '48' }} bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center">
-                                        <span class="text-[#F5A623] text-4xl font-black">{{ $project->category->name ?? 'AK' }}</span>
+                                    <div class="w-full h-full bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center">
+                                        <span class="text-[#F5A623] text-4xl font-black">AK</span>
                                     </div>
                                 @endif
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/{{ $isFeatured ? '60' : '50' }} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
 
-                            <div class="flex justify-between items-start mb-{{ $isFeatured ? '3' : '2' }}">
-                                <h4 class="text-{{ $isFeatured ? '2xl' : 'xl' }} font-black text-[#0A1128] group-hover:text-[#F5A623] transition-colors">{{ Str::limit($project->title, 30) }}</h4>
-                                <div class="neu-pressed px-3 py-1.5 rounded-lg text-xs font-bold text-[#F5A623] shadow-sm">{{ $project->category->name ?? 'Projet' }}</div>
-                            </div>
-
-                            <p class="text-sm text-slate-600 leading-relaxed mb-{{ $isFeatured ? '4' : '3' }}">{{ Str::limit($project->description, 60) }}</p>
-
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2 text-{{ $isFeatured ? 'sm' : 'xs' }} text-emerald-600">
-                                    <svg class="w-{{ $isFeatured ? '5' : '4' }} h-{{ $isFeatured ? '5' : '4' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                                    <span class="font-bold">{{ $isFeatured ? 'Impact Vérifié' : 'Vérifié' }}</span>
+                            <div class="px-2 text-center">
+                                <h4 class="text-sm sm:text-base font-black text-[#0A1128] leading-tight mb-2 font-['Indie_Flower',sans-serif]">{{ Str::limit($project->title, 30) }}</h4>
+                                <div class="flex items-center justify-center gap-3">
+                                    <span class="bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider">Impact Vérifié ✓</span>
                                 </div>
-                                <span class="text-{{ $isFeatured ? 'sm' : 'xs' }} font-black text-{{ $isFeatured ? '[#F5A623]' : 'slate-400' }}">{{ number_format($project->currentAmount, 0, ',', ' ') }} DH</span>
                             </div>
                         </a>
                     @endforeach
-
                 </div>
 
                 <div class="text-center mt-24 lg:mt-32">
