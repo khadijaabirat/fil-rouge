@@ -21,7 +21,7 @@
             <div class="flex items-center justify-between">
                 <a href="{{ route('admin.categories.index') }}" class="text-gray-500 hover:text-gray-700 font-medium">Annuler</a>
                 <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
-                    Enregistrer
+                    <!-- Enregistrer -->
                 </button>
             </div>
         </form>

@@ -1,0 +1,134 @@
+Act as an expert Full-Stack Developer specializing in Laravel 11, Blade templating, and Tailwind CSS.
+
+I am building a solidarity donation platform called "AL-KHAIR". The user interface is entirely in French.
+
+I need your help to merge my backend logic with my new frontend design. I will provide you with two pieces of code for a specific page:
+
+The Logic (Blade): A basic .blade.php file that contains my working Laravel logic (Eloquent loops, variables, conditions, route links, etc.).
+
+The Design (HTML): A static HTML file styled with modern, elegant, and professional Tailwind CSS.
+
+Your Task:
+Merge the Blade logic into the new HTML design. You must:
+
+Keep the Tailwind CSS structure and styling exactly as provided.
+
+Inject the Laravel directives (@foreach, @if, {{ $variable }}, route(), etc.) perfectly into the new design.
+
+Ensure all form actions, inputs, and buttons are correctly wired up with CSRF tokens and proper names/values.
+
+Keep the text and interface in French.
+
+this is my  
+CAHIER DES CHARGES
+Plateforme AL-KHAIR Plateforme Solidaire de Collecte de Dons (Simulation Technique)
+1. PRÉSENTATION GÉNÉRALE DU PROJET
+1.1 Contexte
+AL-KHAIR est une plateforme web solidaire destinée à connecter les donateurs avec des associations marocaines locales, en garantissant une transparence totale sur l’utilisation des dons grâce à un suivi rigoureux et traçable de leur cycle de vie.
+1.2 Problématique
+Manque de visibilité des associations locales.
+Manque de confiance des donateurs concernant la traçabilité réelle des dons.
+Absence d’un outil centralisé, simple et transparent pour suivre l’impact social.
+1.3 Objectifs
+Faciliter la collecte de dons en ligne (simulation technique).
+Garantir la traçabilité complète des dons.
+Offrir une transparence totale à tous les acteurs.
+Centraliser la gestion des associations, projets et dons.
+1.4 Modèle Économique
+Gratuité totale :  La plateforme AL-KHAIR est un projet à but non lucratif. Elle est 100% gratuite pour les associations partenaires. Aucune commission ou frais de service n'est prélevé sur les transactions. L'intégralité des dons collectés est reversée aux projets associatifs.
+
+2. RÈGLES MÉTIER & GESTION DES RÔLES (RBAC)
+2.1 Rôles du système
+2.1.1 Donateur (Simple User)
+Création de compte avec : Email unique, Username, Mot de passe hashé (Bcrypt).
+Sécurité et Accès : Vérification obligatoire de l'adresse e-mail (Email Verification) lors de l'inscription et disponibilité de la fonctionnalité "Mot de passe oublié" pour la récupération de compte.
+Possibilités :
+Effectuer un don vers un projet (Montant minimum : 100 DH).
+Ajouter un commentaire ou message d'encouragement lors du don.
+Option "Don anonyme" : Possibilité de masquer son nom dans la liste publique des contributeurs.
+Télécharger un reçu de don (simulation).
+Consulter l’historique détaillé de ses dons.
+Suivre l’évolution des projets soutenus.
+Modifier son profil (photo, informations, mot de passe).
+2.1.2 Association (Pro User)
+Inscription soumise à validation administrative.
+Profil professionnel contenant : Nom, Description (min. 50 caractères), Catégorie, Ville, Logo et images d’activités.
+Vérification (KYC) : Upload obligatoire d’un justificatif légal (PDF / JPG).
+Droits après validation :
+Création et gestion de projets.
+Suivi des dons reçus et confirmation de réception.
+Publication de preuves d’impact (images/vidéos).
+Accès aux statistiques de collecte.
+2.1.3 Administrateur (Super User)
+Validation ou rejet des comptes associations.
+Supervision globale de la plateforme et modération des contenus (commentaires des donateurs, preuves, images).
+Validation des dons manuels après vérification des reçus.
+Accès aux statistiques globales.
+
+3. GESTION DES PROJETS ASSOCIATIFS
+3.1 Entité Projet
+Chaque association peut créer plusieurs projets avec les champs : ID, Titre, Description détaillée, Objectif financier, Montant collecté, Date limite, Catégorie, Statut (Actif / Terminé).
+3.2 Suivi de progression et Règle d'Expiration
+Barre de progression visuelle (% collecté / objectif).
+Bloc "Projet terminé" si l’objectif est atteint ou la date dépassée
+Destin des projets inachevés (Gestion des Projets Expirés) :
+ Lorsque le projet atteint sa date limite sans avoir atteint l’objectif financier fixé, le système offre les options suivantes :
+Option de prolongation (Extension de délai) : L’association a le droit de prolonger la date de fin du projet depuis son tableau de bord, afin de donner une chance supplémentaire de collecter les dons restants.
+Clôture et transfert (Clôture et Transfert) : Si l’association décide de ne pas prolonger, le projet est clôturé automatiquement et le montant effectivement collecté (même s’il est incomplet) est transféré sur le compte de l’association. Dans ce cas, l’association doit utiliser le montant pour réaliser ce qui peut l’être du projet, tout en s’engageant à fournir un « rapport d’impact » justifié.
+3.3 Rapport d'achèvement (Impact Report)
+À l'achèvement du projet, l'association doit publier un Impact Report comprenant : description finale, date de clôture, et preuves visuelles justifiant l'affectation des fonds.
+
+4. CYCLE DE VIE DU DON (WORKFLOW)
+En attente (Pending) : État initial après soumission du formulaire.
+Validé (Validated) : Validation par l’administrateur (automatique pour l'Online, manuelle pour le Manual).
+En cours (Processing) : Transfert simulé vers l’association.
+Reçu (Received) : Confirmation de réception par l’association.
+Complété (Impact) : Publication du Rapport d'impact par l'association.
+
+5. GESTION DES ENTITÉS & INTÉGRITÉ DES DONNÉES
+5.1 Entité Don
+ID unique
+Donateur (FK) / Association (FK) / Projet (FK)
+Montant (Minimum exigé : 100 DH)
+Commentaire / Message optionnel (max 500 caractères)
+Preuve de dépôt (PDF / Image) pour les paiements manuels
+Statut
+Timestamps : création, validation, clôture
+5.2 Intégrité référentielle
+Soft Delete appliqué aux associations (conservation de l’historique comptable).
+
+6. MODULES COMPLÉMENTAIRES
+6.1 Recherche & Filtrage
+Recherche textuelle. Filtres : Catégorie, Ville. Tri : Urgence, Proximité.
+6.2 Notifications
+Notifications In-App et Email (changement de statut, publication d'impact).
+6.3 Flux financier (Modes de paiement)
+Paiement en ligne (Online) : Carte bancaire ou PayPal.
+Paiement manuel (Manual) : Virement ou agences (Nécessite l'upload d'un reçu et validation manuelle de l'admin).
+
+7. TABLEAUX DE BORD & STATISTIQUES
+Admin : Montant total, associations actives, taux de complétion.
+Association : Graphiques de collecte, nouveaux donateurs.
+Donateur : Historique des projets, compteur d’impact personnel.
+
+8. GESTION DU PROFIL & UX
+Vérification d'email (Email Verification) : Processus obligatoire lors de l'inscription. Le compte (Donateur ou Association) n'est activé qu'après validation du lien envoyé par e-mail.
+Réinitialisation du mot de passe : Fonctionnalité "Mot de passe oublié" (Forgot password) via l'envoi d'un lien sécurisé et temporaire par e-mail.
+Édition du profil utilisateur et changement sécurisé du mot de passe (depuis le tableau de bord).
+Upload de photo de profil / Logo de l'association.
+Interfaces "Empty State" si aucune donnée n'est disponible.
+
+9. GESTION DES ERREURS & ROBUSTESSE
+Validations avec messages clairs (ex: "Le montant minimum est de 50 DH").
+Limitation des uploads : Max 5 Mo (PDF, JPG, PNG).
+
+10. JOURNALISATION (AUDIT LOGS)
+Enregistrement des changements de statut d’un don (Auteur, Ancien/Nouveau statut, Date/Heure).
+
+11. ARCHITECTURE & STACK TECHNIQUE
+Frontend : HTML5/CSS3, Tailwind CSS, JS (Fetch API), Blade (Laravel).
+Backend : PHP 8.x (POO), Laravel 11 (MVC), ORM Eloquent.
+Sécurité : Middlewares RBAC, Protection XSS/SQL Injection, Hashage Bcrypt.
+Outils : MySQL, Git/GitHub, Composer, VS Code
+
+
