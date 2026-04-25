@@ -161,8 +161,15 @@
                 </div>
 
                 <div>
+                    <label class="block text-xs font-label font-bold uppercase tracking-wider text-on-surface-variant mb-2">Ville/Région *</label>
+                    <input type="text" name="ville" value="{{ old('ville') }}" required placeholder="ex: Casablanca, Marrakech, Agadir..."
+                           class="w-full bg-surface border border-outline-variant/30 focus:ring-2 focus:ring-secondary focus:border-transparent rounded-xl p-4 text-on-surface transition-all"/>
+                    @error('ville') <p class="text-error text-xs mt-1 font-medium">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="col-span-1 md:col-span-2">
                     <label class="block text-xs font-label font-bold uppercase tracking-wider text-on-surface-variant mb-2">Lien Vidéo YouTube (Optionnel)</label>
-                    <input type="url" name="videoUrl" value="{{ old('videoUrl') }}" placeholder="https://youtube.com/..." 
+                    <input type="url" name="videoUrl" value="{{ old('videoUrl') }}" placeholder="https://youtube.com/..."
                            class="w-full bg-surface border border-outline-variant/30 focus:ring-2 focus:ring-secondary focus:border-transparent rounded-xl p-4 text-on-surface transition-all"/>
                 </div>
 
@@ -245,7 +252,10 @@
                 </div>
                 <h3 class="font-headline font-bold text-lg text-primary-container">Image principale *</h3>
                 <p class="text-sm text-on-surface-variant max-w-[240px] mt-1 mb-4">Une belle image attire 3x plus de donateurs.</p>
-                <p class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant/60">JPG, PNG ou WEBP • Max 5MB</p>
+                <p class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant/60">JPG, PNG ou WEBP • Max 5 MB</p>
+                <div class="mt-3 px-3 py-1 bg-secondary-container/10 border border-secondary-container/20 rounded-full">
+                    <p class="text-[9px] font-bold text-secondary-container tracking-widest">⚠️ MAXIMUM 5 MB</p>
+                </div>
             </div>
 
             <input type="file" name="image" id="imageInput" accept="image/jpeg,image/png,image/jpg,image/webp" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" required>

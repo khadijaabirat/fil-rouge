@@ -112,6 +112,10 @@
             
             @if ($errors->any())
                 <div class="mb-6 p-4 rounded-lg bg-red-50 text-error text-sm font-medium border border-red-200">
+                    <div class="flex items-center gap-2 mb-2 font-bold">
+                        <span class="material-symbols-outlined">error</span>
+                        Veuillez corriger les erreurs :
+                    </div>
                     <ul class="list-disc list-inside">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -148,9 +152,10 @@
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <span class="text-primary-container font-extrabold text-xl">DH</span>
                         </div>
-                        <input type="number" id="amount" name="amount" min="10" required value="{{ old('amount') }}" oninput="clearButtons()"
-                               class="w-full bg-surface-container-low border-0 rounded-xl py-5 pl-14 pr-4 focus:ring-2 focus:ring-secondary-container text-xl font-bold placeholder:text-on-surface-variant/40 transition-all" 
-                               placeholder="Saisir un autre montant..."/>
+                        <input type="number" id="amount" name="amount" min="100" required value="{{ old('amount') }}" oninput="clearButtons()"
+                               class="w-full bg-surface-container-low border-0 rounded-xl py-5 pl-14 pr-4 focus:ring-2 focus:ring-secondary-container text-xl font-bold placeholder:text-on-surface-variant/40 transition-all"
+                               placeholder="Minimum 100 DH..."/>
+                        @error('amount') <p class="text-error text-xs mt-1 font-medium">{{ $message }}</p> @enderror
                     </div>
                 </section>
 

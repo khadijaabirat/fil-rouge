@@ -563,7 +563,7 @@
 
             <div class="text-center mt-24 lg:mt-32">
                 <p class="text-slate-500 mb-6 text-lg">Chaque projet est vérifié avec des preuves visuelles et des rapports détaillés</p>
-                <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-3 neu-button text-[#0A1128] font-black text-lg px-12 py-6 rounded-2xl group hover:shadow-2xl">
+                <a href="{{ route('impact.index') }}" class="inline-flex items-center gap-3 neu-button text-[#0A1128] font-black text-lg px-12 py-6 rounded-2xl group hover:shadow-2xl">
                     <svg class="w-6 h-6 text-[#F5A623]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                     <span>Voir tous les rapports d'impact</span>
                     <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>

@@ -129,8 +129,15 @@
 
         <div class="space-y-2">
             <label for="title" class="block text-xs font-label font-bold uppercase tracking-wider text-on-surface-variant px-1">Titre du projet *</label>
-            <input type="text" id="title" name="title" value="{{ old('title', $project->title) }}" required 
+            <input type="text" id="title" name="title" value="{{ old('title', $project->title) }}" required
                    class="w-full bg-surface border border-outline-variant/30 focus:ring-2 focus:ring-secondary focus:border-transparent rounded-xl p-4 text-on-surface transition-all font-headline font-bold text-lg"/>
+        </div>
+
+        <div class="space-y-2">
+            <label for="ville" class="block text-xs font-label font-bold uppercase tracking-wider text-on-surface-variant px-1">Ville/Région *</label>
+            <input type="text" id="ville" name="ville" value="{{ old('ville', $project->ville) }}" required placeholder="ex: Casablanca, Marrakech..."
+                   class="w-full bg-surface border border-outline-variant/30 focus:ring-2 focus:ring-secondary focus:border-transparent rounded-xl p-4 text-on-surface transition-all"/>
+            @error('ville') <p class="text-error text-xs mt-1 font-medium">{{ $message }}</p> @enderror
         </div>
 
         <div class="space-y-2">
@@ -151,6 +158,9 @@
                     <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp,image/jpg" 
                            class="w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-container file:text-white hover:file:bg-slate-800 transition-colors cursor-pointer"/>
                     <p class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant/60">JPG, PNG, WEBP • Max 5MB</p>
+                    <div class="mt-2 px-3 py-1 bg-secondary-container/10 border border-secondary-container/20 rounded-full inline-block">
+                        <p class="text-[9px] font-bold text-secondary-container tracking-widest">⚠️ MAXIMUM 5 MB</p>
+                    </div>
                     
                     <div id="imagePreview" class="hidden mt-4">
                         <p class="text-xs font-bold text-secondary mb-2">Nouvel Aperçu :</p>

@@ -14,6 +14,9 @@ require __DIR__.'/auth.php';
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/projets', [ProjectController::class, 'index'])->name('projects.index');
 Route::get('/projects/{id}', [ProjectController::class, 'show'])->whereNumber('id')->name('projects.show');
+Route::get('/impact', [ImpactReportController::class, 'index'])->name('impact.index');
+Route::get('/impact/{id}', [ImpactReportController::class, 'show'])->whereNumber('id')->name('impact.show');
+Route::get('/impact/{id}/pdf', [\App\Http\Controllers\PdfController::class, 'downloadImpactReport'])->whereNumber('id')->name('impact.pdf');
 
  
 

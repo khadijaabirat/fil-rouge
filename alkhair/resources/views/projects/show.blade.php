@@ -222,7 +222,7 @@
                     @if($project->donations->count() > 0)
                         <div class="bg-white rounded-3xl p-6 shadow-sm border border-outline-variant/10">
                             <div class="space-y-3">
-                                @foreach($project->donations as $donation)
+                                @foreach($project->donations->take(10) as $donation)
                                     <div class="flex items-center gap-4 p-4 rounded-2xl bg-surface-container-lowest hover:bg-surface-container-low transition-colors border border-outline-variant/5">
                                         <div class="w-12 h-12 rounded-full bg-secondary-container/20 flex items-center justify-center flex-shrink-0">
                                             <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">favorite</span>
@@ -247,12 +247,21 @@
                                     </div>
                                 @endforeach
                             </div>
+                            @if($project->donations->count() > 10)
+                                <div class="mt-6 pt-6 border-t border-outline-variant/10 text-center">
+                                    <p class="text-sm font-medium text-on-surface-variant">et {{ $project->donations->count() - 10 }} autres donateurs</p>
+                                </div>
+                            @endif
                         </div>
                     @else
                         <div class="bg-surface-container-low rounded-3xl p-12 text-center border border-dashed border-outline-variant/50">
                             <span class="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-4">volunteer_activism</span>
                             <p class="text-primary-container font-bold text-lg">Soyez le premier à soutenir ce projet !</p>
-                            <p class="text-sm text-on-surface-variant mt-2">Votre don peut faire la différence dès aujourd'hui.</p>
+                            <p class="text-sm text-on-surface-variant mt-2 mb-6">Votre don peut faire la différence dès aujourd'hui.</p>
+                            <a href="{{ route('donations.create', $project->id) }}" class="inline-flex items-center gap-2 bg-primary-container text-white px-6 py-3 rounded-lg font-bold hover:scale-105 transition-transform">
+                                <span class="material-symbols-outlined">favorite</span>
+                                Être le premier donateur
+                            </a>
                         </div>
                     @endif
                 </section>

@@ -16,7 +16,6 @@ class CacheService
             return [
                 'totalCollected' => Project::sum('currentAmount'),
                 'activeAssociations' => User::where('role', 'association')
-                    ->whereNotNull('kyc_verified_at')
                     ->count(),
                 'completedProjects' => Project::where('status', 'COMPLETED')->count(),
                 'openProjects' => Project::where('status', 'OPEN')->count(),

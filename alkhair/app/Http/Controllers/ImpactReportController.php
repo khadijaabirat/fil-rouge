@@ -10,6 +10,41 @@ use App\Notifications\ImpactReportPublished;
 
 class ImpactReportController extends Controller
 {
+    public function index(Request $request)
+    {
+        $query = ImpactReport::with(['project.association', 'project.category'])
+            ->whereHas('project')
+            ->latest('completionDate');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->whereHas('project', function($projectQuery) use ($search) {
+                    $projectQuery->where('title', 'like', "%{$search}%")
+                        ->orWhere('ville', 'like', "%{$search}%")
+                        ->orWhereHas('association', function($assocQuery) use ($search) {
+                            $assocQuery->where('name', 'like', "%{$search}%");
+                        });
+                })
+                ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $impactReports = $query->paginate(12);
+
+        return view('impact.indeximpact', compact('impactReports'));
+    }
+
+    public function show($id)
+    {
+        $impactReport = ImpactReport::with(['project.association', 'project.category', 'project.donations.donator'])
+            ->findOrFail($id);
+        
+        $project = $impactReport->project;
+
+        return view('impact.showimpact', compact('impactReport', 'project'));
+    }
+
     public function create($id)
     {
         $project = Project::findOrFail($id);

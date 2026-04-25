@@ -283,9 +283,14 @@
                     </table>
                 </div>
             @else
-                <div class="text-center py-8">
-                    <span class="material-symbols-outlined text-4xl text-outline-variant mb-2">history_toggle_off</span>
-                    <p class="text-on-surface-variant font-medium">Vous n'avez pas encore fait de don.</p>
+                <div class="bg-surface-container-lowest p-12 rounded-xl text-center border border-dashed border-outline-variant shadow-sm">
+                    <span class="material-symbols-outlined text-4xl text-outline-variant mb-4">favorite</span>
+                    <h3 class="text-lg font-bold text-primary-container mb-2">Aucun don effectué</h3>
+                    <p class="text-sm text-on-surface-variant mb-4">Commencez à soutenir les projets solidaires dès maintenant !</p>
+                    <a href="{{ url('/projects') }}" class="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container px-6 py-3 rounded-lg font-bold hover:scale-105 transition-transform">
+                        <span class="material-symbols-outlined">favorite</span>
+                        Explorer les projets
+                    </a>
                 </div>
             @endif
         </section>

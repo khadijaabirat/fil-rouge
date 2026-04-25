@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Donation;
+use App\Models\ImpactReport;
 use App\Services\PdfService;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,6 +14,12 @@ class PdfController extends Controller
     public function __construct(PdfService $pdfService)
     {
         $this->pdfService = $pdfService;
+    }
+
+    public function downloadImpactReport($id)
+    {
+        $impactReport = ImpactReport::with(['project.association', 'project.donations'])->findOrFail($id);
+        return $this->pdfService->generateProjectReport($impactReport->project);
     }
 
     public function downloadDonationReceipt($id)

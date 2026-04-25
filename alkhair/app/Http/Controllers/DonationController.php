@@ -164,16 +164,21 @@ Stripe::setApiKey(config('services.stripe.secret'));
         }
 
         DB::transaction(function () use ($donation) {
-            $payment = Payment::where('donation_id', $donation->id)->firstOrFail();
+            try {
+                $payment = Payment::where('donation_id', $donation->id)->firstOrFail();
 
-            $donation->update(['status' => 'VALIDATED']);
-            $payment->update(['status' => 'SUCCESS']);
+                $donation->update(['status' => 'VALIDATED']);
+                $payment->update(['status' => 'SUCCESS']);
 
-            $project = Project::findOrFail($donation->project_id);
-            $project->increment('currentAmount', $donation->amount);
-            $project->calculateProgress();
-            
-            $donation->donator->notify(new DonationStatusChanged($donation, 'VALIDATED'));
+                $project = Project::findOrFail($donation->project_id);
+                $project->increment('currentAmount', $donation->amount);
+                $project->calculateProgress();
+                
+                $donation->donator->notify(new DonationStatusChanged($donation, 'VALIDATED'));
+            } catch (\Exception $e) {
+                \Log::error('Donation validation failed: ' . $e->getMessage());
+                throw $e;
+            }
         });
         return redirect()->route('donator.dashboard')->with('success', 'Merci, Votre don en ligne a été validé.');
     }

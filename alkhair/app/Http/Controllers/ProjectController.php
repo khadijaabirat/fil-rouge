@@ -178,16 +178,23 @@ return view('projects.create', compact('categories'));
             return back()->with('error', 'Vous ne pouvez pas prolonger un projet qui a déjà atteint son objectif financier.');
         }
         $request->validate([
-            'newEndDate' => 'required|date|after:' . $project->endDate,
+            'newEndDate' => [
+                'required',
+                'date',
+                'after:' . $project->endDate,
+                'before:' . now()->addMonths(6)->format('Y-m-d'),
+            ],
         ], [
             'newEndDate.required' => 'La nouvelle date de fin est obligatoire.',
             'newEndDate.after' => 'La nouvelle date doit être après la date de fin actuelle (' . $project->endDate->format('d/m/Y') . ').',
+            'newEndDate.before' => 'La prolongation ne peut pas dépasser 6 mois à partir d\'aujourd\'hui.',
         ]);
 
          $project->update([
             'endDate' => $request->newEndDate,
             'status' => 'OPEN',
         ]);
+ 
 
         return back()->with('success', 'La date limite du projet a été prolongée avec succès !');
     }
