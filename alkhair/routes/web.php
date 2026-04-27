@@ -9,6 +9,8 @@ use App\Http\Controllers\DonatorController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ImpactReportController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\ContactController;
  
 require __DIR__.'/auth.php'; 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -17,6 +19,9 @@ Route::get('/projects/{id}', [ProjectController::class, 'show'])->whereNumber('i
 Route::get('/impact', [ImpactReportController::class, 'index'])->name('impact.index');
 Route::get('/impact/{id}', [ImpactReportController::class, 'show'])->whereNumber('id')->name('impact.show');
 Route::get('/impact/{id}/pdf', [\App\Http\Controllers\PdfController::class, 'downloadImpactReport'])->whereNumber('id')->name('impact.pdf');
+Route::get('/faq', [FaqController::class, 'index'])->name('faq');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
  
 
@@ -64,7 +69,7 @@ Route::get('/projects/create', [ProjectController::class, 'create'])->name('proj
 
 Route::post('/projects/{id}/extend', [\App\Http\Controllers\ProjectController::class, 'extendDeadline'])->name('projects.extend');
 Route::post('/association/projects/{id}/withdraw', [AssociationController::class, 'withdrawFunds'])->name('association.withdraw');
-Route::get('/association/projects/{id}/impact', [ImpactReportController::class, 'create'])->name('impact.create');
+Route::get('/association/projects/{id?}/impact', [ImpactReportController::class, 'create'])->name('impact.create');
 Route::post('/association/projects/{id}/impact', [ImpactReportController::class, 'store'])->name('impact.store');
 Route::get('/association/profile', [\App\Http\Controllers\AssociationController::class, 'editProfile'])->name('association.profile');
 Route::put('/association/profile', [\App\Http\Controllers\AssociationController::class, 'updateProfile'])->name('association.updateProfile');
