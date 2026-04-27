@@ -141,6 +141,13 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="neu-card-static p-5 border-l-4 border-red-500 flex items-center gap-4 reveal active bg-red-50/30">
+                <span class="material-symbols-outlined text-red-500 text-2xl">error</span>
+                <span class="font-bold text-sm text-red-700">{{ session('error') }}</span>
+            </div>
+        @endif
+
         @if(isset($expiredProjects) && $expiredProjects->count() > 0)
             <div class="space-y-6">
                 @foreach($expiredProjects as $project)
@@ -148,7 +155,10 @@
                         <!-- Image Section -->
                         <div class="md:w-1/3 relative h-56 md:h-auto overflow-hidden bg-slate-100">
                             @if($project->image)
-                                <img alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="{{ asset('storage/' . $project->image) }}"/>
+                                <img alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="{{ asset('storage/' . str_replace(' ', '%20', $project->image)) }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-full bg-gradient-to-br from-[#0A1128]/20 to-[#F5A623]/20 items-center justify-center" style="display:none;">
+                                    <span class="text-[#0A1128]/30 text-5xl font-black">AK</span>
+                                </div>
                             @else
                                 <div class="w-full h-full bg-gradient-to-br from-[#0A1128]/20 to-[#F5A623]/20 flex items-center justify-center">
                                     <span class="text-[#0A1128]/30 text-5xl font-black">AK</span>
@@ -195,12 +205,34 @@
                                     </button>
                                 </form>
 
-                                <form action="{{ route('association.withdraw', $project->id) }}" method="POST" class="flex-1" onsubmit="return confirm('En clôturant ce projet, vous vous engagez à publier un rapport d\'impact pour les fonds récoltés. Continuer ?');">
-                                    @csrf
-                                    <button type="submit" class="w-full py-2.5 bg-white border-2 border-slate-200 text-slate-700 rounded-xl font-bold text-[10px] hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-1.5 shadow-sm uppercase tracking-wider">
-                                        <span class="material-symbols-outlined text-[16px]">swap_horiz</span> Clôturer & Retirer
-                                    </button>
-                                </form>
+                                @if($project->currentAmount > 0)
+                                    @php
+                                        $hasProcessing = $project->donations()->where('status', 'PROCESSING')->exists();
+                                        $hasReceived = $project->donations()->where('status', 'RECEIVED')->exists();
+                                    @endphp
+
+                                    @if($hasProcessing)
+                                        <div class="flex-1 bg-blue-50 border-2 border-blue-200 rounded-xl p-3 flex items-center justify-center gap-2">
+                                            <span class="material-symbols-outlined text-blue-500 animate-spin text-lg">hourglass_top</span>
+                                            <span class="text-xs font-bold text-blue-700">Transfert en cours...</span>
+                                        </div>
+                                    @elseif($hasReceived)
+                                        <div class="flex-1 bg-red-50 border-2 border-red-200 rounded-xl p-3 flex items-center justify-center gap-2">
+                                            <span class="text-xs font-bold text-red-700">Fonds reçus ! Publiez le rapport</span>
+                                        </div>
+                                    @else
+                                        <form action="{{ route('association.withdraw', $project->id) }}" method="POST" class="flex-1" onsubmit="console.log('Form submitting...', '{{ route('association.withdraw', $project->id) }}'); return confirm('En clôturant ce projet, vous vous engagez à publier un rapport d\'impact pour les fonds récoltés. Continuer ?');">
+                                            @csrf
+                                            <button type="submit" onclick="console.log('Button clicked for project {{ $project->id }}');" class="w-full py-2.5 bg-orange-600 text-white rounded-xl font-bold text-[10px] hover:bg-orange-700 transition-all flex items-center justify-center gap-1.5 shadow-sm uppercase tracking-wider">
+                                                <span class="material-symbols-outlined text-[16px]">swap_horiz</span> Clôturer & Retirer
+                                            </button>
+                                        </form>
+                                    @endif
+                                @else
+                                    <div class="flex-1 bg-slate-50 border-2 border-slate-200 rounded-xl p-3 flex items-center justify-center">
+                                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Aucun fonds collecté</span>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
