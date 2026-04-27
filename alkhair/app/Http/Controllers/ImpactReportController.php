@@ -45,18 +45,45 @@ class ImpactReportController extends Controller
         return view('impact.showimpact', compact('impactReport', 'project'));
     }
 
-    public function create($id)
+    public function create($id = null)
     {
+        // إذا كان id = 0 أو null، نعرض liste des projets
+        if ($id === null || $id == 0) {
+            $association = Auth::user();
+            
+            // المشاريع اللي محتاجة rapport d'impact
+            $projectsNeedingReport = Project::where('association_id', $association->id)
+                ->where(function($query) {
+                    // Projets COMPLETED بلا rapport
+                    $query->where('status', 'COMPLETED')
+                          ->whereDoesntHave('impactReport');
+                })
+                ->orWhere(function($query) use ($association) {
+                    // Projets avec dons RECEIVED
+                    $query->where('association_id', $association->id)
+                          ->whereHas('donations', function($q) {
+                              $q->where('status', 'RECEIVED');
+                          });
+                })
+                ->with(['category', 'donations'])
+                ->get();
+            
+            return view('impact.select_project', compact('projectsNeedingReport'));
+        }
+        
+        // Sinon, formulaire normal pour un projet spécifique
         $project = Project::findOrFail($id);
 
         if ($project->association_id !== Auth::id()) {
             abort(403, 'Accès non autorisé.');
         }
-    if ($project->impactReport()->exists()) {
+        
+        if ($project->impactReport()->exists()) {
             return redirect()->route('association.dashboard')
                 ->with('error', 'Ce projet possède déjà un rapport d\'impact.');
         }
-        return view('association.impact_create', compact('project'));
+        
+        return view('impact.impact_create', compact('project'));
     }
 
 
