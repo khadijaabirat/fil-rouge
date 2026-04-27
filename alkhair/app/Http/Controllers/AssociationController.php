@@ -17,19 +17,38 @@ use Illuminate\Support\Facades\Storage;
     {
         $association = Auth::user();
 
-       $projects = Project::where('association_id', $association->id)
-                           ->with('category')
+        $projects = Project::where('association_id', $association->id)
+                           ->with(['category', 'donations', 'impactReport'])
                            ->latest()
                            ->paginate(6);
 
+        // مشاريع عندها fonds reçus (RECEIVED) بلا rapport
         $pendingProject = Project::where('association_id', $association->id)
             ->whereHas('donations', function ($query) {
                 $query->where('status', 'RECEIVED');
             })->first();
 
-$hasPendingReports = $pendingProject ? true : false;
+        $hasPendingReports = $pendingProject ? true : false;
+        
+        // مشاريع COMPLETED بلا rapport d'impact
+        $hasCompletedWithoutReport = Project::where('association_id', $association->id)
+            ->where('status', 'COMPLETED')
+            ->whereDoesntHave('impactReport')
+            ->exists();
+        
+        // مشروع OPEN نشيط
+        $hasActiveProject = Project::where('association_id', $association->id)
+            ->where('status', 'OPEN')
+            ->exists();
 
-return view('association.dashboard', compact('association', 'projects', 'hasPendingReports', 'pendingProject'));
+        return view('association.dashboard', compact(
+            'association', 
+            'projects', 
+            'hasPendingReports', 
+            'pendingProject', 
+            'hasActiveProject',
+            'hasCompletedWithoutReport'
+        ));
     }
 
     public function expiredProjects()
@@ -47,6 +66,7 @@ return view('association.dashboard', compact('association', 'projects', 'hasPend
         $expiredProjects = Project::where('association_id', $association->id)
             ->where('status', 'CLOSED')
             ->whereColumn('currentAmount', '<', 'goalAmount')
+            ->with(['donations', 'category'])
             ->latest()
             ->get();
             
