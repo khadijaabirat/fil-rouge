@@ -40,9 +40,9 @@ class DonationSeeder extends Seeder
             ['amount' => 150000, 'message' => 'Que Dieu l\'accepte', 'donationDate' => '2026-03-20', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 18, 'project_id' => 6],
 
             // === Project 7: Chirurgies cardiaques (COMPLETED 600000) ===
-            ['amount' => 200000, 'message' => 'Pour la santé des enfants', 'donationDate' => '2025-07-01', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 19, 'project_id' => 7],
-            ['amount' => 250000, 'message' => null, 'donationDate' => '2025-09-15', 'isAnonymous' => true, 'status' => 'VALIDATED', 'donator_id' => 20, 'project_id' => 7],
-            ['amount' => 150000, 'message' => 'Que Dieu protège nos enfants', 'donationDate' => '2025-12-01', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 21, 'project_id' => 7],
+            ['amount' => 200000, 'message' => 'Pour la santé des enfants', 'donationDate' => '2025-07-01', 'isAnonymous' => false, 'status' => 'IMPACT', 'donator_id' => 19, 'project_id' => 7],
+            ['amount' => 250000, 'message' => null, 'donationDate' => '2025-09-15', 'isAnonymous' => true, 'status' => 'IMPACT', 'donator_id' => 20, 'project_id' => 7],
+            ['amount' => 150000, 'message' => 'Que Dieu protège nos enfants', 'donationDate' => '2025-12-01', 'isAnonymous' => false, 'status' => 'IMPACT', 'donator_id' => 21, 'project_id' => 7],
 
             // === Project 8: Dépistage diabète (COMPLETED 95000) ===
             ['amount' => 45000, 'message' => 'Pour la prévention', 'donationDate' => '2025-11-15', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 25, 'project_id' => 8],
@@ -54,8 +54,8 @@ class DonationSeeder extends Seeder
             ['amount' => 102000, 'message' => null, 'donationDate' => '2026-03-15', 'isAnonymous' => true, 'status' => 'VALIDATED', 'donator_id' => 16, 'project_id' => 9],
 
             // === Project 10: Rénovation orphelinat (COMPLETED 280000) ===
-            ['amount' => 130000, 'message' => 'Pour les orphelins', 'donationDate' => '2025-10-15', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 17, 'project_id' => 10],
-            ['amount' => 150000, 'message' => 'Que Dieu vous bénisse', 'donationDate' => '2025-12-10', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 18, 'project_id' => 10],
+            ['amount' => 130000, 'message' => 'Pour les orphelins', 'donationDate' => '2025-10-15', 'isAnonymous' => false, 'status' => 'RECEIVED', 'donator_id' => 17, 'project_id' => 10],
+            ['amount' => 150000, 'message' => 'Que Dieu vous bénisse', 'donationDate' => '2025-12-10', 'isAnonymous' => false, 'status' => 'RECEIVED', 'donator_id' => 18, 'project_id' => 10],
 
             // === Project 11: Colonie vacances (45000) ===
             ['amount' => 25000, 'message' => 'Pour le sourire des enfants', 'donationDate' => '2026-05-10', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 27, 'project_id' => 11],
@@ -95,18 +95,18 @@ class DonationSeeder extends Seeder
             ['amount' => 140000, 'message' => 'Aumône continue pour mon père', 'donationDate' => '2026-03-10', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 15, 'project_id' => 19],
 
             // === Project 20: Route rurale (COMPLETED 600000) ===
-            ['amount' => 200000, 'message' => 'Pour le désenclavement', 'donationDate' => '2025-09-01', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 22, 'project_id' => 20],
-            ['amount' => 250000, 'message' => null, 'donationDate' => '2025-11-15', 'isAnonymous' => true, 'status' => 'VALIDATED', 'donator_id' => 23, 'project_id' => 20],
-            ['amount' => 150000, 'message' => 'Pour connecter les douars', 'donationDate' => '2026-01-10', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 24, 'project_id' => 20],
+            ['amount' => 200000, 'message' => 'Pour le désenclavement', 'donationDate' => '2025-09-01', 'isAnonymous' => false, 'status' => 'IMPACT', 'donator_id' => 22, 'project_id' => 20],
+            ['amount' => 250000, 'message' => null, 'donationDate' => '2025-11-15', 'isAnonymous' => true, 'status' => 'IMPACT', 'donator_id' => 23, 'project_id' => 20],
+            ['amount' => 150000, 'message' => 'Pour connecter les douars', 'donationDate' => '2026-01-10', 'isAnonymous' => false, 'status' => 'IMPACT', 'donator_id' => 24, 'project_id' => 20],
 
             // === Project 21: Formation couture (120000) ===
             ['amount' => 60000, 'message' => 'Pour l\'autonomisation des femmes', 'donationDate' => '2026-02-15', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 26, 'project_id' => 21],
             ['amount' => 60000, 'message' => 'Soutien aux femmes', 'donationDate' => '2026-03-10', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 27, 'project_id' => 21],
 
             // === Project 22: Coopérative argan (COMPLETED 250000) ===
-            ['amount' => 100000, 'message' => 'Pour les femmes de l\'argan', 'donationDate' => '2025-07-15', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 28, 'project_id' => 22],
-            ['amount' => 100000, 'message' => null, 'donationDate' => '2025-09-20', 'isAnonymous' => true, 'status' => 'VALIDATED', 'donator_id' => 14, 'project_id' => 22],
-            ['amount' => 50000, 'message' => 'Bravo les femmes !', 'donationDate' => '2025-11-01', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 15, 'project_id' => 22],
+            ['amount' => 100000, 'message' => 'Pour les femmes de l\'argan', 'donationDate' => '2025-07-15', 'isAnonymous' => false, 'status' => 'RECEIVED', 'donator_id' => 28, 'project_id' => 22],
+            ['amount' => 100000, 'message' => null, 'donationDate' => '2025-09-20', 'isAnonymous' => true, 'status' => 'RECEIVED', 'donator_id' => 14, 'project_id' => 22],
+            ['amount' => 50000, 'message' => 'Bravo les femmes !', 'donationDate' => '2025-11-01', 'isAnonymous' => false, 'status' => 'RECEIVED', 'donator_id' => 15, 'project_id' => 22],
 
             // === Project 23: Alphabétisation (35000) ===
             ['amount' => 20000, 'message' => 'L\'éducation change la vie', 'donationDate' => '2026-05-01', 'isAnonymous' => false, 'status' => 'VALIDATED', 'donator_id' => 16, 'project_id' => 23],
