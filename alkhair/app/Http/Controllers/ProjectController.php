@@ -29,16 +29,37 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $hasPendingReports =  Project::where('association_id', Auth::id())
+         $hasPendingReports = Project::where('association_id', Auth::id())
             ->whereHas('donations', function ($query) {
-                 $query->where('status', 'RECEIVED');
+                $query->where('status', 'RECEIVED');
             })->exists();
-            if ($hasPendingReports) {
+            
+        if ($hasPendingReports) {
             return redirect()->route('association.dashboard')
-            ->with('error', 'Action bloquée : Vous devez d\'abord publier les rapports d\'impact de vos projets précédents (fonds reçus) avant de créer un nouveau projet.');
+                ->with('error', 'Action bloquée : Vous devez d\'abord publier les rapports d\'impact de vos projets précédents (fonds reçus) avant de créer un nouveau projet.');
         }
-        $categories=Category::all();
-return view('projects.create', compact('categories'));
+        
+         $hasCompletedWithoutReport = Project::where('association_id', Auth::id())
+            ->where('status', 'COMPLETED')
+            ->whereDoesntHave('impactReport')
+            ->exists();
+            
+        if ($hasCompletedWithoutReport) {
+            return redirect()->route('association.dashboard')
+                ->with('error', 'Action bloquée : Vous devez publier le rapport d\'impact de votre projet complété avant de créer un nouveau projet.');
+        }
+        
+         $hasActiveProject = Project::where('association_id', Auth::id())
+            ->where('status', 'OPEN')
+            ->exists();
+            
+        if ($hasActiveProject) {
+            return redirect()->route('association.dashboard')
+                ->with('error', 'Action bloquée : Vous avez déjà un projet actif en cours. Veuillez le terminer avant d\'en créer un nouveau.');
+        }
+        
+        $categories = Category::all();
+        return view('projects.create', compact('categories'));
     }
 
     /**
@@ -46,7 +67,8 @@ return view('projects.create', compact('categories'));
      */
     public function store(Request $request)
     {
-        $hasPendingReports =  Project::where('association_id', Auth::id())
+        // 1. تحقق من rapports en attente (RECEIVED)
+        $hasPendingReports = Project::where('association_id', Auth::id())
             ->whereHas('donations', function ($query) {
                 $query->where('status', 'RECEIVED');
             })->exists();
@@ -54,7 +76,29 @@ return view('projects.create', compact('categories'));
         if ($hasPendingReports) {
             abort(403, 'Vous devez publier vos rapports d\'impact en attente.');
         }
-       $validate= $request->validate([
+        
+        // 2. تحقق من المشاريع COMPLETED بلا rapport
+        $hasCompletedWithoutReport = Project::where('association_id', Auth::id())
+            ->where('status', 'COMPLETED')
+            ->whereDoesntHave('impactReport')
+            ->exists();
+            
+        if ($hasCompletedWithoutReport) {
+            return redirect()->route('association.dashboard')
+                ->with('error', 'Vous devez publier le rapport d\'impact de votre projet complété avant de créer un nouveau projet.');
+        }
+        
+        // 3. تحقق من وجود مشروع OPEN
+        $hasActiveProject = Project::where('association_id', Auth::id())
+            ->where('status', 'OPEN')
+            ->exists();
+            
+        if ($hasActiveProject) {
+            return redirect()->route('association.dashboard')
+                ->with('error', 'Vous avez déjà un projet actif. Veuillez le terminer avant d\'en créer un nouveau.');
+        }
+        
+        $validate = $request->validate([
             'title'=>'required|string|max:250',
             'description'=>'required|string',
             'goalAmount'=>'required|numeric|min:1',
@@ -82,9 +126,9 @@ return view('projects.create', compact('categories'));
             $validate['image'] = $request->file('image')->store('projects', 'public');
         }
         
-        $user=Auth::user();
-        $validate['association_id']=$user->id;
-         Project::create($validate);
+        $user = Auth::user();
+        $validate['association_id'] = $user->id;
+        Project::create($validate);
         return redirect()->route('association.dashboard')->with('success', 'Projet ajouté avec succès');
     }
 
@@ -174,9 +218,16 @@ return view('projects.create', compact('categories'));
         if ($project->association_id !== Auth::id()) {
             abort(403, 'Accès non autorisé.');
         }
+     
+        
          if ($project->currentAmount >= $project->goalAmount) {
             return back()->with('error', 'Vous ne pouvez pas prolonger un projet qui a déjà atteint son objectif financier.');
         }
+        
+         if (!in_array($project->status, ['OPEN', 'CLOSED'])) {
+            return back()->with('error', 'Ce projet ne peut pas être prolongé dans son état actuel.');
+        }
+        
         $request->validate([
             'newEndDate' => [
                 'required',
@@ -190,11 +241,10 @@ return view('projects.create', compact('categories'));
             'newEndDate.before' => 'La prolongation ne peut pas dépasser 6 mois à partir d\'aujourd\'hui.',
         ]);
 
-         $project->update([
+        $project->update([
             'endDate' => $request->newEndDate,
-            'status' => 'OPEN',
+            'status' => 'OPEN', // رجوع للحالة OPEN بعد التمديد
         ]);
- 
 
         return back()->with('success', 'La date limite du projet a été prolongée avec succès !');
     }
