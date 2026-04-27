@@ -54,7 +54,7 @@
             <span class="material-symbols-outlined text-xl" style="{{ request()->routeIs('association.projects.expired') ? 'font-variation-settings: \'FILL\' 1;' : '' }}">hourglass_empty</span>
             <span class="text-sm font-semibold">Projets Expirés</span>
         </a>
-        <a href="{{ route('impact.create', 0) }}" class="sidebar-link flex items-center gap-3 px-4 py-3.5 text-slate-600">
+        <a href="{{ route('impact.create') }}" class="sidebar-link flex items-center gap-3 px-4 py-3.5 text-slate-600">
             <span class="material-symbols-outlined text-xl">verified</span>
             <span class="text-sm font-semibold">Preuves d'impact</span>
         </a>
@@ -75,16 +75,27 @@
     </div>
 
     <div class="mt-auto p-5 bg-gradient-to-br from-[#0A1128] to-[#1a2744] text-white rounded-2xl text-xs shadow-xl border border-[#F5A623]/10">
-        <div class="flex items-center justify-between mb-3">
-            <span class="font-bold text-white/90">Statut</span>
-            <div class="flex items-center gap-1.5">
-                <div class="w-2 h-2 rounded-full {{ $association->status === 'ACTIVE' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400' }}"></div>
-                <span class="{{ $association->status === 'ACTIVE' ? 'text-emerald-400' : 'text-amber-400' }} font-bold">
-                    {{ $association->status === 'ACTIVE' ? 'Vérifié' : 'En attente' }}
-                </span>
+        <div class="flex items-center gap-3 mb-3">
+            @if($association->profilePhoto)
+                <img src="{{ asset('storage/' . str_replace(' ', '%20', $association->profilePhoto)) }}" alt="{{ $association->name }}" class="w-12 h-12 rounded-xl object-contain bg-white/10 p-1 border-2 border-[#F5A623]/30" onerror="this.onerror=null; this.src='{{ asset('images/default-logo.png') }}'; this.classList.add('hidden');">
+            @else
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F5A623] to-[#FFD085] flex items-center justify-center font-black text-[#0A1128] text-lg">
+                    {{ strtoupper(substr($association->name, 0, 2)) }}
+                </div>
+            @endif
+            <div class="flex-1">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="font-bold text-white/90 text-xs">Statut</span>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2 h-2 rounded-full {{ $association->status === 'ACTIVE' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400' }}"></div>
+                        <span class="{{ $association->status === 'ACTIVE' ? 'text-emerald-400' : 'text-amber-400' }} font-bold text-xs">
+                            {{ $association->status === 'ACTIVE' ? 'Vérifié' : 'En attente' }}
+                        </span>
+                    </div>
+                </div>
+                <div class="text-[10px] text-white/40 truncate">{{ $association->name }}</div>
             </div>
         </div>
-        <div class="text-[10px] text-white/40 truncate">{{ $association->name }}</div>
     </div>
 </aside>
 
@@ -101,9 +112,16 @@
                     <p class="text-sm font-bold text-[#0A1128] truncate max-w-[200px]">{{ $association->name }}</p>
                     <p class="text-[10px] text-[#F5A623] font-bold uppercase tracking-wider">Association</p>
                 </div>
-                <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center font-black text-[#F5A623] text-sm shadow-lg border border-[#F5A623]/20">
-                    <span class="material-symbols-outlined text-[20px]">building</span>
-                </div>
+                @if($association->profilePhoto)
+                    <img src="{{ asset('storage/' . str_replace(' ', '%20', $association->profilePhoto)) }}" alt="{{ $association->name }}" class="h-10 w-10 rounded-xl object-contain bg-white p-1 shadow-lg border-2 border-[#F5A623]/20" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-[#0A1128] to-[#1a2744] items-center justify-center font-black text-[#F5A623] text-sm shadow-lg border border-[#F5A623]/20" style="display:none;">
+                        <span class="material-symbols-outlined text-[20px]">building</span>
+                    </div>
+                @else
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center font-black text-[#F5A623] text-sm shadow-lg border border-[#F5A623]/20">
+                        <span class="material-symbols-outlined text-[20px]">building</span>
+                    </div>
+                @endif
             </div>
         </div>
     </header>
@@ -140,27 +158,57 @@
                 <h2 class="text-3xl font-black text-[#0A1128] tracking-tight">Tableau de bord</h2>
             </div>
             <div class="flex flex-wrap gap-3">
-                <a href="{{ route('impact.create', 0) }}" class="bg-white text-[#0A1128] border border-slate-200 px-5 py-2.5 rounded-xl font-bold hover:bg-slate-50 transition-all flex items-center gap-2 text-xs uppercase tracking-wider shadow-sm">
+                <a href="{{ route('impact.create') }}" class="bg-white text-[#0A1128] border border-slate-200 px-5 py-2.5 rounded-xl font-bold hover:bg-slate-50 transition-all flex items-center gap-2 text-xs uppercase tracking-wider shadow-sm">
                     <span class="material-symbols-outlined text-[18px]">verified</span>
                     Publier un impact
                 </a>
 
-                @if(!$hasPendingReports && $association->status === 'ACTIVE')
+                @if(!$hasPendingReports && !$hasCompletedWithoutReport && !$hasActiveProject && $association->status === 'ACTIVE')
                     <button onclick="window.location.href='{{ route('projects.create') }}'" class="bg-[#0A1128] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#F5A623] hover:text-[#0A1128] transition-all flex items-center gap-2 text-xs uppercase tracking-wider shadow-md">
                         <span class="material-symbols-outlined text-[18px]">add_circle</span>
                         Nouveau Projet
                     </button>
+                @elseif($hasActiveProject)
+                    <div class="bg-amber-50 border border-amber-200 text-amber-800 px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 text-xs">
+                        <span class="material-symbols-outlined text-[18px]">info</span>
+                        Projet actif en cours
+                    </div>
+                @elseif($hasPendingReports || $hasCompletedWithoutReport)
+                    <div class="bg-red-50 border border-red-200 text-red-800 px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 text-xs">
+                        <span class="material-symbols-outlined text-[18px]">warning</span>
+                        Rapport d'impact requis
+                    </div>
                 @endif
             </div>
         </section>
 
-        <!-- Pending Reports Alert -->
+        <!-- Alerts Section -->
         @if($hasPendingReports && $association->status === 'ACTIVE')
             <div class="neu-card border-l-4 border-red-500 p-6 flex items-start gap-4 reveal active">
                 <span class="material-symbols-outlined text-red-500 text-3xl">warning</span>
                 <div>
-                    <h3 class="text-red-600 font-black text-lg mb-1">Création de projet bloquée</h3>
+                    <h3 class="text-red-600 font-black text-lg mb-1">Création de projet bloquée - Fonds reçus</h3>
                     <p class="text-sm text-slate-600">Vous avez reçu des fonds pour un ou plusieurs projets terminés. Par souci de transparence, vous devez obligatoirement publier le <strong>Rapport d'Impact</strong> de ces projets avant de pouvoir lancer une nouvelle campagne.</p>
+                </div>
+            </div>
+        @elseif($hasCompletedWithoutReport && $association->status === 'ACTIVE')
+            <div class="neu-card border-l-4 border-red-500 p-6 flex items-start gap-4 reveal active">
+                <span class="material-symbols-outlined text-red-500 text-3xl">warning</span>
+                <div>
+                    <h3 class="text-red-600 font-black text-lg mb-1">Création de projet bloquée - Rapport manquant</h3>
+                    <p class="text-sm text-slate-600">Vous avez un projet complété sans rapport d'impact. Vous devez <strong>publier le rapport d'impact</strong> de ce projet avant de créer un nouveau projet.</p>
+                    <a href="{{ route('impact.create') }}" class="inline-flex items-center gap-2 mt-3 bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-red-700 transition-all">
+                        <span class="material-symbols-outlined text-[16px]">add</span>
+                        Publier le rapport maintenant
+                    </a>
+                </div>
+            </div>
+        @elseif($hasActiveProject && $association->status === 'ACTIVE')
+            <div class="neu-card border-l-4 border-amber-500 p-6 flex items-start gap-4 reveal active">
+                <span class="material-symbols-outlined text-amber-500 text-3xl">info</span>
+                <div>
+                    <h3 class="text-amber-600 font-black text-lg mb-1">Projet actif en cours</h3>
+                    <p class="text-sm text-slate-600">Vous avez déjà un projet actif. Pour garantir une meilleure gestion et concentration des efforts, vous devez <strong>terminer ou clôturer votre projet actuel</strong> avant d'en créer un nouveau.</p>
                 </div>
             </div>
         @endif
@@ -228,9 +276,9 @@
                         @php
                             $isExpired = \Carbon\Carbon::now()->greaterThan($project->endDate);
                             $isFullyFunded = $project->currentAmount >= $project->goalAmount;
-                            $hasProcessing = $project->donations()->where('status', 'PROCESSING')->exists();
-                            $hasReceived = $project->donations()->where('status', 'RECEIVED')->exists();
-                            $hasReport = \App\Models\ImpactReport::where('project_id', $project->id)->exists();
+                            $hasProcessing = $project->donations->where('status', 'PROCESSING')->isNotEmpty();
+                            $hasReceived = $project->donations->where('status', 'RECEIVED')->isNotEmpty();
+                            $hasReport = $project->impactReport !== null;
                             $percentage = ($project->goalAmount > 0) ? ($project->currentAmount / $project->goalAmount) * 100 : 0;
                             $percentage = min($percentage, 100);
                         @endphp
@@ -239,9 +287,14 @@
                             <!-- Project Image -->
                             <div class="h-48 relative overflow-hidden bg-slate-100">
                                 @if($project->image)
-                                    <img src="{{ asset('storage/' . $project->image) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ $project->title }}">
+                                    <img src="{{ asset('storage/' . str_replace(' ', '%20', $project->image)) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ $project->title }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-full bg-gradient-to-br from-[#0A1128]/20 to-[#F5A623]/20 items-center justify-center" style="display:none;">
+                                        <span class="material-symbols-outlined text-6xl text-[#0A1128]/30">image</span>
+                                    </div>
                                 @else
-                                    <div class="w-full h-full bg-gradient-to-br from-[#0A1128]/20 to-[#F5A623]/20"></div>
+                                    <div class="w-full h-full bg-gradient-to-br from-[#0A1128]/20 to-[#F5A623]/20 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-6xl text-[#0A1128]/30">image</span>
+                                    </div>
                                 @endif
 
                                 <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -290,6 +343,30 @@
                                                 </button>
                                             </form>
                                         </div>
+                                    @elseif($project->status === 'CLOSED' && $project->currentAmount > 0)
+                                        @if($hasProcessing)
+                                            <div class="bg-blue-50 p-3 rounded-xl flex items-center gap-2 text-blue-700 border border-blue-100">
+                                                <span class="material-symbols-outlined text-blue-500 animate-spin text-lg">hourglass_top</span>
+                                                <span class="text-xs font-bold">Transfert des fonds en cours...</span>
+                                            </div>
+                                        @elseif($hasReceived)
+                                            <div class="bg-red-50 border border-red-100 p-3.5 rounded-xl flex justify-between items-center gap-2">
+                                                <span class="text-[10px] text-red-700 font-black uppercase">Fonds reçus !</span>
+                                                <a href="{{ route('impact.create', $project->id) }}" class="bg-[#0A1128] text-white px-3 py-2 rounded-lg text-[10px] font-bold hover:bg-[#F5A623] hover:text-[#0A1128] transition-all whitespace-nowrap shadow-sm uppercase tracking-wider">
+                                                    Publier rapport
+                                                </a>
+                                            </div>
+                                        @else
+                                            <div class="bg-orange-50 border border-orange-100 p-3.5 rounded-xl flex justify-between items-center gap-2">
+                                                <span class="text-[10px] text-orange-700 font-black uppercase">⏰ Projet expiré</span>
+                                                <form action="{{ route('association.withdraw', $project->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="bg-orange-600 text-white px-3 py-2 rounded-lg text-[10px] font-bold hover:bg-orange-700 transition-all shadow-sm uppercase tracking-wider">
+                                                        Clôturer & Retirer
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endif
                                     @elseif($project->status === 'COMPLETED')
                                         @if($hasReport)
                                             <div class="bg-emerald-50 p-3 rounded-xl flex items-center gap-2 text-emerald-700 border border-emerald-100">
@@ -338,7 +415,7 @@
                     </div>
                     <h3 class="text-2xl font-black text-[#0A1128] mb-3">Aucun projet créé</h3>
                     <p class="text-slate-500 mb-8 max-w-md mx-auto text-sm">Commencez votre première campagne de collecte de fonds et impactez les communautés.</p>
-                    @if($association->status === 'ACTIVE' && !$hasPendingReports)
+                    @if($association->status === 'ACTIVE' && !$hasPendingReports && !$hasCompletedWithoutReport && !$hasActiveProject)
                         <a href="{{ route('projects.create') }}" class="inline-flex items-center gap-2 bg-[#0A1128] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#F5A623] hover:text-[#0A1128] transition-all text-sm shadow-md">
                             <span class="material-symbols-outlined text-[18px]">add</span>
                             Créer un projet
@@ -359,9 +436,13 @@
                 <div class="neu-card p-6">
                     <div class="space-y-4">
                         @php
-                            $recentDonations = \App\Models\Donation::whereHas('project', function($q) use ($association) {
-                                $q->where('association_id', $association->id);
-                            })->orderByDesc('created_at')->limit(4)->get();
+                            $recentDonations = \App\Models\Donation::with('project')
+                                ->whereHas('project', function($q) use ($association) {
+                                    $q->where('association_id', $association->id);
+                                })
+                                ->orderByDesc('created_at')
+                                ->limit(4)
+                                ->get();
                         @endphp
 
                         @forelse($recentDonations as $donation)
