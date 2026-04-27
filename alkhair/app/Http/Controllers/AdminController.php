@@ -42,7 +42,17 @@ class AdminController extends Controller
             ->take(3)
             ->get();
 
-        return view('admin.dashboard', compact('pendingAssociations', 'pendingDonationsCount', 'recentManualDonations', 'recentActivities'));
+        // Demandes de retrait en attente
+        $withdrawalRequests = Project::with(['association', 'donations' => function($q) {
+                $q->where('status', 'PROCESSING');
+            }])
+            ->whereHas('donations', function($q) {
+                $q->where('status', 'PROCESSING');
+            })
+            ->latest()
+            ->get();
+
+        return view('admin.dashboard', compact('pendingAssociations', 'pendingDonationsCount', 'recentManualDonations', 'recentActivities', 'withdrawalRequests'));
     }
 
     public function showDonation($id) {
