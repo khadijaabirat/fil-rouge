@@ -50,9 +50,9 @@ class Project extends Model
     }
     public function checkDeadline()
     {
-         if (now()->greaterThan($this->endDate) && $this->status === 'OPEN' && $this->currentAmount < $this->goalAmount) {
-            $this->update(['status' => 'CLOSED']);
-        }
+         if (now()->greaterThan($this->endDate) && $this->status === 'OPEN'  ) {
+$this->update(['status' => 'COMPLETED']);
+            return true;        }return false;
     }
     protected function casts(): array
     {
