@@ -15,17 +15,31 @@ protected $description = 'Ferme automatiquement les projets dont la date limite 
             ->where('endDate', '<', now())
             ->get();
 
-        $count = 0;
+        $closedCount = 0;
+        $completedCount = 0;
+        
         foreach ($expiredProjects as $project) {
-           $isCompleted = $project->checkDeadline();
+            $oldStatus = $project->status;
+            $isExpired = $project->checkDeadline();
             
-            if ($isCompleted) {
-            $this->info("Project #{$project->id} - {$project->title} has been closed.");
-            $count++;
+            if ($isExpired) {
+                $newStatus = $project->fresh()->status;
+                
+                if ($newStatus === 'CLOSED') {
+                    $this->warn("❌ Project #{$project->id} - {$project->title} → CLOSED (objectif non atteint)");
+                    $closedCount++;
+                } elseif ($newStatus === 'COMPLETED') {
+                    $this->info("✅ Project #{$project->id} - {$project->title} → COMPLETED (objectif atteint)");
+                    $completedCount++;
+                }
             }
         }
 
-$this->info("{$count} projets ont été fermés automatiquement.");
+        $this->info("\n📊 Résumé:");
+        $this->info("✅ {$completedCount} projet(s) complété(s)");
+        $this->warn("❌ {$closedCount} projet(s) fermé(s)");
+        $this->info("🔢 Total: " . ($closedCount + $completedCount) . " projet(s) traité(s)");
+        
         return Command::SUCCESS; 
     }
 }
