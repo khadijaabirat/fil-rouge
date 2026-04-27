@@ -77,56 +77,30 @@
         }
     </script>
     <style>
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .glass-header { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        #map { height: 400px; width: 100%; border-radius: 1rem; z-index: 1; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .glass-nav { background: rgba(10,17,40,0.9); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px); border-bottom: 1px solid rgba(245,166,35,0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+        .glass-card { background: rgba(255,255,255,0.95); border-radius: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.08), 0 0 1px rgba(0,0,0,0.02); border: 1px solid rgba(255,255,255,0.8); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+        .glass-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 16px 40px rgba(245,166,35,0.12), 0 0 1px rgba(0,0,0,0.04); border-color: rgba(245,166,35,0.3); }
+        .progress-bar { background: linear-gradient(90deg, #F5A623 0%, #FFD085 50%, #F5A623 100%); background-size: 200% 100%; animation: shimmer 3s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        @keyframes shimmer { 0%{background-position:-200% 0} 50%{background-position:0% 0} 100%{background-position:200% 0} }
+        @keyframes slideInUp { from { opacity:0; transform:translateY(30px); filter: blur(4px); } to { opacity:1; transform:translateY(0); filter: blur(0); } }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        .animate-in { animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) backwards; }
+        .animate-in:nth-child(2) { animation-delay: 0.15s; }
+        .animate-in:nth-child(3) { animation-delay: 0.3s; }
+        .reveal { opacity: 0; transform: translateY(25px); transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        #map { height: 400px; width: 100%; border-radius: 1.5rem; z-index: 1; box-shadow: 0 4px 16px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); }
+        .neumorphic-lg { background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(248,250,252,0.8) 100%); }
+        .neumorphic { background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 100%); }
     </style>
 </head>
-<body class="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container">
+<body class="bg-[#f0f2f5] text-[#191c1e] font-body selection:bg-[#F5A623]/20">
 
-    <header class="fixed w-full top-0 z-50 transition-all duration-300">
-        <nav class="glass-header w-full">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-20">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-gradient-to-br from-[#F5A623] to-[#FFD085] p-2 rounded-xl font-black text-[#0A1128] text-xl shadow-md">AK</div>
-                        <a href="{{ url('/') }}" class="flex flex-col">
-                            <span class="text-2xl font-black text-white drop-shadow-md leading-none tracking-tight font-headline">AL-KHAIR</span>
-                            <span class="text-[10px] text-[#F5A623] font-bold tracking-widest uppercase">Certifié 2026</span>
-                        </a>
-                    </div>
-                    
-                    <div class="hidden md:flex items-center gap-8">
-                        <a class="text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="{{ url('/') }}">Accueil</a>
-                        <a class="text-[#F5A623] font-bold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-[#F5A623]" href="{{ route('projects.index') }}">Projets</a>
-                        
-                        @auth
-                            @if(Auth::user()->isAdmin())
-                                <a href="{{ route('admin.dashboard') }}" class="text-white/90 font-medium hover:text-[#F5A623] transition">Dashboard</a>
-                            @elseif(Auth::user()->isAssociation())
-                                <a href="{{ route('association.dashboard') }}" class="text-white/90 font-medium hover:text-[#F5A623] transition">Mon Espace</a>
-                            @elseif(Auth::user()->isDonator())
-                                <a href="{{ route('donator.dashboard') }}" class="text-white/90 font-medium hover:text-[#F5A623] transition">Mon Espace</a>
-                            @endif
-
-                            <form action="{{ route('logout') }}" method="POST" class="inline ml-2">
-                                @csrf
-                                <button type="submit" class="bg-white/10 hover:bg-red-500/20 border border-white/20 text-white text-sm font-bold px-5 py-2 rounded-xl transition-all shadow-sm">Quitter</button>
-                            </form>
-                        @else
-                            <a class="text-white/90 font-medium hover:text-[#F5A623] transition" href="{{ route('login') }}">Connexion</a>
-                            <a class="bg-gradient-to-r from-[#F5A623] to-[#FFD085] hover:scale-105 text-[#0A1128] font-bold px-6 py-2.5 rounded-xl transition-all shadow-lg flex items-center gap-2" href="{{ route('register') }}">
-                                S'inscrire <span class="text-lg leading-none">→</span>
-                            </a>
-                        @endauth
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
+    @include('partials.navbar')
 
     <main>
-        <section class="relative h-[650px] min-h-[500px] w-full overflow-hidden">
+        <section class="relative h-[550px] min-h-[450px] w-full overflow-hidden">
             @if($project->image)
                 <img alt="{{ $project->title }}" class="absolute inset-0 w-full h-full object-cover" src="{{ asset('storage/' . $project->image) }}"/>
             @else
@@ -176,34 +150,67 @@
             
             <div class="lg:col-span-8 space-y-16">
                 
-                <section>
-                    <h2 class="text-3xl font-black font-headline mb-6 text-primary-container flex items-center gap-3">
-                        <span class="material-symbols-outlined text-secondary-container text-4xl">subject</span>
+                <section class="reveal">
+                    <h2 class="text-3xl font-black font-headline mb-6 text-[#0A1128] flex items-center gap-3">
+                        <span class="material-symbols-outlined text-[#F5A623] text-4xl p-2 bg-gradient-to-br from-[#F5A623]/15 to-[#FFD085]/10 rounded-xl border border-[#F5A623]/20 shadow-lg shadow-[#F5A623]/5">subject</span>
                         Mission du Projet
                     </h2>
-                    <div class="prose prose-lg max-w-none text-on-surface-variant leading-relaxed bg-white p-8 rounded-3xl shadow-sm border border-outline-variant/10">
+                    <div class="glass-card backdrop-blur-xl max-w-none text-[#191c1e] leading-relaxed p-8 rounded-2xl neumorphic-lg transition-all duration-300 group hover:shadow-xl hover:shadow-[#F5A623]/10">
                         {!! nl2br(e($project->description)) !!}
                     </div>
                 </section>
 
+                @if($project->videoUrl)
+                    <section class="reveal">
+                        <h2 class="text-3xl font-black font-headline mb-6 text-[#0A1128] flex items-center gap-3">
+                            <span class="material-symbols-outlined text-[#F5A623] text-4xl p-2 bg-gradient-to-br from-[#F5A623]/15 to-[#FFD085]/10 rounded-xl border border-[#F5A623]/20 shadow-lg shadow-[#F5A623]/5">play_circle</span>
+                            Vidéo du Projet
+                        </h2>
+                        <div class="glass-card backdrop-blur-xl rounded-2xl overflow-hidden neumorphic-lg transition-all duration-300 group hover:shadow-xl hover:shadow-[#F5A623]/10">
+                            <div class="relative" style="padding-bottom: 56.25%; height: 0;">
+                                @php
+                                    $embedUrl = $project->videoUrl;
+                                    // Convert YouTube watch URL to embed URL
+                                    if (strpos($embedUrl, 'youtube.com/watch') !== false) {
+                                        preg_match('/[?&]v=([^&]+)/', $embedUrl, $matches);
+                                        if (isset($matches[1])) {
+                                            $embedUrl = 'https://www.youtube.com/embed/' . $matches[1];
+                                        }
+                                    } elseif (strpos($embedUrl, 'youtu.be/') !== false) {
+                                        $videoId = substr(parse_url($embedUrl, PHP_URL_PATH), 1);
+                                        $embedUrl = 'https://www.youtube.com/embed/' . $videoId;
+                                    }
+                                @endphp
+                                <iframe 
+                                    src="{{ $embedUrl }}" 
+                                    class="absolute top-0 left-0 w-full h-full" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                    </section>
+                @endif
+
                 @if($project->impactReport)
-                    <section class="bg-gradient-to-br from-green-50 to-emerald-50 p-8 md:p-10 rounded-3xl border border-green-200 shadow-sm relative overflow-hidden">
-                        <div class="absolute -right-10 -top-10 text-green-500 opacity-10">
-                            <span class="material-symbols-outlined text-[150px]">verified</span>
+                    <section class="bg-gradient-to-br from-emerald-50 to-green-50 p-8 md:p-10 rounded-2xl border border-emerald-200 neumorphic-lg relative overflow-hidden group hover:shadow-xl hover:shadow-green-200/40 transition-all duration-300 reveal">
+                        <div class="absolute -right-16 -top-16 text-green-500/10 group-hover:scale-110 transition-transform duration-500">
+                            <span class="material-symbols-outlined text-[150px]" style="font-variation-settings: 'FILL' 1;">verified</span>
                         </div>
                         <div class="relative z-10">
                             <h3 class="text-2xl font-black font-headline mb-4 flex items-center gap-2 text-green-800">
-                                <span class="material-symbols-outlined">task_alt</span>
+                                <span class="material-symbols-outlined bg-green-200/60 p-2 rounded-lg text-green-600">task_alt</span>
                                 Impact Réalisé
                             </h3>
                             <p class="text-green-700 font-medium mb-4">Ce projet a été complété le {{ \Carbon\Carbon::parse($project->impactReport->completionDate)->format('d M Y') }}.</p>
-                            <div class="bg-white/60 p-6 rounded-2xl text-green-900 leading-relaxed mb-6">
+                            <div class="glass-card bg-white/80 p-6 rounded-xl text-green-900 leading-relaxed mb-6 neumorphic border border-green-100/50">
                                 {!! nl2br(e($project->impactReport->description)) !!}
                             </div>
-                            
+
                             @if($project->impactReport->image)
-                                <div class="mt-6 rounded-xl overflow-hidden shadow-md h-64">
-                                    <img src="{{ asset('storage/' . $project->impactReport->image) }}" class="w-full h-full object-cover" alt="Preuve d'impact">
+                                <div class="mt-6 rounded-xl overflow-hidden neumorphic-lg h-64 group-hover:shadow-lg group-hover:shadow-green-200/40 transition-all duration-300 border border-green-100/30">
+                                    <img src="{{ asset('storage/' . $project->impactReport->image) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="Preuve d'impact">
                                 </div>
                             @endif
                         </div>
@@ -212,53 +219,53 @@
 
                 <section>
                     <div class="flex items-center justify-between mb-8">
-                        <h2 class="text-2xl font-black font-headline flex items-center gap-3 text-primary-container">
-                            <span class="material-symbols-outlined text-secondary-container text-4xl">volunteer_activism</span>
+                        <h2 class="text-2xl font-black font-headline flex items-center gap-3 text-[#0A1128] reveal">
+                            <span class="material-symbols-outlined text-[#F5A623] text-4xl p-2 bg-gradient-to-br from-[#F5A623]/15 to-[#FFD085]/10 rounded-xl border border-[#F5A623]/20 shadow-lg shadow-[#F5A623]/5">volunteer_activism</span>
                             Donateurs Récents
                         </h2>
-                        <span class="text-sm font-bold text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-full">{{ $project->donations->count() }} dons au total</span>
+                        <span class="text-sm font-bold text-gray-700 bg-gray-100 px-3 py-1 rounded-full neumorphic shadow-sm">{{ $project->donations->count() }} dons au total</span>
                     </div>
 
                     @if($project->donations->count() > 0)
-                        <div class="bg-white rounded-3xl p-6 shadow-sm border border-outline-variant/10">
+                        <div class="glass-card backdrop-blur-xl rounded-2xl p-6 neumorphic-lg transition-all duration-300 reveal">
                             <div class="space-y-3">
                                 @foreach($project->donations->take(10) as $donation)
-                                    <div class="flex items-center gap-4 p-4 rounded-2xl bg-surface-container-lowest hover:bg-surface-container-low transition-colors border border-outline-variant/5">
-                                        <div class="w-12 h-12 rounded-full bg-secondary-container/20 flex items-center justify-center flex-shrink-0">
-                                            <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                    <div class="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-white/60 to-white/40 hover:from-[#F5A623]/8 hover:to-[#FFD085]/8 transition-all border border-gray-200/40 hover:border-[#F5A623]/40 group">
+                                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#F5A623]/25 to-[#FFD085]/25 flex items-center justify-center flex-shrink-0 group-hover:shadow-lg group-hover:shadow-[#F5A623]/25 transition-all">
+                                            <span class="material-symbols-outlined text-[#F5A623]" style="font-variation-settings: 'FILL' 1;">favorite</span>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <p class="font-bold text-primary-container text-sm">
+                                            <p class="font-bold text-[#0A1128] text-sm">
                                                 {{ $donation->isAnonymous ? 'Donateur Anonyme' : ($donation->donator->name ?? 'Donateur') }}
                                             </p>
                                             <div class="flex items-center gap-2 mt-1">
-                                                <p class="text-xs text-on-surface-variant">{{ $donation->created_at->diffForHumans() }}</p>
-                                                <span class="text-[10px] font-bold uppercase text-green-600 bg-green-50 px-2 rounded">Validé</span>
+                                                <p class="text-xs text-gray-600">{{ $donation->created_at->diffForHumans() }}</p>
+                                                <span class="text-[10px] font-bold uppercase text-green-700 bg-green-50/80 px-2 py-0.5 rounded-full neumorphic border border-green-200/30">Validé</span>
                                             </div>
                                             @if($donation->message)
-                                                <p class="text-xs text-on-surface-variant/80 mt-2 italic bg-surface p-2 rounded-lg border-l-2 border-secondary-container">
+                                                <p class="text-xs text-gray-700/80 mt-2 italic bg-gray-50 p-2 rounded-lg border-l-4 border-[#F5A623]">
                                                     "{{ $donation->message }}"
                                                 </p>
                                             @endif
                                         </div>
                                         <div class="text-right flex-shrink-0">
-                                            <p class="font-black text-secondary text-lg">{{ number_format($donation->amount, 0, ',', ' ') }} DH</p>
+                                            <p class="font-black text-[#F5A623] text-lg">{{ number_format($donation->amount, 0, ',', ' ') }} DH</p>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
                             @if($project->donations->count() > 10)
-                                <div class="mt-6 pt-6 border-t border-outline-variant/10 text-center">
-                                    <p class="text-sm font-medium text-on-surface-variant">et {{ $project->donations->count() - 10 }} autres donateurs</p>
+                                <div class="mt-6 pt-6 border-t border-gray-200/40 text-center">
+                                    <p class="text-sm font-medium text-gray-600">et {{ $project->donations->count() - 10 }} autres donateurs</p>
                                 </div>
                             @endif
                         </div>
                     @else
-                        <div class="bg-surface-container-low rounded-3xl p-12 text-center border border-dashed border-outline-variant/50">
-                            <span class="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-4">volunteer_activism</span>
-                            <p class="text-primary-container font-bold text-lg">Soyez le premier à soutenir ce projet !</p>
-                            <p class="text-sm text-on-surface-variant mt-2 mb-6">Votre don peut faire la différence dès aujourd'hui.</p>
-                            <a href="{{ route('donations.create', $project->id) }}" class="inline-flex items-center gap-2 bg-primary-container text-white px-6 py-3 rounded-lg font-bold hover:scale-105 transition-transform">
+                        <div class="glass-card backdrop-blur-xl rounded-2xl p-12 text-center border-2 border-dashed border-gray-300/40 neumorphic hover:border-[#F5A623]/50 hover:bg-[#F5A623]/2 transition-all duration-300 reveal">
+                            <span class="material-symbols-outlined text-5xl text-gray-400/60 mb-4 block">volunteer_activism</span>
+                            <p class="text-[#0A1128] font-bold text-lg">Soyez le premier à soutenir ce projet !</p>
+                            <p class="text-sm text-gray-600 mt-2 mb-6">Votre don peut faire la différence dès aujourd'hui.</p>
+                            <a href="{{ route('donations.create', $project->id) }}" class="inline-flex items-center gap-2 bg-gradient-to-r from-[#0A1128] to-[#1a2a4a] text-white px-6 py-3 rounded-lg font-bold hover:shadow-lg hover:shadow-[#0A1128]/40 transition-all active:scale-95 neumorphic border border-[#0A1128]/20">
                                 <span class="material-symbols-outlined">favorite</span>
                                 Être le premier donateur
                             </a>
@@ -267,15 +274,15 @@
                 </section>
 
                 <section>
-                    <h2 class="text-2xl font-black font-headline mb-6 text-primary-container flex items-center gap-3">
-                        <span class="material-symbols-outlined text-secondary-container text-4xl">map</span>
+                    <h2 class="text-2xl font-black font-headline mb-6 text-[#0A1128] flex items-center gap-3 reveal">
+                        <span class="material-symbols-outlined text-[#F5A623] text-4xl p-2 bg-gradient-to-br from-[#F5A623]/15 to-[#FFD085]/10 rounded-xl border border-[#F5A623]/20 shadow-lg shadow-[#F5A623]/5">map</span>
                         Localisation du projet
                     </h2>
-                    <div class="bg-white rounded-3xl p-4 shadow-sm border border-outline-variant/10">
-                        <div id="map" class="z-0 border border-outline-variant/20"></div>
-                        <div class="mt-4 p-4 bg-primary-container/5 rounded-xl border border-primary-container/10 flex items-start gap-3">
-                            <span class="material-symbols-outlined text-primary-container">security</span>
-                            <p class="text-xs font-medium text-primary-container leading-relaxed">
+                    <div class="glass-card backdrop-blur-xl rounded-2xl p-4 neumorphic-lg transition-all duration-300 reveal">
+                        <div id="map" class="z-0 border border-gray-200/40 rounded-xl overflow-hidden shadow-inner"></div>
+                        <div class="mt-4 p-4 bg-gradient-to-r from-[#0A1128]/5 to-[#F5A623]/5 rounded-lg border border-[#0A1128]/10 flex items-start gap-3 hover:bg-[#F5A623]/8 transition-all">
+                            <span class="material-symbols-outlined text-[#0A1128] flex-shrink-0 mt-0.5">security</span>
+                            <p class="text-xs font-medium text-[#0A1128] leading-relaxed">
                                 Les coordonnées exactes sont affichées à des fins de transparence. L'association partenaire est responsable de la mise en œuvre sur ce site.
                             </p>
                         </div>
@@ -285,91 +292,81 @@
 
             <div class="lg:col-span-4">
                 <div class="sticky top-28 space-y-8">
-                    
-                    <div class="bg-white p-8 rounded-3xl shadow-xl shadow-primary-container/5 border border-outline-variant/20 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-secondary-container/10 rounded-bl-full -mr-10 -mt-10"></div>
-                        
-                        <div class="relative z-10 mb-8">
-                            <p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Fonds Collectés</p>
-                            <div class="flex items-end gap-2 mb-4">
-                                <span class="text-4xl font-black text-primary-container font-headline">{{ number_format($project->currentAmount, 0, ',', ' ') }}</span>
-                                <span class="text-xl font-bold text-secondary mb-1">DH</span>
-                            </div>
-                            
-                            @php
-                                $percentage = $project->goalAmount > 0 ? min(($project->currentAmount / $project->goalAmount) * 100, 100) : 0;
-                            @endphp
-                            <div class="h-2.5 w-full bg-surface-container-high rounded-full overflow-hidden mb-3">
-                                <div class="h-full bg-gradient-to-r from-secondary to-secondary-container rounded-full transition-all duration-1000" style="width: {{ $percentage }}%"></div>
-                            </div>
-                            
-                            <div class="flex justify-between items-center text-sm font-bold">
-                                <span class="text-secondary">{{ number_format($percentage, 0) }}% financé</span>
-                                <span class="text-on-surface-variant">Objectif: {{ number_format($project->goalAmount, 0, ',', ' ') }} DH</span>
-                            </div>
-                        </div>
 
-                        <div class="space-y-4">
-                            @if($project->status === 'OPEN')
-                                <a href="{{ route('donations.create', $project->id) }}" class="block w-full bg-primary-container text-white py-5 rounded-xl font-headline font-black text-lg hover:bg-slate-800 transition-all duration-300 shadow-lg shadow-primary-container/20 active:scale-95 text-center">
-                                    Faire un don
-                                </a>
-                                <p class="text-center text-[10px] text-on-surface-variant font-bold uppercase tracking-widest flex items-center justify-center gap-1">
-                                    <span class="material-symbols-outlined text-[14px]">lock</span>
-                                    Paiement Sécurisé
-                                </p>
-                            @else
-                                <button disabled class="w-full bg-surface-container-highest text-on-surface-variant py-5 rounded-xl font-headline font-black text-lg cursor-not-allowed">
-                                    Projet {{ $project->status === 'COMPLETED' ? 'Complété' : 'Fermé' }}
-                                </button>
-                                @if($project->status === 'COMPLETED')
-                                    <p class="text-center text-sm text-green-600 font-bold mt-2">Merci à tous les donateurs !</p>
+                        <div class="glass-card p-6 rounded-2xl reveal">
+                            <div class="relative z-10 mb-6">
+                                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Fonds Collectés</p>
+                                <div class="flex items-end gap-2 mb-3">
+                                    <span class="text-3xl font-black text-[#0A1128]">{{ number_format($project->currentAmount, 0, ',', ' ') }}</span>
+                                    <span class="text-lg font-bold text-[#F5A623] mb-0.5">DH</span>
+                                </div>
+
+                                @php
+                                    $percentage = $project->goalAmount > 0 ? min(($project->currentAmount / $project->goalAmount) * 100, 100) : 0;
+                                @endphp
+                                <div class="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden mb-2 shadow-inner">
+                                    <div class="h-full progress-bar rounded-full" style="width: {{ $percentage }}%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs">
+                                    <span class="font-bold text-[#F5A623]">{{ number_format($percentage, 0) }}%</span>
+                                    <span class="text-slate-400">Objectif: {{ number_format($project->goalAmount, 0, ',', ' ') }} DH</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3">
+                                @if($project->status === 'OPEN')
+                                    <a href="{{ route('donations.create', $project->id) }}" class="block w-full bg-gradient-to-r from-[#0A1128] to-[#162040] hover:from-[#F5A623] hover:to-[#FFD085] text-white hover:text-[#0A1128] py-4 rounded-lg font-bold text-center transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-[#F5A623]/30">
+                                        Faire un don
+                                    </a>
+                                    <p class="text-center text-[10px] text-slate-400 font-medium flex items-center justify-center gap-1">
+                                        <span class="material-symbols-outlined text-[12px]">lock</span>
+                                        Paiement Sécurisé
+                                    </p>
+                                @else
+                                    <button disabled class="w-full bg-slate-100 text-slate-400 py-4 rounded-lg font-bold cursor-not-allowed transition-all">
+                                        Projet {{ $project->status === 'COMPLETED' ? 'Complété' : 'Fermé' }}
+                                    </button>
+                                    @if($project->status === 'COMPLETED')
+                                        <p class="text-center text-xs text-emerald-500 font-bold">Merci à tous les donateurs !</p>
+                                    @endif
                                 @endif
-                            @endif
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="bg-primary-container p-8 rounded-3xl text-white shadow-lg relative overflow-hidden">
-                        <div class="absolute -bottom-10 -right-10 opacity-10">
-                            <span class="material-symbols-outlined text-[150px]">pie_chart</span>
+                        <div class="bg-gradient-to-br from-[#0A1128] via-[#162040] to-[#0d1c30] p-6 rounded-2xl text-white relative overflow-hidden reveal group shadow-xl shadow-[#0A1128]/20 border border-[#F5A623]/10">
+                            <div class="absolute -right-20 -bottom-20 w-56 h-56 bg-[#F5A623]/15 rounded-full blur-3xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
+                            <div class="relative z-10">
+                                <h4 class="text-xs font-bold uppercase tracking-widest text-[#F5A623] mb-4 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                    Garantie Al-Khair
+                                </h4>
+                                <p class="text-xs text-blue-100/80 leading-relaxed font-medium">
+                                    <strong class="text-[#FFD085]">100%</strong> de votre don est reversé à l'association. Aucun frais de plateforme.
+                                </p>
+                            </div>
                         </div>
-                        <div class="relative z-10">
-                            <h4 class="text-sm font-bold uppercase tracking-widest font-label text-secondary-container mb-6 flex items-center gap-2">
-                                <span class="material-symbols-outlined text-[18px]">donut_small</span>
-                                Garantie Al-Khair
-                            </h4>
-                            <p class="text-sm text-blue-100 leading-relaxed">
-                                Notre plateforme assure que <strong>100%</strong> de votre don (hors frais bancaires) est reversé directement à l'association pour ce projet spécifique. Aucun frais de plateforme n'est prélevé.
-                            </p>
-                        </div>
-                    </div>
 
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="bg-primary-container text-white py-12 border-t-4 border-secondary-container mt-10">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <h2 class="text-2xl font-black mb-2 tracking-widest text-secondary-container font-headline">AL-KHAIR</h2>
-            <p class="text-blue-200/60 text-sm mb-6">L'archive éthique de l'impact humanitaire au Maroc.</p>
-            <p class="text-xs text-blue-200/40">© 2026 Al-Khair Foundation. Tous droits réservés.</p>
-        </div>
-    </footer>
+    @include('partials.footer')
 
     <script>
+        // Map initialization
         document.addEventListener('DOMContentLoaded', function() {
             const hasCoordinates = {{ ($project->latitude && $project->longitude) ? 'true' : 'false' }};
             const latitude = {{ $project->latitude ?? 31.7917 }};
             const longitude = {{ $project->longitude ?? -7.0926 }};
-            
+
             const map = L.map('map').setView([latitude, longitude], hasCoordinates ? 13 : 5);
-            
+
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 19,
             }).addTo(map);
-            
+
             if (hasCoordinates) {
                 const customIcon = L.divIcon({
                     className: 'custom-marker',
@@ -377,9 +374,9 @@
                     iconSize: [40, 40],
                     iconAnchor: [20, 40],
                 });
-                
+
                 const marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
-                
+
                 marker.bindPopup(`
                     <div style="text-align: center; padding: 4px;">
                         <strong style="font-size: 13px; color: #021c36; font-family: Manrope;">{{ addslashes($project->title) }}</strong><br>
@@ -387,10 +384,22 @@
                     </div>
                 `).openPopup();
             }
-            
+
             window.addEventListener('resize', function() {
                 map.invalidateSize();
             });
+
+            // Scroll reveal animation
+            const observerOptions = { threshold: 0.08, rootMargin: '0px 0px -60px 0px' };
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         });
     </script>
 </body>

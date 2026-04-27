@@ -8,89 +8,42 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 
     <style>
-        body { 
-            font-family: 'Inter', sans-serif;
-            background: #e8ecf3;
-        }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
-        
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); }
-
-        /* Custom Scroll Reveal Animation */
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Poppins', sans-serif; }
+        .glass-nav { background: rgba(10,17,40,0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid rgba(245,166,35,0.15); }
+        .card { background: #fff; border-radius: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 6px 20px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.04); transition: all 0.4s cubic-bezier(.4,0,.2,1); }
+        .card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.1); transform: translateY(-6px); }
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(.4,0,.2,1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
         .float-animation { animation: float 6s ease-in-out infinite; }
+        .progress-bar { background: linear-gradient(90deg, #F5A623 0%, #FFD085 50%, #F5A623 100%); background-size: 200% 100%; animation: shimmer 2s infinite; }
+        @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
     </style>
 </head>
-<body class="bg-[#e8ecf3] text-slate-700 overflow-x-hidden selection:bg-[#F5A623] selection:text-white">
+<body class="bg-[#f0f2f5] text-slate-700 overflow-x-hidden selection:bg-[#F5A623] selection:text-white">
 
-    <header id="main-nav" class="fixed w-full top-0 z-50 transition-all duration-300 bg-[#0A1128]/80 backdrop-blur-xl shadow-xl py-2">
-        <nav class="container mx-auto px-4 flex justify-between items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-lg shadow-black/5">
-            <div class="flex items-center gap-3">
-                <div class="bg-gradient-to-br from-[#F5A623] to-[#FFD085] p-2 rounded-xl font-black text-[#0A1128] text-xl shadow-md">AK</div>
-                <div>
-                    <a href="{{ url('/') }}">
-                        <h1 class="text-2xl font-black text-white drop-shadow-md leading-none tracking-tight">AL-KHAIR</h1>
-                        <p class="text-[10px] text-[#F5A623] font-bold tracking-widest uppercase">Certifié 2026</p>
-                    </a>
-                </div>
-            </div>
-            <div class="hidden md:flex items-center gap-8">
-                <a class="text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="{{ url('/') }}">Accueil</a>
-                <a class="text-[#F5A623] font-bold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-[#F5A623]" href="{{ route('projects.index') }}">Projets</a>
+@include('partials.navbar')
 
-                @auth
-                    @if(Auth::user()->isAdmin())
-                        <a href="{{ route('admin.dashboard') }}" class="text-white/90 font-medium hover:text-[#F5A623] transition">Dashboard</a>
-                    @elseif(Auth::user()->isAssociation())
-                        <a href="{{ route('association.dashboard') }}" class="text-white/90 font-medium hover:text-[#F5A623] transition">Mon Espace</a>
-                    @elseif(Auth::user()->isDonator())
-                        <a href="{{ route('donator.dashboard') }}" class="text-white/90 font-medium hover:text-[#F5A623] transition">Mon Espace</a>
-                    @endif
+    <section class="relative pt-28 pb-16 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-[#0A1128] via-[#162040] to-[#0A1128]"></div>
+        <div class="absolute top-1/3 left-1/4 w-72 h-72 bg-[#F5A623]/15 rounded-full blur-3xl float-animation"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl float-animation" style="animation-delay:2s"></div>
 
-                    <form action="{{ route('logout') }}" method="POST" class="inline ml-2">
-                        @csrf
-                        <button type="submit" class="glass hover:bg-red-500/20 text-white text-sm font-bold px-5 py-2 rounded-xl transition-all shadow-sm">Quitter</button>
-                    </form>
-                @else
-                    <a class="text-white/90 font-medium hover:text-[#F5A623] transition" href="{{ route('login') }}">Connexion</a>
-                    <a class="bg-gradient-to-r from-[#F5A623] to-[#FFD085] hover:scale-105 text-[#0A1128] font-bold px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-[#F5A623]/30 flex items-center gap-2" href="{{ route('register') }}">
-                        S'inscrire <span class="text-lg leading-none">→</span>
-                    </a>
-                @endauth
-            </div>
-        </nav>
-    </header>
-
-    <section class="relative min-h-[50vh] flex items-center overflow-hidden pt-32 pb-20">
-        <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-gradient-to-br from-[#0A1128] via-[#1a2744] to-[#0A1128]"></div>
-            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#F5A623]/20 rounded-full blur-3xl float-animation"></div>
-            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl float-animation" style="animation-delay: 2s;"></div>
-        </div>
-
-        <div class="container mx-auto px-4 relative z-10 text-center">
-            <div class="inline-flex items-center gap-2 glass text-white px-5 py-2 rounded-full text-xs font-bold mb-8 uppercase tracking-widest shadow-lg">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                {{ $projects->total() ?? 0 }} Projets Actifs
-            </div>
-            <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-[1.05] tracking-tight reveal active">
-                Explorez tous les <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#F5A623] via-[#FFD085] to-[#F5A623]">projets solidaires</span>
+        <div class="container mx-auto px-4 relative z-10 text-center py-12">
+            <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur text-white/90 px-4 py-1.5 rounded-full text-xs font-bold mb-6 border border-white/10">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                {{ $projects->total() ?? 0 }} Projets disponibles
+            </span>
+            <h1 class="text-4xl md:text-6xl font-black text-white mb-4 leading-tight tracking-tight reveal active">
+                Projets <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#F5A623] to-[#FFD085]">solidaires</span>
             </h1>
-            <p class="text-xl md:text-2xl text-blue-100/80 mb-10 leading-relaxed font-light max-w-3xl mx-auto reveal active">
-                Découvrez les initiatives qui changent des vies à travers le Maroc. Chaque projet est vérifié et transparent.
-            </p>
+            <p class="text-lg text-blue-100/60 max-w-2xl mx-auto reveal active">Chaque projet est vérifié et transparent. Trouvez celui qui vous parle.</p>
         </div>
     </section>
 
-    <section class="container mx-auto px-4 -mt-10 relative z-20 mb-16 reveal active">
-        <div class="glass-card rounded-[2rem] shadow-2xl p-8">
+    <section class="container mx-auto px-4 -mt-8 relative z-20 mb-12 reveal active">
+        <div class="bg-white rounded-2xl shadow-xl p-6 border border-black/[0.04]">
             <form action="{{ route('projects.index') }}" method="GET" id="filter-form">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <div class="md:col-span-2">
@@ -169,60 +122,58 @@
 
     <section class="container mx-auto px-4 pb-24">
         @if($projects->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($projects as $project)
-                    <div class="bg-white rounded-3xl overflow-hidden shadow-lg shadow-gray-200/40 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col group reveal">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach($projects as $i => $project)
+                    <div class="card flex flex-col group reveal" style="animation-delay:{{ ($i % 6) * 0.08 }}s">
                         
-                        <div class="relative h-56 overflow-hidden bg-[#0A1128]">
+                        <div class="relative h-52 overflow-hidden bg-[#0A1128]">
                             @if($project->image)
-                                <img alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90" src="{{ asset('storage/' . $project->image) }}"/>
+                                <img alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ asset('storage/' . $project->image) }}"/>
                             @else
-                                <div class="w-full h-full flex items-center justify-center">
-                                    <span class="text-[#F5A623] text-5xl font-black">AK</span>
+                                <div class="w-full h-full bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center">
+                                    <span class="text-[#F5A623]/30 text-6xl font-black">AK</span>
                                 </div>
                             @endif
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/90 to-transparent"></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
 
-                            <div class="absolute top-4 left-4 flex gap-2">
-                                <span class="bg-white/90 backdrop-blur text-[#0A1128] text-[10px] font-black uppercase px-3 py-1.5 rounded-lg shadow-sm">
+                            <div class="absolute top-3 left-3 flex gap-1.5">
+                                <span class="bg-white text-[#0A1128] text-[10px] font-bold px-2.5 py-1 rounded-lg shadow">
                                     {{ $project->category->name ?? 'Solidaire' }}
                                 </span>
                                 @if($project->currentAmount >= $project->goalAmount)
-                                    <span class="bg-emerald-500 text-white text-[10px] font-black uppercase px-3 py-1.5 rounded-lg shadow-sm">
-                                        ✓ Financé
-                                    </span>
+                                    <span class="bg-emerald-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg">✓ Financé</span>
                                 @endif
                             </div>
 
-                            <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <p class="text-xs font-bold uppercase tracking-widest text-[#F5A623] mb-1">{{ $project->association->name ?? 'Association' }}</p>
-                                <h3 class="text-xl font-bold leading-tight">{{ Str::limit($project->title, 50) }}</h3>
+                            <div class="absolute bottom-3 left-3 right-3 text-white">
+                                <p class="text-[10px] font-bold text-[#F5A623] mb-0.5">{{ $project->association->name ?? 'Association' }}</p>
+                                <h3 class="text-base font-bold leading-snug line-clamp-2">{{ $project->title }}</h3>
                             </div>
                         </div>
 
-                        <div class="p-6 flex-1 flex flex-col">
-                            <p class="text-sm text-slate-600 mb-6 line-clamp-3 leading-relaxed">{{ Str::limit($project->description, 120) }}</p>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <p class="text-xs text-slate-500 mb-4 line-clamp-2 leading-relaxed">{{ Str::limit($project->description, 100) }}</p>
 
-                            <div class="mb-6 mt-auto">
+                            <div class="mb-4 mt-auto">
                                 @php
                                     $percentage = ($project->goalAmount > 0) ? ($project->currentAmount / $project->goalAmount) * 100 : 0;
                                     $percentage = min($percentage, 100);
                                 @endphp
-                                <div class="flex justify-between text-sm mb-2 font-bold">
-                                    <span class="text-[#0A1128]">{{ number_format($project->currentAmount, 0, ',', ' ') }} DH</span>
-                                    <span class="text-slate-400">{{ number_format($percentage, 0) }}%</span>
+                                <div class="flex justify-between text-xs mb-1.5">
+                                    <span class="font-bold text-[#0A1128]">{{ number_format($project->currentAmount, 0, ',', ' ') }} DH</span>
+                                    <span class="font-bold text-[#F5A623]">{{ number_format($percentage, 0) }}%</span>
                                 </div>
-                                <div class="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-[#F5A623] to-[#FFD085] rounded-full transition-all duration-500" style="width: {{ $percentage }}%"></div>
+                                <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full progress-bar rounded-full" style="width: {{ $percentage }}%"></div>
                                 </div>
-                                <div class="flex justify-between text-xs text-slate-400 mt-2 font-medium">
+                                <div class="flex justify-between text-[10px] text-slate-400 mt-1.5 font-medium">
                                     <span>Objectif: {{ number_format($project->goalAmount, 0, ',', ' ') }} DH</span>
-                                    <span>Fin: {{ \Carbon\Carbon::parse($project->endDate)->format('d M Y') }}</span>
+                                    <span>{{ \Carbon\Carbon::parse($project->endDate)->format('d M Y') }}</span>
                                 </div>
                             </div>
 
-                            <a href="{{ route('projects.show', $project->id) }}" class="w-full block text-center bg-gradient-to-r from-[#F5A623] to-[#FFD085] hover:scale-105 text-[#0A1128] font-bold py-3 rounded-xl transition-all shadow-lg group-hover:shadow-xl">
-                                Soutenir ce projet →
+                            <a href="{{ route('projects.show', $project->id) }}" class="w-full block text-center bg-[#0A1128] hover:bg-[#F5A623] text-white hover:text-[#0A1128] font-bold text-sm py-3 rounded-xl transition-all">
+                                Soutenir →
                             </a>
                         </div>
                     </div>
@@ -246,15 +197,7 @@
         @endif
     </section>
 
-    <footer class="bg-[#0A1128] text-white pt-16 pb-8">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-2xl font-black mb-4 tracking-widest text-[#F5A623]">AL-KHAIR</h2>
-            <p class="text-slate-400 text-sm mb-8">Plateforme marocaine de dons solidaires avec transparence totale.</p>
-            <div class="border-t border-white/10 pt-8">
-                <p class="text-xs text-slate-500">© 2026 Al-Khair. Tous droits réservés.</p>
-            </div>
-        </div>
-    </footer>
+    @include('partials.footer')
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

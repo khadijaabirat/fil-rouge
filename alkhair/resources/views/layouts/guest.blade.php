@@ -43,10 +43,9 @@
 
         <div class="relative z-10 mb-4 mt-10 sm:mt-0">
             <a href="/" class="flex flex-col items-center gap-3 group">
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-container to-slate-800 text-secondary-container flex items-center justify-center font-headline font-black text-2xl shadow-lg group-hover:scale-105 transition-transform duration-300 border border-outline-variant/20">
-                    AK
+                <div class="w-16 h-16">
+                    <x-application-logo class="w-16 h-16" />
                 </div>
-                <span class="font-headline font-extrabold text-2xl tracking-tight text-primary-container">AL-KHAIR</span>
             </a>
         </div>
 

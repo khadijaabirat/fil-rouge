@@ -53,7 +53,7 @@ public function store(Request $request, $id)
             if ($request->hasFile('paymentReceipt')) {
                 $receiptPath = $request->file('paymentReceipt')->store('receipts', 'public');
 
-                 DB::transaction(function () use ($request, $project, $receiptPath) {
+                $donation = DB::transaction(function () use ($request, $project, $receiptPath) {
                     $donation = Donation::create([
                         'amount' => $request->amount,
                         'message' => $request->message,
@@ -73,9 +73,11 @@ public function store(Request $request, $id)
                         'status' => 'PENDING',
                         'donation_id' => $donation->id,
                     ]);
+
+                    return $donation;
                 });
 
-                return redirect()->route('donator.dashboard')->with('success', 'Votre promesse de don a été enregistrée. Elle sera traitée prochainement par l\'administration.');
+                return redirect()->route('donations.confirmation', $donation->id)->with('success', 'Votre promesse de don a été enregistrée. Elle sera traitée prochainement par l\'administration.');
             }
         }
 
@@ -180,7 +182,7 @@ Stripe::setApiKey(config('services.stripe.secret'));
                 throw $e;
             }
         });
-        return redirect()->route('donator.dashboard')->with('success', 'Merci, Votre don en ligne a été validé.');
+        return redirect()->route('donations.confirmation', $donation->id)->with('success', 'Merci, Votre don en ligne a été validé.');
     }
 
 
@@ -189,18 +191,27 @@ Stripe::setApiKey(config('services.stripe.secret'));
  public function cancel($id)
     {
         $donation = Donation::findOrFail($id);
-       if ($donation->status === 'PENDING') {
-        $payment = Payment::where('donation_id', $donation->id)->first();
-        
-         if ($payment && $payment->paymentReceipt && Storage::disk('public')->exists($payment->paymentReceipt)) {
-            Storage::disk('public')->delete($payment->paymentReceipt);
+        if ($donation->status === 'PENDING') {
+            $payment = Payment::where('donation_id', $donation->id)->first();
+            
+            if ($payment && $payment->paymentReceipt && Storage::disk('public')->exists($payment->paymentReceipt)) {
+                Storage::disk('public')->delete($payment->paymentReceipt);
+            }
+            
+            if ($payment) {
+                $payment->delete();
+            }
+            $donation->delete();
         }
-        
-        if ($payment) {
-            $payment->delete();
-        }
-        $donation->delete();
+        return redirect()->route('donator.dashboard')->with('error', 'Vous avez annulé le paiement en ligne.');
     }
-         return redirect()->route('donator.dashboard')->with('error', 'Vous avez annulé le paiement en ligne.');
+
+    public function confirmation($id)
+    {
+        $donation = Donation::with('project')->findOrFail($id);
+        if ($donation->donator_id !== Auth::id()) {
+            abort(403, 'Accès non autorisé.');
+        }
+        return view('donator.confirmation', compact('donation'));
     }
 }

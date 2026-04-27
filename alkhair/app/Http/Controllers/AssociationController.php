@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
  class AssociationController extends Controller
 {
+    public function pending()
+    {
+        return view('association.pending');
+    }
+
     public function dashboard()
     {
         $association = Auth::user();
@@ -27,23 +32,52 @@ $hasPendingReports = $pendingProject ? true : false;
 return view('association.dashboard', compact('association', 'projects', 'hasPendingReports', 'pendingProject'));
     }
 
+    public function expiredProjects()
+    {
+        $association = Auth::user();
+        
+        // Nmarquiw les projets expirés comme CLOSED automatiquement
+        Project::where('association_id', $association->id)
+            ->where('status', 'OPEN')
+            ->where('endDate', '<', now())
+            ->whereColumn('currentAmount', '<', 'goalAmount')
+            ->update(['status' => 'CLOSED']);
+        
+        // Nbanو ghir les projets CLOSED (expirés)
+        $expiredProjects = Project::where('association_id', $association->id)
+            ->where('status', 'CLOSED')
+            ->whereColumn('currentAmount', '<', 'goalAmount')
+            ->latest()
+            ->get();
+            
+        return view('association.expired', compact('association', 'expiredProjects'));
+    }
+
 
 
     public function withdrawFunds(Request $request, $id)
     {
         $project = Project::findOrFail($id);
         $association = Auth::user();
-if ($project->association_id !== $association->id) {
-                abort(403, 'Accès non autorisé.');
+        
+        if ($project->association_id !== $association->id) {
+            abort(403, 'Accès non autorisé.');
         }
+        
         if (empty($association->rib)) {
             return back()->with('error', 'Vous devez d\'abord ajouter votre RIB bancaire dans "Mon Profil" avant de demander un retrait.');
         }
-        if (!in_array($project->status, ['COMPLETED', 'CLOSED'])) {
-            return back()->with('error', 'Vous ne pouvez retirer les fonds que si le projet est COMPLETED ou CLOSED.');
+        
+        // Si le projet est CLOSED (expiré), on le marque comme COMPLETED pour exiger un rapport d'impact
+        if ($project->status === 'CLOSED') {
+            $project->update(['status' => 'COMPLETED']);
+        }
+        
+        if (!in_array($project->status, ['COMPLETED'])) {
+            return back()->with('error', 'Vous ne pouvez retirer les fonds que si le projet est clôturé.');
         }
 
-         $hasProcessing = $project->donations()->where('status', 'PROCESSING')->exists();
+        $hasProcessing = $project->donations()->where('status', 'PROCESSING')->exists();
         if ($hasProcessing) {
             return back()->with('error', 'Une demande de retrait est déjà en cours de traitement pour ce projet.');
         }
@@ -55,7 +89,7 @@ if ($project->association_id !== $association->id) {
 
         $project->donations()->where('status', 'VALIDATED')->update(['status' => 'PROCESSING']);
 
-         return back()->with('success', 'Votre demande de retrait des fonds pour le projet "' . $project->title . '" a été envoyée à l\'administration avec succès. Vous serez contacté prochainement.');
+        return back()->with('success', 'Votre demande de retrait des fonds pour le projet "' . $project->title . '" a été envoyée à l\'administration avec succès. Vous serez contacté prochainement. N\'oubliez pas de publier un rapport d\'impact.');
     }
 
 

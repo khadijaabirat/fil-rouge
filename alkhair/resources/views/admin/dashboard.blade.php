@@ -1,790 +1,310 @@
 <!DOCTYPE html>
-<html class="light" lang="fr">
+<html class="scroll-smooth light" lang="fr">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Tableau de Bord Administrateur - AL-KHAIR</title>
+    <title>Tableau de Bord Admin | AL-KHAIR</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "brand-navy": "#0A1128",
-                        "brand-gold": "#F5A623",
-                        "brand-light-gold": "#FFD085",
-                    },
-                    fontFamily: {
-                        "headline": ["Manrope", "sans-serif"],
-                        "body": ["Inter", "sans-serif"],
-                        "label": ["Inter", "sans-serif"]
-                    },
-                },
-            },
-        }
-    </script>
     <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f9fb;
-            color: #191c1e;
-        }
-        .glass-effect {
-            backdrop-filter: blur(12px);
-            background-color: rgba(255, 255, 255, 0.8);
-        }
+        body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Poppins', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .neu-card { background: #fff; border-radius: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.04); transition: all 0.4s cubic-bezier(.4,0,.2,1); }
+        .neu-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 20px 48px rgba(0,0,0,0.1); transform: translateY(-4px); }
+        .glass-sidebar { background: rgba(255,255,255,0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-right: 1px solid rgba(0,0,0,0.06); }
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(.4,0,.2,1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        @keyframes countUp { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+        @keyframes fadeSlide { from { opacity:0; transform: translateX(-12px); } to { opacity:1; transform: translateX(0); } }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        .animate-count { animation: countUp 0.8s ease-out backwards; }
+        .animate-slide { animation: fadeSlide 0.5s ease-out backwards; }
+        .stat-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; transition: transform 0.3s; }
+        .neu-card:hover .stat-icon { transform: scale(1.12) rotate(-4deg); }
+        .sidebar-link { transition: all 0.25s ease; border-radius: 14px; }
+        .sidebar-link:hover { background: rgba(10,17,40,0.04); }
+        .sidebar-link.active { background: linear-gradient(135deg, #0A1128, #1a2744); color: #fff; box-shadow: 0 4px 16px rgba(10,17,40,0.3); }
+        .progress-ring { background: conic-gradient(#F5A623 var(--progress), #e5e7eb var(--progress)); border-radius: 50%; }
     </style>
 </head>
-<body class="bg-slate-50 font-body selection:bg-brand-gold/30">
-    <!-- Sidebar -->
-    <aside class="h-screen w-64 fixed left-0 top-0 z-50 bg-white dark:bg-slate-900 flex flex-col p-4 gap-2 border-r border-slate-200">
-        <div class="mb-8 px-4 py-6">
-            <div class="flex items-center gap-2 mb-2">
-                <div class="bg-gradient-to-br from-brand-navy to-brand-gold p-2 rounded-lg font-black text-white text-lg">AK</div>
-                <div>
-                    <h1 class="font-headline font-extrabold text-lg text-slate-900 uppercase tracking-wider">AL-KHAIR</h1>
-                    <p class="text-xs font-medium text-brand-gold uppercase tracking-widest">Admin</p>
-                </div>
+<body class="bg-gradient-to-br from-[#e8ecf3] to-white text-slate-700 overflow-x-hidden selection:bg-[#F5A623] selection:text-white">
+
+<!-- Sidebar -->
+<aside class="h-screen w-72 fixed left-0 top-0 z-50 glass-sidebar flex flex-col p-6">
+    <div class="mb-10">
+        <a href="{{ route('home') }}" class="flex items-center gap-3 mb-4 group">
+            <div class="w-12 h-12">
+                <x-application-logo class="w-12 h-12 group-hover:scale-105 transition-transform" />
             </div>
-        </div>
-        <nav class="flex-grow space-y-1">
-            <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-brand-gold/10 text-brand-gold font-bold transition-transform duration-200" href="{{ route('admin.dashboard') }}">
-                <span class="material-symbols-outlined">dashboard</span>
-                <span class="font-['Inter'] text-sm font-medium">Tableau de Bord</span>
-            </a>
-            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors" href="{{ route('admin.categories.index') }}">
-                <span class="material-symbols-outlined">category</span>
-                <span class="font-['Inter'] text-sm font-medium">Catégories</span>
-            </a>
-            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors" href="#">
-                <span class="material-symbols-outlined">account_balance</span>
-                <span class="font-['Inter'] text-sm font-medium">Associations</span>
-            </a>
-            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors" href="#">
-                <span class="material-symbols-outlined">assignment</span>
-                <span class="font-['Inter'] text-sm font-medium">Projets</span>
-            </a>
-            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors" href="#">
-                <span class="material-symbols-outlined">volunteer_activism</span>
-                <span class="font-['Inter'] text-sm font-medium">Dons</span>
-            </a>
-        </nav>
-        <div class="mt-auto p-4 bg-brand-navy text-white rounded-xl text-xs flex items-center justify-between">
-            <span class="font-medium">Système: Actif</span>
-            <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-        </div>
-        <form method="POST" action="{{ route('logout') }}" class="mt-4">
+        </a>
+    </div>
+
+    <nav class="flex-grow space-y-2">
+        <a href="{{ route('admin.dashboard') }}" class="sidebar-link flex items-center gap-3 px-4 py-3.5 {{ request()->routeIs('admin.dashboard') ? 'active' : 'text-slate-600' }}">
+            <span class="material-symbols-outlined text-xl" style="{{ request()->routeIs('admin.dashboard') ? 'font-variation-settings: \'FILL\' 1;' : '' }}">dashboard</span>
+            <span class="text-sm font-semibold">Tableau de Bord</span>
+        </a>
+        <a href="{{ route('admin.categories.index') }}" class="sidebar-link flex items-center gap-3 px-4 py-3.5 {{ request()->routeIs('admin.categories.*') ? 'active' : 'text-slate-600' }}">
+            <span class="material-symbols-outlined text-xl" style="{{ request()->routeIs('admin.categories.*') ? 'font-variation-settings: \'FILL\' 1;' : '' }}">category</span>
+            <span class="text-sm font-semibold">Catégories</span>
+        </a>
+        <a href="{{ route('admin.validations') }}" class="sidebar-link flex items-center gap-3 px-4 py-3.5 {{ request()->routeIs('admin.validations') ? 'active' : 'text-slate-600' }}">
+            <span class="material-symbols-outlined text-xl" style="{{ request()->routeIs('admin.validations') ? 'font-variation-settings: \'FILL\' 1;' : '' }}">fact_check</span>
+            <span class="text-sm font-semibold">Validations KYC</span>
+            @if($pendingAssociations->count() > 0)<span class="ml-auto w-5 h-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center">{{ $pendingAssociations->count() }}</span>@endif
+        </a>
+        <a href="{{ route('admin.users') }}" class="sidebar-link flex items-center gap-3 px-4 py-3.5 {{ request()->routeIs('admin.users') ? 'active' : 'text-slate-600' }}">
+            <span class="material-symbols-outlined text-xl" style="{{ request()->routeIs('admin.users') ? 'font-variation-settings: \'FILL\' 1;' : '' }}">group</span>
+            <span class="text-sm font-semibold">Utilisateurs</span>
+        </a>
+    </nav>
+
+    <div class="pt-6 border-t border-white/20">
+        <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="w-full py-2 text-sm font-bold text-brand-gold hover:bg-brand-gold/10 rounded-lg transition-colors">
+            <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-500/10 font-bold text-sm transition-all rounded-xl group">
+                <span class="material-symbols-outlined text-xl">logout</span>
                 Déconnexion
             </button>
         </form>
-    </aside>
+    </div>
 
-    <!-- Main Content Area -->
-    <main class="ml-64 min-h-screen">
-        <!-- Top Navigation -->
-        <header class="w-full sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm flex justify-between items-center px-8 h-16">
-            <div class="flex items-center gap-8">
-                <h1 class="font-headline font-bold text-xl tracking-tight text-brand-navy">AL-KHAIR</h1>
-            </div>
-            <div class="flex items-center gap-4">
-                @if(session('success'))
-                    <div class="px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 text-sm font-medium">
-                        {{ session('success') }}
-                    </div>
+    <div class="mt-auto p-5 bg-gradient-to-br from-[#0A1128] to-[#1a2744] text-white rounded-2xl text-xs shadow-xl border border-[#F5A623]/10">
+        <div class="flex items-center justify-between mb-3">
+            <span class="font-bold text-white/90">Système</span>
+            <div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div><span class="text-emerald-400 font-bold">En ligne</span></div>
+        </div>
+        <div class="text-[10px] text-white/40">v2.0 · Laravel 11 · {{ now()->format('d M Y') }}</div>
+    </div>
+</aside>
+
+<!-- Main Content -->
+<main class="ml-72 min-h-screen relative">
+    <!-- Header -->
+    <header class="fixed right-0 top-0 z-40 bg-white/70 backdrop-blur-2xl border-b border-black/[0.04] flex justify-between items-center px-8 py-4" style="width: calc(100% - 18rem);">
+        <div class="flex items-center gap-4">
+            <h2 class="text-xl font-black text-[#0A1128] tracking-tight">Tableau de Bord</h2>
+            <span class="hidden sm:inline px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-bold rounded-full uppercase tracking-wider border border-emerald-200">● En direct</span>
+        </div>
+        <div class="flex items-center gap-5">
+            <button class="relative p-2 rounded-xl hover:bg-slate-100 transition-colors">
+                <span class="material-symbols-outlined text-slate-500">notifications</span>
+                @if($pendingAssociations->count() + $pendingDonationsCount > 0)
+                <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[8px] font-black rounded-full flex items-center justify-center">{{ $pendingAssociations->count() + $pendingDonationsCount }}</span>
                 @endif
+            </button>
+            <div class="flex items-center gap-3 pl-5 border-l border-slate-200">
+                <div class="text-right">
+                    <p class="text-sm font-bold text-[#0A1128]">{{ auth()->user()->name }}</p>
+                    <p class="text-[10px] text-[#F5A623] font-bold uppercase tracking-wider">Super Admin</p>
+                </div>
+                <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center font-black text-[#F5A623] text-sm shadow-lg">
+                    {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+                </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- Dashboard Content -->
-        <div class="p-8 max-w-7xl mx-auto space-y-12">
-            <!-- Header Section -->
-            <section class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div class="space-y-1">
-                    <h2 class="font-headline text-3xl font-extrabold tracking-tight text-brand-navy">Vue d'ensemble</h2>
-                    <p class="text-slate-600 font-medium">Gestion des validations et modérations en attente.</p>
+    <!-- Dashboard Content -->
+    <div class="pt-24 pb-20 px-8 max-w-7xl mx-auto space-y-10">
+        <section class="flex items-end justify-between reveal active">
+            <div>
+                <p class="text-sm font-bold text-[#F5A623] uppercase tracking-widest mb-1">Bienvenue, {{ auth()->user()->name }}</p>
+                <h2 class="text-3xl font-black text-[#0A1128] tracking-tight">Vue d'ensemble</h2>
+            </div>
+            <p class="text-xs text-slate-400 font-medium">Dernière MAJ : {{ now()->format('d/m/Y H:i') }}</p>
+        </section>
+
+        <!-- Statistics Cards -->
+        @php
+            $totalCollected = \App\Models\Donation::where('status', 'RECEIVED')->sum('amount') ?? 0;
+            $activeAssocs = \App\Models\User::where('role', 'association')->where('status', 'ACTIVE')->count() ?? 0;
+            $totalDonors = \App\Models\User::where('role', 'donator')->count() ?? 0;
+            $completedProjects = \App\Models\Project::where('status', 'COMPLETED')->count() ?? 0;
+            $totalProjects = \App\Models\Project::count() ?? 1;
+            $impactRate = ($completedProjects / $totalProjects) * 100;
+        @endphp
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="neu-card p-6 group reveal">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="stat-icon bg-amber-50 border border-amber-100">
+                        <span class="material-symbols-outlined text-2xl text-[#F5A623]" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+                    </div>
+                    <span class="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">● Actif</span>
+                </div>
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Collecté</p>
+                <h3 class="text-2xl font-black text-[#0A1128] animate-count">{{ number_format($totalCollected, 0, ',', ' ') }} <span class="text-sm text-[#F5A623]">DH</span></h3>
+            </div>
+
+            <div class="neu-card p-6 group reveal" style="animation-delay:.1s">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="stat-icon bg-emerald-50 border border-emerald-100">
+                        <span class="material-symbols-outlined text-2xl text-emerald-600" style="font-variation-settings: 'FILL' 1;">foundation</span>
+                    </div>
+                    <span class="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">Vérifiées</span>
+                </div>
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Associations</p>
+                <h3 class="text-2xl font-black text-[#0A1128] animate-count">{{ $activeAssocs }}</h3>
+            </div>
+
+            <div class="neu-card p-6 group reveal" style="animation-delay:.2s">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="stat-icon bg-blue-50 border border-blue-100">
+                        <span class="material-symbols-outlined text-2xl text-blue-600" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                    </div>
+                    <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">Inscrits</span>
+                </div>
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Donateurs</p>
+                <h3 class="text-2xl font-black text-[#0A1128] animate-count">{{ $totalDonors }}</h3>
+            </div>
+
+            <div class="neu-card p-6 group reveal" style="animation-delay:.3s">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="stat-icon bg-violet-50 border border-violet-100">
+                        <span class="material-symbols-outlined text-2xl text-violet-600" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+                    </div>
+                </div>
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Taux d'Impact</p>
+                <h3 class="text-2xl font-black text-[#0A1128] animate-count">{{ number_format($impactRate, 1) }}<span class="text-sm text-slate-400">%</span></h3>
+                <div class="mt-3 h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-violet-500 to-purple-400 rounded-full" style="width:{{ min($impactRate,100) }}%"></div></div>
+            </div>
+        </section>
+
+        <!-- Main Dashboard Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <section class="lg:col-span-8 space-y-6">
+                <div class="neu-card p-7 reveal">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-lg font-black text-[#0A1128] mb-0.5">Validations en attente</h3>
+                            <p class="text-xs text-slate-400">Associations récemment inscrites</p>
+                        </div>
+                        @if($pendingAssociations->count() > 0)
+                            <span class="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-full">
+                                <span class="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></span>
+                                <span class="text-[10px] font-black text-amber-700">{{ $pendingAssociations->count() }} EN ATTENTE</span>
+                            </span>
+                        @endif
+                    </div>
+
+                    <div class="space-y-2">
+                        @forelse($pendingAssociations as $i => $assoc)
+                            <div class="p-4 rounded-xl border border-slate-100 flex items-center gap-4 group hover:border-[#F5A623]/30 hover:bg-amber-50/30 transition-all animate-slide" style="animation-delay:{{ $i * 0.1 }}s">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F5A623] to-[#FFD085] flex items-center justify-center font-bold text-[#0A1128] text-sm flex-shrink-0 shadow-sm">
+                                    {{ strtoupper(substr($assoc->name, 0, 2)) }}
+                                </div>
+                                <div class="flex-grow min-w-0">
+                                    <h4 class="font-bold text-[#0A1128] text-sm truncate">{{ $assoc->name }}</h4>
+                                    <p class="text-[11px] text-slate-400">{{ $assoc->email }} · {{ $assoc->created_at->diffForHumans() }}</p>
+                                </div>
+                                <a href="{{ route('admin.validations') }}" class="px-4 py-2 bg-[#0A1128] text-white text-[10px] font-bold rounded-lg hover:bg-[#F5A623] hover:text-[#0A1128] transition-all flex-shrink-0">
+                                    Vérifier
+                                </a>
+                            </div>
+                        @empty
+                            <div class="p-10 text-center rounded-xl border-2 border-dashed border-slate-200">
+                                <span class="material-symbols-outlined text-3xl text-emerald-400 mb-2 block" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                <p class="text-sm font-bold text-slate-600">Tout est à jour</p>
+                                <p class="text-xs text-slate-400 mt-0.5">Aucune association en attente</p>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    @if($pendingAssociations->count() > 0)
+                        <div class="mt-6 text-center pt-6 border-t border-white/30">
+                            <a href="{{ route('admin.validations') }}" class="text-[#F5A623] font-black hover:text-[#0A1128] transition-colors">Voir toutes les validations →</a>
+                        </div>
+                    @endif
                 </div>
             </section>
 
-            <!-- Main Dashboard Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                <!-- Left Column: Pending Validations -->
-                <section class="lg:col-span-8 space-y-8">
-                    <!-- Pending Associations -->
-                    <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-                        <div class="flex items-center justify-between mb-8">
-                            <div>
-                                <h3 class="font-headline text-xl font-bold text-brand-navy">Associations en attente</h3>
-                                <p class="text-sm text-slate-600">Validez les nouvelles demandes d'inscription</p>
-                            </div>
-                            <span class="px-3 py-1 bg-brand-gold/20 text-brand-gold text-[10px] font-bold rounded-full uppercase tracking-tighter">{{ $pendingAssociations->count() }} EN ATTENTE</span>
+            <!-- Right Column: Manual Donations & Activity -->
+            <section class="lg:col-span-4 space-y-8">
+
+                <!-- Manual Donations -->
+                <div class="bg-gradient-to-br from-[#0A1128] to-[#162040] text-white rounded-2xl p-7 relative overflow-hidden shadow-xl reveal">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-[#F5A623]/8 rounded-full blur-2xl"></div>
+
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-center mb-5">
+                            <h3 class="text-sm font-bold">Dons Manuels</h3>
+                            @if($pendingDonationsCount > 0)
+                                <span class="px-2.5 py-1 bg-[#F5A623] text-[#0A1128] text-[10px] font-black rounded-lg">{{ $pendingDonationsCount }}</span>
+                            @endif
                         </div>
-                        <div class="space-y-4">
-                            @forelse($pendingAssociations as $assoc)
-                                <div class="bg-slate-50 p-5 rounded-xl flex items-center gap-6 hover:shadow-lg transition-all duration-300">
-                                    <div class="w-12 h-12 rounded-lg bg-brand-gold/10 flex items-center justify-center flex-shrink-0 text-brand-navy font-bold">
-                                        {{ substr($assoc->name, 0, 1) }}
+
+                        <div class="space-y-3">
+                            @forelse($recentManualDonations as $donation)
+                                <div class="bg-white/[0.06] border border-white/10 p-3.5 rounded-xl hover:bg-white/[0.1] transition-all">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div>
+                                            <p class="text-xs font-bold">{{ $donation->isAnonymous ? 'Anonyme' : $donation->donator->name ?? 'Inconnu' }}</p>
+                                            <p class="text-[10px] text-white/50 mt-0.5">{{ number_format($donation->amount, 0, ',', ' ') }} DH</p>
+                                        </div>
+                                        <span class="text-[9px] px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 font-bold uppercase">Pending</span>
                                     </div>
-                                    <div class="flex-grow">
-                                        <h4 class="font-bold text-slate-900">{{ $assoc->name }}</h4>
-                                        <p class="text-xs text-slate-500">{{ $assoc->ville }} • Licence: {{ $assoc->licenseNumber }}</p>
-                                    </div>
-                                    <div class="flex gap-2">
-                                        <a href="{{ asset('storage/' . $assoc->documentKYC) }}" target="_blank" class="px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">
-                                            Voir Document
-                                        </a>
-                                        <form action="{{ route('admin.validateAssociation', $assoc->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit" class="px-4 py-2 text-xs font-bold bg-brand-gold text-white rounded-lg hover:bg-brand-gold/90 transition-all">
-                                                Valider
-                                            </button>
-                                        </form>
-                                    </div>
+                                    <a href="{{ route('admin.validations') }}" class="block py-1.5 text-[10px] font-bold bg-white/10 hover:bg-[#F5A623] hover:text-[#0A1128] text-center rounded-lg transition-all">
+                                        Vérifier →
+                                    </a>
                                 </div>
                             @empty
-                                <div class="bg-slate-100 p-8 rounded-xl text-center">
-                                    <p class="text-slate-600 font-medium">Aucune association en attente</p>
+                                <div class="text-center py-6 text-white/40 text-xs">
+                                    <span class="material-symbols-outlined text-2xl block mb-1" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                    Aucun don en attente
                                 </div>
                             @endforelse
                         </div>
                     </div>
+                </div>
 
-                    <!-- Pending Manual Donations -->
-                    <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-                        <div class="flex items-center justify-between mb-8">
-                            <div>
-                                <h3 class="font-headline text-xl font-bold text-brand-navy">Dons manuels en attente</h3>
-                                <p class="text-sm text-slate-600">Validez les paiements par virement bancaire</p>
+                <!-- Activity Timeline -->
+                <div class="neu-card p-7 reveal">
+                    <h3 class="text-sm font-black text-[#0A1128] mb-5 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[#F5A623] text-lg" style="font-variation-settings: 'FILL' 1;">timeline</span>
+                        Activité Récente
+                    </h3>
+                    <div class="space-y-4 relative">
+                        <div class="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-[#F5A623] to-slate-200"></div>
+
+                        @forelse($recentActivities as $i => $activity)
+                            <div class="relative pl-8 animate-slide" style="animation-delay:{{ $i * 0.15 }}s">
+                                <div class="absolute left-0 top-0.5 w-[22px] h-[22px] rounded-full bg-white border-2 border-[#F5A623] shadow-sm flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[#F5A623] text-[10px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                </div>
+                                <p class="text-xs font-bold text-[#0A1128]">{{ number_format($activity->amount, 0, ',', ' ') }} DH</p>
+                                <p class="text-[10px] text-slate-400 mt-0.5">{{ Str::limit($activity->project->title ?? 'Projet', 30) }}</p>
+                                <span class="text-[9px] text-slate-300 font-medium">{{ $activity->created_at->diffForHumans() }}</span>
                             </div>
-                            <span class="px-3 py-1 bg-brand-gold/20 text-brand-gold text-[10px] font-bold rounded-full uppercase tracking-tighter">{{ $pendingDonations->count() }} EN ATTENTE</span>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm">
-                                <thead>
-                                    <tr class="border-b border-slate-200">
-                                        <th class="text-left py-3 px-4 font-bold text-slate-700">Donateur</th>
-                                        <th class="text-left py-3 px-4 font-bold text-slate-700">Projet</th>
-                                        <th class="text-right py-3 px-4 font-bold text-slate-700">Montant</th>
-                                        <th class="text-center py-3 px-4 font-bold text-slate-700">Reçu</th>
-                                        <th class="text-center py-3 px-4 font-bold text-slate-700">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($pendingDonations as $donation)
-                                        <tr class="border-b border-slate-100 hover:bg-slate-50">
-                                            <td class="py-3 px-4">{{ $donation->isAnonymous ? 'Anonyme' : ($donation->donator->name ?? 'Inconnu') }}</td>
-                                            <td class="py-3 px-4">{{ $donation->project->title ?? 'Projet supprimé' }}</td>
-                                            <td class="py-3 px-4 text-right font-bold text-brand-gold">{{ number_format($donation->amount, 0, ',', ' ') }} DH</td>
-                                            <td class="py-3 px-4 text-center">
-                                                @if($donation->payment && $donation->payment->paymentReceipt)
-                                                    <a href="{{ asset('storage/' . $donation->payment->paymentReceipt) }}" target="_blank" class="text-brand-gold hover:underline">Voir</a>
-                                                @else
-                                                    <span class="text-slate-400 text-xs">N/A</span>
-                                                @endif
-                                            </td>
-                                            <td class="py-3 px-4 text-center">
-                                                <div class="flex gap-1 justify-center">
-                                                    <form action="{{ route('admin.validateDonation', $donation->id) }}" method="POST" onsubmit="return confirm('Confirmer la validation de ce don ?');">
-                                                        @csrf
-                                                        <button type="submit" class="px-3 py-1 text-xs font-bold bg-emerald-500 text-white rounded hover:bg-emerald-600">
-                                                            ✓
-                                                        </button>
-                                                    </form>
-                                                    <form action="{{ route('admin.rejectDonation', $donation->id) }}" method="POST" onsubmit="return confirm('Refuser ce don ?');">
-                                                        @csrf
-                                                        <button type="submit" class="px-3 py-1 text-xs font-bold bg-red-500 text-white rounded hover:bg-red-600">
-                                                            ✕
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="py-8 px-4 text-center text-slate-600 font-medium">
-                                                Aucun don manuel en attente
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Project Moderation -->
-                    <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-                        <div class="flex items-center justify-between mb-8">
-                            <div>
-                                <h3 class="font-headline text-xl font-bold text-brand-navy">Modération des Projets</h3>
-                                <p class="text-sm text-slate-600">Gérez les projets actifs et suspendus</p>
+                        @empty
+                            <div class="pl-8 text-center py-4">
+                                <p class="text-xs text-slate-400">Aucune activité récente</p>
                             </div>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm">
-                                <thead>
-                                    <tr class="border-b border-slate-200">
-                                        <th class="text-left py-3 px-4 font-bold text-slate-700">Titre</th>
-                                        <th class="text-left py-3 px-4 font-bold text-slate-700">Association</th>
-                                        <th class="text-center py-3 px-4 font-bold text-slate-700">Statut</th>
-                                        <th class="text-center py-3 px-4 font-bold text-slate-700">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($managedProjects as $project)
-                                        <tr class="border-b border-slate-100 hover:bg-slate-50">
-                                            <td class="py-3 px-4 font-medium">{{ $project->title }}</td>
-                                            <td class="py-3 px-4">{{ $project->association->name ?? 'N/A' }}</td>
-                                            <td class="py-3 px-4 text-center">
-                                                <span class="px-2 py-1 text-xs font-bold rounded {{ $project->status === 'SUSPENDED' ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700' }}">
-                                                    {{ $project->status === 'SUSPENDED' ? 'Suspendu' : 'Actif' }}
-                                                </span>
-                                            </td>
-                                            <td class="py-3 px-4 text-center">
-                                                @if($project->status === 'SUSPENDED')
-                                                    <form action="{{ route('admin.restoreProject', $project->id) }}" method="POST" class="inline">
-                                                        @csrf
-                                                        <button type="submit" class="px-3 py-1 text-xs font-bold bg-emerald-500 text-white rounded hover:bg-emerald-600">
-                                                            Restaurer
-                                                        </button>
-                                                    </form>
-                                                @else
-                                                    <form action="{{ route('admin.suspendProject', $project->id) }}" method="POST" class="inline" onsubmit="return confirm('Suspendre ce projet ?');">
-                                                        @csrf
-                                                        <button type="submit" class="px-3 py-1 text-xs font-bold bg-red-500 text-white rounded hover:bg-red-600">
-                                                            Suspendre
-                                                        </button>
-                                                    </form>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="py-8 px-4 text-center text-slate-600 font-medium">
-                                                Aucun projet à modérer
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                        @endforelse
                     </div>
-
-                    <!-- Association Moderation -->
-                    <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-                        <div class="flex items-center justify-between mb-8">
-                            <div>
-                                <h3 class="font-headline text-xl font-bold text-brand-navy">Modération des Associations</h3>
-                                <p class="text-sm text-slate-600">Gérez les statuts des associations</p>
-                            </div>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm">
-                                <thead>
-                                    <tr class="border-b border-slate-200">
-                                        <th class="text-left py-3 px-4 font-bold text-slate-700">Nom</th>
-                                        <th class="text-left py-3 px-4 font-bold text-slate-700">Ville</th>
-                                        <th class="text-center py-3 px-4 font-bold text-slate-700">Statut</th>
-                                        <th class="text-center py-3 px-4 font-bold text-slate-700">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($managedAssociations as $assoc)
-                                        <tr class="border-b border-slate-100 hover:bg-slate-50">
-                                            <td class="py-3 px-4 font-medium">{{ $assoc->name }}</td>
-                                            <td class="py-3 px-4">{{ $assoc->ville }}</td>
-                                            <td class="py-3 px-4 text-center">
-                                                <span class="px-2 py-1 text-xs font-bold rounded {{ $assoc->status === 'BANNED' ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700' }}">
-                                                    {{ $assoc->status === 'BANNED' ? 'Bannue' : 'Active' }}
-                                                </span>
-                                            </td>
-                                            <td class="py-3 px-4 text-center">
-                                                @if($assoc->status === 'BANNED')
-                                                    <form action="{{ route('admin.unbanAssociation', $assoc->id) }}" method="POST" class="inline">
-                                                        @csrf
-                                                        <button type="submit" class="px-3 py-1 text-xs font-bold bg-emerald-500 text-white rounded hover:bg-emerald-600">
-                                                            Réactiver
-                                                        </button>
-                                                    </form>
-                                                @else
-                                                    <form action="{{ route('admin.banAssociation', $assoc->id) }}" method="POST" class="inline" onsubmit="return confirm('Bannir cette association ? Tous ses projets seront suspendus.');">
-                                                        @csrf
-                                                        <button type="submit" class="px-3 py-1 text-xs font-bold bg-red-500 text-white rounded hover:bg-red-600">
-                                                            Bannir
-                                                        </button>
-                                                    </form>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="py-8 px-4 text-center text-slate-600 font-medium">
-                                                Aucune association à modérer
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Right Column: Summary Stats -->
-                <section class="lg:col-span-4 space-y-6">
-                    <!-- Donation Stats -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-                        <h3 class="font-headline font-bold text-brand-navy mb-4">Montant Total</h3>
-                        <p class="text-3xl font-black text-brand-gold">
-                            @php
-                                $total = \App\Models\Donation::where('status', 'RECEIVED')->sum('amount') ?? 0;
-                            @endphp
-                            {{ number_format($total, 0, ',', ' ') }} DH
-                        </p>
-                    </div>
-
-                    <!-- Association Stats -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-                        <h3 class="font-headline font-bold text-brand-navy mb-4">Associations Actives</h3>
-                        <p class="text-3xl font-black text-brand-gold">
-                            @php
-                                $activeAssocs = \App\Models\User::where('role', 'ASSOCIATION')->where('status', 'APPROVED')->count() ?? 0;
-                            @endphp
-                            {{ $activeAssocs }}
-                        </p>
-                    </div>
-
-                    <!-- Pending Actions -->
-                    <div class="bg-brand-gold/10 border-l-4 border-brand-gold rounded-lg p-6">
-                        <h3 class="font-headline font-bold text-brand-navy mb-4">Actions en attente</h3>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-slate-700">Associations</span>
-                                <span class="font-bold text-brand-gold">{{ $pendingAssociations->count() }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-700">Dons manuels</span>
-                                <span class="font-bold text-brand-gold">{{ $pendingDonations->count() }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
+                </div>
+            </section>
         </div>
-    </main>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const reveals = document.querySelectorAll('.reveal');
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        reveals.forEach(reveal => revealObserver.observe(reveal));
+    });
+</script>
 </body>
 </html>
-<!DOCTYPE html>
-
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Al-Khair Admin Dashboard</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "tertiary-container": "#370e00",
-              "surface-tint": "#4a607c",
-              "tertiary-fixed": "#ffdbce",
-              "primary": "#000000",
-              "inverse-on-surface": "#eff1f3",
-              "primary-fixed": "#d2e4ff",
-              "on-tertiary-fixed": "#370e00",
-              "on-primary": "#ffffff",
-              "on-error": "#ffffff",
-              "on-tertiary": "#ffffff",
-              "error-container": "#ffdad6",
-              "primary-container": "#021c36",
-              "secondary-container": "#feb700",
-              "on-surface": "#191c1e",
-              "on-tertiary-container": "#e05814",
-              "surface-container-lowest": "#ffffff",
-              "surface-container": "#eceef0",
-              "on-secondary-fixed": "#271900",
-              "surface-container-highest": "#e0e3e5",
-              "on-error-container": "#93000a",
-              "error": "#ba1a1a",
-              "tertiary-fixed-dim": "#ffb599",
-              "surface-container-low": "#f2f4f6",
-              "on-secondary": "#ffffff",
-              "secondary-fixed": "#ffdea8",
-              "on-secondary-fixed-variant": "#5e4200",
-              "on-background": "#191c1e",
-              "outline-variant": "#c4c6ce",
-              "outline": "#74777e",
-              "background": "#f8f9fb",
-              "on-tertiary-fixed-variant": "#7f2b00",
-              "surface-dim": "#d8dadc",
-              "on-surface-variant": "#43474d",
-              "surface-variant": "#e0e3e5",
-              "surface-container-high": "#e6e8ea",
-              "surface-bright": "#f8f9fb",
-              "primary-fixed-dim": "#b1c8e9",
-              "on-secondary-container": "#6b4b00",
-              "surface": "#f8f9fb",
-              "secondary-fixed-dim": "#ffba20",
-              "on-primary-fixed-variant": "#324863",
-              "secondary": "#7c5800",
-              "on-primary-fixed": "#021c36",
-              "inverse-surface": "#2d3133",
-              "inverse-primary": "#b1c8e9",
-              "tertiary": "#000000",
-              "on-primary-container": "#6f85a3"
-            },
-            fontFamily: {
-              "headline": ["Manrope", "sans-serif"],
-              "body": ["Inter", "sans-serif"],
-              "label": ["Inter", "sans-serif"]
-            },
-            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-          },
-        },
-      }
-    </script>
-<style>
-      .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-      }
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f8f9fb;
-        color: #191c1e;
-      }
-      .glass-effect {
-        backdrop-filter: blur(12px);
-        background-color: rgba(255, 255, 255, 0.8);
-      }
-    </style>
-</head>
-<body class="bg-surface font-body selection:bg-secondary-container/30">
-<!-- SideNavBar (Execution from JSON) -->
-<aside class="h-screen w-64 fixed left-0 top-0 z-50 bg-slate-50 dark:bg-slate-900 flex flex-col p-4 gap-2">
-<div class="mb-8 px-4 py-6">
-<h1 class="font-headline font-extrabold text-lg text-slate-900 dark:text-white uppercase tracking-wider">Al-Khair Admin</h1>
-<p class="text-xs font-medium text-slate-500 uppercase tracking-widest mt-1">Humanitarian Portal</p>
-</div>
-<nav class="flex-grow space-y-1">
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-amber-500/10 text-amber-700 dark:text-amber-400 font-bold translate-x-1 transition-transform duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-<span class="font-['Inter'] text-sm font-medium">Dashboard</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
-<span class="font-['Inter'] text-sm font-medium">Associations</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
-<span class="font-['Inter'] text-sm font-medium">Projects</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="volunteer_activism">volunteer_activism</span>
-<span class="font-['Inter'] text-sm font-medium">Donations</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="group">group</span>
-<span class="font-['Inter'] text-sm font-medium">Users</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
-<span class="font-['Inter'] text-sm font-medium">Reports</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="settings">settings</span>
-<span class="font-['Inter'] text-sm font-medium">Settings</span>
-</a>
-</nav>
-<div class="mt-auto p-4 bg-primary-container text-white/90 rounded-xl text-xs flex items-center justify-between">
-<span class="font-medium">System Status: Active</span>
-<div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-</div>
-</aside>
-<!-- Main Content Area -->
-<main class="ml-64 min-h-screen">
-<!-- TopNavBar (Execution from JSON) -->
-<header class="w-full sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-sm flex justify-between items-center px-8 h-16">
-<div class="flex items-center gap-8">
-<span class="font-['Manrope'] font-bold text-xl tracking-tight text-slate-950">Al-Khair</span>
-<div class="hidden md:flex gap-6">
-<a class="font-['Inter'] font-semibold text-sm text-black border-b-2 border-amber-500 pb-1" href="#">Dashboard</a>
-<a class="font-['Inter'] font-medium text-sm text-slate-500 hover:text-amber-600 transition-colors" href="#">Analytics</a>
-<a class="font-['Inter'] font-medium text-sm text-slate-500 hover:text-amber-600 transition-colors" href="#">Support</a>
-</div>
-</div>
-<div class="flex items-center gap-4">
-<button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-all">
-<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-</button>
-<button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-all">
-<span class="material-symbols-outlined" data-icon="settings">settings</span>
-</button>
-<div class="h-8 w-8 rounded-full overflow-hidden bg-slate-200 ml-2">
-<img alt="Admin Avatar" class="w-full h-full object-cover" data-alt="Portrait of a professional male administrator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjvhta3jcDMZS43cvTdJey4_XvTOg9BuZ_HO0xYtaYV9pwxCE2TYkDo0XskfdpBktDmyu4Vrmagw8RyFHKEHWk0kbeKMbeIOKCWDOlbuRFcuBYg4pcoSqI9bbiOMlhFgwmBJmE6MxRjhBcuXFFkKuvbjPTIEh7SumGAjVoRamQjRTh64ks_KgmxPAZi8mxZL4LOOciqTIAS65A9qdsYaTupn9uLAoaZT21CQVgHFfk3Hi-3tblNF18ecWofWJIIf9-w-7Ye5AXue0"/>
-</div>
-</div>
-</header>
-<!-- Dashboard Content -->
-<div class="p-8 max-w-7xl mx-auto space-y-12">
-<!-- Header Section -->
-<section class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-<div class="space-y-1">
-<h2 class="font-headline text-3xl font-extrabold tracking-tight text-primary-container">Platform Overview</h2>
-<p class="text-on-surface-variant font-medium">Real-time performance and pending administrative actions.</p>
-</div>
-<div class="flex gap-3">
-<button class="px-5 py-2.5 bg-surface-container-high text-on-surface font-semibold text-sm rounded-lg flex items-center gap-2 hover:bg-surface-container-highest transition-all">
-<span class="material-symbols-outlined text-lg" data-icon="file_download">file_download</span>
-                        Export Report
-                    </button>
-</div>
-</section>
-<!-- Statistics Cards (Bento Grid Style) -->
-<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_32px_64px_-12px_rgba(25,28,30,0.04)] border border-white flex flex-col gap-4">
-<div class="flex justify-between items-start">
-<span class="p-2 bg-amber-500/10 text-amber-700 rounded-lg">
-<span class="material-symbols-outlined" data-icon="payments">payments</span>
-</span>
-<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">+12.5%</span>
-</div>
-<div>
-<p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Collected</p>
-<h3 class="text-2xl font-extrabold font-headline text-primary-container mt-1">1,284,500 <span class="text-sm font-medium">DH</span></h3>
-</div>
-</div>
-<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_32px_64px_-12px_rgba(25,28,30,0.04)] border border-white flex flex-col gap-4">
-<div class="flex justify-between items-start">
-<span class="p-2 bg-slate-100 text-primary-container rounded-lg">
-<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
-</span>
-</div>
-<div>
-<p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Active Associations</p>
-<h3 class="text-2xl font-extrabold font-headline text-primary-container mt-1">42</h3>
-</div>
-</div>
-<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_32px_64px_-12px_rgba(25,28,30,0.04)] border border-white flex flex-col gap-4">
-<div class="flex justify-between items-start">
-<span class="p-2 bg-slate-100 text-primary-container rounded-lg">
-<span class="material-symbols-outlined" data-icon="volunteer_activism">volunteer_activism</span>
-</span>
-<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">+210 new</span>
-</div>
-<div>
-<p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Donors</p>
-<h3 class="text-2xl font-extrabold font-headline text-primary-container mt-1">8,942</h3>
-</div>
-</div>
-<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_32px_64px_-12px_rgba(25,28,30,0.04)] border border-white flex flex-col gap-4">
-<div class="flex justify-between items-start">
-<span class="p-2 bg-amber-500 text-white rounded-lg">
-<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
-</span>
-</div>
-<div>
-<p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Impact Rate</p>
-<h3 class="text-2xl font-extrabold font-headline text-primary-container mt-1">94.8%</h3>
-</div>
-</div>
-</section>
-<!-- Main Dashboard Grid -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-<!-- Left Column: Pending Validations -->
-<section class="lg:col-span-8 space-y-8">
-<div class="bg-surface-container-low rounded-2xl p-8">
-<div class="flex items-center justify-between mb-8">
-<div>
-<h3 class="font-headline text-xl font-bold text-primary-container">Pending Validations</h3>
-<p class="text-sm text-on-surface-variant">Review new association requests and projects</p>
-</div>
-<span class="px-3 py-1 bg-tertiary-container text-white text-[10px] font-bold rounded-full uppercase tracking-tighter">4 ACTIONS REQUIRED</span>
-</div>
-<div class="space-y-4">
-<!-- Pending Item 1 -->
-<div class="bg-surface-container-lowest p-5 rounded-xl flex items-center gap-6 group hover:shadow-lg transition-all duration-300">
-<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
-<img alt="Assoc Logo" class="w-full h-full object-cover" data-alt="Non-profit organization logo showing helping hands" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChiBju_w2JGEVHGAWeLF99OarP8aUDNGYy4GXU7lQY6UbukF4lDZWkb0d73uK4ejdiL3zIeYmJ6j6zsuXHaI7rtixmWABb6rU7cS-pfkGak9mUJvm54RlQKo5s0hUDdyUojhu75T8S4SKhWiJF9705BaN2XUaWMbf_EHHGmefGISPqYlT_jSp9NzDvZTLtp1xzyN3ODtNlIOzTRVCfpoppCxb38scC_aT2L7K8pmR0vQsNhDhfj-enYtHq6IpYqDm7OifAHhkw1t4"/>
-</div>
-<div class="flex-grow">
-<h4 class="font-bold text-on-surface">Atlas Relief Network</h4>
-<p class="text-xs text-on-surface-variant">New Association Account • Submitted 2h ago</p>
-</div>
-<div class="flex gap-2">
-<button class="px-4 py-2 text-xs font-bold text-error hover:bg-error-container rounded-lg transition-colors">Reject</button>
-<button class="px-4 py-2 text-xs font-bold bg-primary-container text-white rounded-lg hover:scale-105 transition-all">Approve</button>
-</div>
-</div>
-<!-- Pending Item 2 -->
-<div class="bg-surface-container-lowest p-5 rounded-xl flex items-center gap-6 group hover:shadow-lg transition-all duration-300">
-<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
-<img alt="Project Logo" class="w-full h-full object-cover" data-alt="Community well building project in Africa" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7S-s6n_IslWKt3faNAKAlciMqUAQzW6EkH2edOylSgRuOxtwLLdhKY8LFWYJ-5Ixn05PN7yTfgzhltCw5T7PeZSCTcaZw09UBZyFE_9bzx53jp8HWPyMKsWiq_Baq9PhlXpsXQiGag7x9Xhcbv66Fzwtb3hcKwWB7YzFN4BrdBHw9Lfgp0LllfXadzBrYmfN6Xj2JNyGGgRKC1qQB-LFAEu5iw8iTeAC5tJgEuzOEFccxyetTU7Ysv8zlWvXt5WpJjZR7iirkbX0"/>
-</div>
-<div class="flex-grow">
-<h4 class="font-bold text-on-surface">Village Water Well - Azilal</h4>
-<p class="text-xs text-on-surface-variant">Infrastructure Project • Submitted 5h ago</p>
-</div>
-<div class="flex gap-2">
-<button class="px-4 py-2 text-xs font-bold text-error hover:bg-error-container rounded-lg transition-colors">Reject</button>
-<button class="px-4 py-2 text-xs font-bold bg-primary-container text-white rounded-lg hover:scale-105 transition-all">Approve</button>
-</div>
-</div>
-<!-- Pending Item 3 -->
-<div class="bg-surface-container-lowest p-5 rounded-xl flex items-center gap-6 group hover:shadow-lg transition-all duration-300">
-<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
-<img alt="Assoc Logo" class="w-full h-full object-cover" data-alt="Educational charity icon with books" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM9ztm7875iJpn1QSkJ-BUweA2eJd6gpFbM6eMia_zgXWYqyfQK4rUaKr1Mx557Uo7-w8P8LYJ4ahvLZIBevI9M7Xr0NXjTf9zZu7k2y8_-Ur-4gsqnPYObgLQ9WnEEBUb6yCDdcdx-g3duuevMJ3niKRIgM9PLz81ufPQC7JN6IB_syNtd3vTpk6qG-Yd5cxcWCmWuREusoBiw8Rh2kQKibb0gphdJnK28ZnwjbqsdYm1MOW-KSncsd4XCRyh16v_HY0nzbjtY5I"/>
-</div>
-<div class="flex-grow">
-<h4 class="font-bold text-on-surface">Savoir Pour Tous</h4>
-<p class="text-xs text-on-surface-variant">Education NGO • Submitted yesterday</p>
-</div>
-<div class="flex gap-2">
-<button class="px-4 py-2 text-xs font-bold text-error hover:bg-error-container rounded-lg transition-colors">Reject</button>
-<button class="px-4 py-2 text-xs font-bold bg-primary-container text-white rounded-lg hover:scale-105 transition-all">Approve</button>
-</div>
-</div>
-</div>
-</div>
-<!-- Global Donation Chart (Simulated Visualization) -->
-<div class="bg-surface-container-lowest rounded-2xl p-8 border border-surface-container-high">
-<div class="flex items-center justify-between mb-10">
-<div>
-<h3 class="font-headline text-xl font-bold text-primary-container">Donation Trends</h3>
-<p class="text-sm text-on-surface-variant">Volume analysis for the last 6 months</p>
-</div>
-<div class="flex gap-2 bg-surface-container-low p-1 rounded-lg">
-<button class="px-3 py-1 text-[10px] font-bold bg-white rounded shadow-sm">VOLUME</button>
-<button class="px-3 py-1 text-[10px] font-bold text-on-surface-variant">COUNT</button>
-</div>
-</div>
-<div class="relative h-64 w-full flex items-end gap-2 px-2">
-<!-- Simplified CSS-based Bar Chart representing 6 months -->
-<div class="flex-grow bg-slate-100 rounded-t-lg relative group" style="height: 45%;">
-<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-primary-container text-white text-[10px] py-1 px-2 rounded">180K</div>
-<div class="absolute inset-0 bg-primary-container/20 rounded-t-lg"></div>
-<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">MAY</span>
-</div>
-<div class="flex-grow bg-slate-100 rounded-t-lg relative group" style="height: 60%;">
-<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-primary-container text-white text-[10px] py-1 px-2 rounded">240K</div>
-<div class="absolute inset-0 bg-primary-container/20 rounded-t-lg"></div>
-<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">JUN</span>
-</div>
-<div class="flex-grow bg-slate-100 rounded-t-lg relative group" style="height: 55%;">
-<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-primary-container text-white text-[10px] py-1 px-2 rounded">210K</div>
-<div class="absolute inset-0 bg-primary-container/20 rounded-t-lg"></div>
-<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">JUL</span>
-</div>
-<div class="flex-grow bg-slate-100 rounded-t-lg relative group" style="height: 85%;">
-<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-amber-500 text-on-secondary-fixed text-[10px] py-1 px-2 rounded">340K</div>
-<div class="absolute inset-0 bg-secondary-container rounded-t-lg"></div>
-<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">AUG</span>
-</div>
-<div class="flex-grow bg-slate-100 rounded-t-lg relative group" style="height: 70%;">
-<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-primary-container text-white text-[10px] py-1 px-2 rounded">280K</div>
-<div class="absolute inset-0 bg-primary-container/20 rounded-t-lg"></div>
-<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">SEP</span>
-</div>
-<div class="flex-grow bg-slate-100 rounded-t-lg relative group" style="height: 95%;">
-<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-primary-container text-white text-[10px] py-1 px-2 rounded">390K</div>
-<div class="absolute inset-0 bg-primary-container/20 rounded-t-lg"></div>
-<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">OCT</span>
-</div>
-</div>
-</div>
-</section>
-<!-- Right Column: Manual Donations & Stats -->
-<section class="lg:col-span-4 space-y-8">
-<div class="bg-primary-container text-white rounded-2xl p-8 relative overflow-hidden shadow-xl">
-<div class="relative z-10">
-<h3 class="font-headline text-lg font-bold mb-6">Recent Manual Donations</h3>
-<div class="space-y-6">
-<!-- Transaction 1 -->
-<div class="space-y-3 pb-4 border-b border-white/10">
-<div class="flex justify-between items-start">
-<div>
-<p class="text-sm font-bold">Ahmed Mansouri</p>
-<p class="text-[10px] text-white/60">Bank Transfer • 5,000 DH</p>
-</div>
-<span class="text-[10px] px-2 py-0.5 rounded bg-amber-500 text-on-secondary-fixed font-bold">PENDING</span>
-</div>
-<div class="flex gap-2">
-<button class="flex-1 py-2 text-[10px] font-bold bg-white/10 hover:bg-white/20 rounded transition-colors flex items-center justify-center gap-1">
-<span class="material-symbols-outlined text-sm" data-icon="receipt_long">receipt_long</span> Verify Receipt
-                                        </button>
-<button class="flex-1 py-2 text-[10px] font-bold bg-secondary-container text-on-secondary-fixed rounded hover:scale-105 transition-all">Confirm</button>
-</div>
-</div>
-<!-- Transaction 2 -->
-<div class="space-y-3 pb-4 border-b border-white/10">
-<div class="flex justify-between items-start">
-<div>
-<p class="text-sm font-bold">Inara Co. Ltd</p>
-<p class="text-[10px] text-white/60">Corporate Grant • 25,000 DH</p>
-</div>
-<span class="text-[10px] px-2 py-0.5 rounded bg-amber-500 text-on-secondary-fixed font-bold">PENDING</span>
-</div>
-<div class="flex gap-2">
-<button class="flex-1 py-2 text-[10px] font-bold bg-white/10 hover:bg-white/20 rounded transition-colors flex items-center justify-center gap-1">
-<span class="material-symbols-outlined text-sm" data-icon="receipt_long">receipt_long</span> Verify Receipt
-                                        </button>
-<button class="flex-1 py-2 text-[10px] font-bold bg-secondary-container text-on-secondary-fixed rounded hover:scale-105 transition-all">Confirm</button>
-</div>
-</div>
-</div>
-<button class="w-full mt-6 py-3 text-xs font-bold text-white/70 hover:text-white transition-colors uppercase tracking-widest">View All Queue</button>
-</div>
-<!-- Decorative element -->
-<div class="absolute -right-12 -bottom-12 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl"></div>
-</div>
-<!-- Platform Activity Feed -->
-<div class="bg-surface-container-low rounded-2xl p-8 border border-white">
-<h3 class="font-headline text-lg font-bold text-primary-container mb-6">Activity Feed</h3>
-<div class="space-y-6 relative">
-<!-- Line decoration -->
-<div class="absolute left-2.5 top-2 bottom-2 w-0.5 bg-slate-200"></div>
-<div class="relative pl-10">
-<div class="absolute left-0 top-1 w-5 h-5 rounded-full bg-emerald-500 border-4 border-surface-container-low"></div>
-<p class="text-xs font-bold text-on-surface">System Verification</p>
-<p class="text-[10px] text-on-surface-variant">Education Hub project reached 100% funding.</p>
-<span class="text-[10px] text-slate-400">12 mins ago</span>
-</div>
-<div class="relative pl-10">
-<div class="absolute left-0 top-1 w-5 h-5 rounded-full bg-amber-500 border-4 border-surface-container-low"></div>
-<p class="text-xs font-bold text-on-surface">New Association Flagged</p>
-<p class="text-[10px] text-on-surface-variant">Duplicate documentation detected for 'Atlas Relief'.</p>
-<span class="text-[10px] text-slate-400">45 mins ago</span>
-</div>
-<div class="relative pl-10">
-<div class="absolute left-0 top-1 w-5 h-5 rounded-full bg-primary-container border-4 border-surface-container-low"></div>
-<p class="text-xs font-bold text-on-surface">Weekly Report Generated</p>
-<p class="text-[10px] text-on-surface-variant">Financial audit for Q4 is now ready for review.</p>
-<span class="text-[10px] text-slate-400">2 hours ago</span>
-</div>
-</div>
-</div>
-</section>
-</div>
-</div>
-</main>
-<!-- Floating Tooltip (Generic implementation for UI demo) -->
-<div class="fixed bottom-8 right-8 group">
-<div class="bg-primary-container text-white p-4 rounded-full shadow-2xl cursor-help hover:scale-110 transition-transform">
-<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
-</div>
-<div class="absolute bottom-full right-0 mb-4 w-48 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-<div class="bg-slate-900 text-white text-[10px] font-medium p-3 rounded-xl shadow-xl border border-slate-700">
-                Need help with the platform? Contact Al-Khair technical support.
-            </div>
-</div>
-</div>
-</body></html>

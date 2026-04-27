@@ -5,83 +5,75 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Inscription - AL-KHAIR</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "primary-container": "#021c36",
-              "secondary-container": "#feb700",
-              "surface": "#f8f9fb",
-              "on-surface": "#191c1e",
-              "on-surface-variant": "#43474d",
-              "surface-container-lowest": "#ffffff",
-              "surface-container-low": "#f2f4f6",
-              "surface-container-high": "#e6e8ea",
-              "outline-variant": "#c4c6ce",
-              "secondary": "#7c5800",
-              "error": "#ba1a1a",
-            },
-            fontFamily: {
-              "headline": ["Manrope"],
-              "body": ["Inter"],
-              "label": ["Inter"]
-            }
-          },
-        },
-      }
-    </script>
     <style>
-      .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-      .glass-effect { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); }
-      /* Custom Scrollbar for the right section */
-      .scrollable-form::-webkit-scrollbar { width: 6px; }
-      .scrollable-form::-webkit-scrollbar-thumb { background-color: #c4c6ce; border-radius: 10px; }
+      body { font-family: 'Inter', sans-serif; background: #e8ecf3; }
+      h1,h2,h3,h4,h5,h6 { font-family: 'Poppins', sans-serif; }
+      .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+      @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+      .float { animation: float 6s ease-in-out infinite; }
+      .scrollable-form::-webkit-scrollbar { width: 5px; }
+      .scrollable-form::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+      
+      .modern-input { background: #f0f2f5; border: 1px solid transparent; border-radius: 1rem; transition: all 0.3s; font-size: 0.875rem; color: #0A1128; font-weight: 600; }
+      .modern-input:focus { background: #ffffff; border-color: #F5A623; box-shadow: 0 0 0 4px rgba(245, 166, 35, 0.1); outline: none; }
+      
+      input[type=file]::file-selector-button {
+            background-color: #0A1128; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.75rem;
+            font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s;
+      }
+      input[type=file]::file-selector-button:hover { background-color: #F5A623; color: #0A1128; }
     </style>
 </head>
-<body class="bg-surface font-body text-on-surface antialiased h-screen overflow-hidden">
+<body class="bg-[#e8ecf3] text-slate-700 antialiased h-screen overflow-hidden selection:bg-[#F5A623] selection:text-white">
 <main class="h-full flex flex-col md:flex-row">
     
-    <section class="hidden md:flex md:w-5/12 bg-primary-container relative flex-col justify-between p-12 overflow-hidden h-full">
-        <div class="absolute top-[-10%] right-[-10%] w-96 h-96 bg-secondary-container/10 rounded-full blur-3xl"></div>
+    <!-- Left Sidebar -->
+    <section class="hidden md:flex md:w-5/12 bg-gradient-to-br from-[#0A1128] to-[#162040] relative flex-col justify-between p-12 overflow-hidden h-full">
+        <div class="absolute top-[-10%] right-[-10%] w-72 h-72 bg-[#F5A623]/20 rounded-full blur-[80px] float pointer-events-none"></div>
+        <div class="absolute bottom-[-5%] left-[-5%] w-72 h-72 bg-blue-500/10 rounded-full blur-[80px] float pointer-events-none" style="animation-delay:3s"></div>
+        
         <div class="relative z-10">
-            <div class="text-white font-headline font-extrabold text-3xl tracking-tighter mb-16">AL-KHAIR</div>
-            <h1 class="font-headline font-bold text-5xl text-white leading-tight tracking-tight mb-6">
-                Rejoignez la force <br/>du <span class="text-secondary-container">bien durable</span>.
+            <div class="flex items-center gap-3 mb-16">
+                <div class="w-30 h-30">
+                    <x-application-logo class="w-20 h-20" />
+                </div>
+            </div>
+            <h1 class="font-black text-5xl text-white leading-tight tracking-tight mb-6">
+                Rejoignez la force<br/>du <span class="text-[#F5A623]">bien durable</span>.
             </h1>
-            <p class="text-gray-300 text-lg max-w-sm leading-relaxed">
+            <p class="text-blue-100/70 text-lg max-w-sm leading-relaxed font-medium">
                 Une plateforme transparente dédiée à l'impact humanitaire.
             </p>
         </div>
+        
         <div class="relative z-10">
-            <div class="flex items-center gap-4 p-6 glass-effect rounded-xl border border-white/10">
-                <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center">
-                    <span class="material-symbols-outlined text-yellow-900">verified_user</span>
+            <div class="flex items-center gap-4 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl">
+                <div class="w-12 h-12 rounded-xl bg-[#F5A623]/20 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-[#F5A623] text-2xl" style="font-variation-settings: 'FILL' 1;">verified_user</span>
                 </div>
                 <div>
-                    <p class="font-headline font-bold text-primary-container text-sm">Transparence Totale</p>
-                    <p class="text-gray-600 text-xs font-medium">Chaque don est tracé et documenté.</p>
+                    <p class="font-black text-white text-base">Transparence Totale</p>
+                    <p class="text-blue-100/50 text-sm mt-0.5">Chaque don est tracé et documenté.</p>
                 </div>
             </div>
-        </div>
-        <div class="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay">
-            <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz5K2nxJgzn3rEk5-TmcYB5pdcq00aqOqELwOD4JTvdPLrmygKcJEFWDHh8zdUt8KoI988Lypou9gSXX-a8Uq3V9xqEQqaVZtBcLSjUJ1STAOKhF4sToWAhMYtSsFCUObjSq1cODYuUtYhMZBXfmgiUrdcSiSMe6PAjRVWiEvKcQVpsLeou1EnzQ-jcPcJlXvC_y_TIaR8SkKganKL2rWowxj5knaGJdJbQfB3DdhkSEsp-kF83PslSVbbbRmMQM3kPmjpzoNOFhA" alt="Pattern"/>
         </div>
     </section>
 
-    <section class="flex-1 flex flex-col items-center px-6 py-12 md:px-16 lg:px-24 bg-surface h-full overflow-y-auto scrollable-form">
-        
+    <!-- Right Form Area -->
+    <section class="flex-1 flex flex-col items-center px-6 py-10 md:px-14 lg:px-20 bg-white h-full overflow-y-auto scrollable-form">
         <div class="w-full max-w-2xl">
-            <div class="md:hidden flex justify-center mb-8">
-                <div class="text-primary-container font-headline font-extrabold text-2xl tracking-tighter">AL-KHAIR</div>
+            <div class="md:hidden flex justify-center mb-10">
+                <div class="w-24 h-24">
+                    <x-application-logo class="w-24 h-24" />
+                </div>
             </div>
 
             @if ($errors->any())
-                <div class="mb-6 p-4 rounded-lg bg-red-50 text-error text-sm font-medium border border-red-200">
-                    <ul class="list-disc list-inside">
+                <div class="mb-8 p-4 rounded-xl bg-red-50 text-red-600 text-sm font-bold border border-red-100 flex gap-3 items-start">
+                    <span class="material-symbols-outlined">error</span>
+                    <ul class="list-disc list-inside mt-0.5">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -92,100 +84,99 @@
             <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" id="registerForm" class="w-full pb-10">
                 @csrf
 
+                <!-- Step 1: Role Selection -->
                 <div id="step-1" class="space-y-10 {{ $errors->any() ? 'hidden' : 'block' }}">
                     <header class="text-center md:text-left space-y-4">
-                        <span class="inline-block px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-label font-bold tracking-widest text-on-surface-variant uppercase">
-                            Étape 1 sur 2
-                        </span>
-                        <h2 class="font-headline font-bold text-3xl md:text-4xl text-primary leading-tight">
-                            Comment souhaitez-vous <br/>contribuer ?
-                        </h2>
+                        <span class="inline-block px-4 py-1.5 bg-[#f0f2f5] rounded-lg text-[10px] font-black tracking-widest text-slate-400 uppercase">Étape 1 sur 2</span>
+                        <h2 class="font-black text-4xl text-[#0A1128] leading-tight tracking-tight">Comment souhaitez-vous contribuer ?</h2>
                     </header>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <label class="group relative cursor-pointer outline-none">
+                        <label class="group relative cursor-pointer outline-none h-full">
                             <input class="peer sr-only" name="role" type="radio" value="donator" {{ old('role') == 'donator' ? 'checked' : '' }} required/>
-                            <div class="h-full p-8 rounded-xl bg-surface-container-lowest border-2 border-transparent transition-all peer-checked:border-secondary-container shadow-sm group-hover:scale-[1.02]">
-                                <div class="w-14 h-14 mb-6 rounded-xl bg-surface-container-low flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-secondary text-3xl">favorite</span>
+                            <div class="h-full p-8 rounded-3xl bg-white border-2 border-slate-200 transition-all peer-checked:border-[#F5A623] peer-checked:bg-[#F5A623]/5 shadow-sm group-hover:border-slate-300">
+                                <div class="w-16 h-16 mb-6 rounded-2xl bg-blue-50 flex items-center justify-center group-hover:scale-110 transition-transform peer-checked:bg-[#F5A623] peer-checked:text-[#0A1128]">
+                                    <span class="material-symbols-outlined text-blue-600 text-3xl peer-checked:text-[#0A1128]">favorite</span>
                                 </div>
-                                <h3 class="font-headline font-bold text-xl text-primary mb-3">Donateur</h3>
-                                <p class="text-on-surface-variant text-sm">Je souhaite soutenir des projets et suivre mon impact.</p>
-                                <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100">
-                                    <span class="material-symbols-outlined text-secondary-container text-2xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                <h3 class="font-black text-2xl text-[#0A1128] mb-3">Donateur</h3>
+                                <p class="text-slate-500 text-sm font-medium leading-relaxed">Je souhaite soutenir des projets et suivre mon impact avec transparence.</p>
+                                <div class="absolute top-6 right-6 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                    <span class="material-symbols-outlined text-[#F5A623] text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </div>
                         </label>
 
-                        <label class="group relative cursor-pointer outline-none">
+                        <label class="group relative cursor-pointer outline-none h-full">
                             <input class="peer sr-only" name="role" type="radio" value="association" {{ old('role') == 'association' ? 'checked' : '' }} required/>
-                            <div class="h-full p-8 rounded-xl bg-surface-container-lowest border-2 border-transparent transition-all peer-checked:border-secondary-container shadow-sm group-hover:scale-[1.02]">
-                                <div class="w-14 h-14 mb-6 rounded-xl bg-surface-container-low flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-secondary text-3xl">foundation</span>
+                            <div class="h-full p-8 rounded-3xl bg-white border-2 border-slate-200 transition-all peer-checked:border-[#F5A623] peer-checked:bg-[#F5A623]/5 shadow-sm group-hover:border-slate-300">
+                                <div class="w-16 h-16 mb-6 rounded-2xl bg-emerald-50 flex items-center justify-center group-hover:scale-110 transition-transform peer-checked:bg-[#F5A623] peer-checked:text-[#0A1128]">
+                                    <span class="material-symbols-outlined text-emerald-600 text-3xl peer-checked:text-[#0A1128]">foundation</span>
                                 </div>
-                                <h3 class="font-headline font-bold text-xl text-primary mb-3">Association</h3>
-                                <p class="text-on-surface-variant text-sm">Nous cherchons à lever des fonds pour des projets concrets.</p>
-                                <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100">
-                                    <span class="material-symbols-outlined text-secondary-container text-2xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                <h3 class="font-black text-2xl text-[#0A1128] mb-3">Association</h3>
+                                <p class="text-slate-500 text-sm font-medium leading-relaxed">Nous cherchons à lever des fonds pour réaliser des projets concrets.</p>
+                                <div class="absolute top-6 right-6 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                    <span class="material-symbols-outlined text-[#F5A623] text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </div>
                         </label>
                     </div>
 
-                    <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
-                        <p class="text-sm text-on-surface-variant">Déjà inscrit ? <a href="{{ route('login') }}" class="text-secondary font-bold hover:underline">Se connecter</a></p>
-                        <button type="button" onclick="nextStep()" class="px-8 py-3 bg-primary-container text-white font-bold rounded-full hover:scale-[1.02] transition-transform">
-                            Continuer &rarr;
+                    <div class="flex flex-col-reverse md:flex-row items-center justify-between pt-8 border-t border-slate-100 gap-6">
+                        <p class="text-sm font-bold text-slate-400">Déjà inscrit ? <a href="{{ route('login') }}" class="text-[#F5A623] hover:text-[#0A1128] transition-colors">Se connecter</a></p>
+                        <button type="button" onclick="nextStep()" class="w-full md:w-auto px-8 py-4 bg-[#0A1128] hover:bg-[#F5A623] text-white hover:text-[#0A1128] font-black text-sm uppercase tracking-widest rounded-2xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                            Continuer <span class="material-symbols-outlined">arrow_forward</span>
                         </button>
                     </div>
                 </div>
 
-                <div id="step-2" class="space-y-8 {{ $errors->any() ? 'block' : 'hidden' }}">
-                    <header class="space-y-2">
-                        <span class="inline-block px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-label font-bold tracking-widest text-on-surface-variant uppercase">
-                            Étape 2 sur 2
-                        </span>
-                        <h2 class="font-headline font-bold text-3xl text-primary">Vos informations</h2>
+                <!-- Step 2: Information -->
+                <div id="step-2" class="space-y-10 {{ $errors->any() ? 'block' : 'hidden' }}">
+                    <header class="space-y-4">
+                        <span class="inline-block px-4 py-1.5 bg-[#f0f2f5] rounded-lg text-[10px] font-black tracking-widest text-slate-400 uppercase">Étape 2 sur 2</span>
+                        <h2 class="font-black text-4xl text-[#0A1128] tracking-tight">Vos informations</h2>
                     </header>
 
-                    <div class="space-y-4 bg-surface-container-lowest p-6 rounded-xl shadow-sm">
+                    <div class="space-y-5 bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
                         <div>
-                            <label class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">Nom complet / Nom de l'association *</label>
-                            <input type="text" name="name" value="{{ old('name') }}" required class="w-full bg-surface-container-low border-0 rounded-lg p-3 focus:ring-2 focus:ring-primary-container">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Nom complet / Nom de l'association *</label>
+                            <input type="text" name="name" value="{{ old('name') }}" required class="modern-input w-full p-4">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">Email *</label>
-                            <input type="email" name="email" value="{{ old('email') }}" required class="w-full bg-surface-container-low border-0 rounded-lg p-3 focus:ring-2 focus:ring-primary-container">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Email *</label>
+                            <input type="email" name="email" value="{{ old('email') }}" required class="modern-input w-full p-4">
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">Mot de passe *</label>
-                                <input type="password" name="password" required class="w-full bg-surface-container-low border-0 rounded-lg p-3 focus:ring-2 focus:ring-primary-container">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Mot de passe *</label>
+                                <input type="password" name="password" required class="modern-input w-full p-4">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">Confirmer MDP *</label>
-                                <input type="password" name="password_confirmation" required class="w-full bg-surface-container-low border-0 rounded-lg p-3 focus:ring-2 focus:ring-primary-container">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Confirmer MDP *</label>
+                                <input type="password" name="password_confirmation" required class="modern-input w-full p-4">
                             </div>
                         </div>
                     </div>
 
-                    <div id="association-fields" class="space-y-4 bg-surface-container-lowest p-6 rounded-xl shadow-sm {{ old('role') == 'association' ? 'block' : 'hidden' }}">
-                        <h3 class="font-headline font-bold text-lg text-primary mb-2">Dossier Institutionnel</h3>
+                    <!-- Association Specific Fields -->
+                    <div id="association-fields" class="space-y-5 bg-white p-8 rounded-3xl shadow-sm border border-slate-100 {{ old('role') == 'association' ? 'block' : 'hidden' }}">
+                        <h3 class="font-black text-xl text-[#0A1128] mb-6 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[#F5A623]">folder_special</span> Dossier Institutionnel
+                        </h3>
                         
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">Ville *</label>
-                                <input type="text" name="ville" id="ville" value="{{ old('ville') }}" class="w-full bg-surface-container-low border-0 rounded-lg p-3 focus:ring-2">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Ville *</label>
+                                <input type="text" name="ville" id="ville" value="{{ old('ville') }}" class="modern-input w-full p-4">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">Numéro d'autorisation *</label>
-                                <input type="text" name="licenseNumber" id="licenseNumber" value="{{ old('licenseNumber') }}" placeholder="Ex: LIC-12345" class="w-full bg-surface-container-low border-0 rounded-lg p-3 focus:ring-2">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Numéro d'autorisation *</label>
+                                <input type="text" name="licenseNumber" id="licenseNumber" value="{{ old('licenseNumber') }}" placeholder="Ex: LIC-12345" class="modern-input w-full p-4">
                             </div>
                         </div>
                         
                         <div>
-                            <label class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">Catégorie *</label>
-                            <select name="category_id" id="category_id" class="w-full bg-surface-container-low border-0 rounded-lg p-3 focus:ring-2">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Catégorie d'intervention *</label>
+                            <select name="category_id" id="category_id" class="modern-input w-full p-4 cursor-pointer">
                                 <option value="">Sélectionnez...</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
@@ -194,28 +185,28 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">Description *</label>
-                            <textarea name="description" id="description" rows="3" class="w-full bg-surface-container-low border-0 rounded-lg p-3 focus:ring-2">{{ old('description') }}</textarea>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Description (min. 50 caractères) *</label>
+                            <textarea name="description" id="description" rows="3" minlength="50" class="modern-input w-full p-4 resize-none">{{ old('description') }}</textarea>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">Logo (Image) *</label>
-                                <input type="file" name="profilePhoto" id="profilePhoto" accept="image/*" class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:bg-primary-container file:text-white hover:file:bg-slate-800">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4">
+                            <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                                <label class="block text-[10px] font-black text-[#0A1128] uppercase tracking-widest mb-3">Logo (Image) *</label>
+                                <input type="file" name="profilePhoto" id="profilePhoto" accept="image/*" class="w-full text-xs text-slate-500">
                             </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">Document KYC (PDF/Image) *</label>
-                                <input type="file" name="documentKYC" id="documentKYC" accept=".pdf,image/*" class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:bg-secondary-container file:text-yellow-900 hover:file:bg-yellow-500">
+                            <div class="bg-amber-50 p-5 rounded-2xl border border-amber-100">
+                                <label class="block text-[10px] font-black text-amber-900 uppercase tracking-widest mb-3">Document KYC (PDF/Image) *</label>
+                                <input type="file" name="documentKYC" id="documentKYC" accept=".pdf,image/*" class="w-full text-xs text-slate-500 file:!bg-amber-600 hover:file:!bg-amber-700">
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-between pt-6 border-t border-surface-container-high">
-                        <button type="button" onclick="prevStep()" class="text-on-surface-variant hover:text-primary font-medium text-sm flex items-center gap-1">
-                            &larr; Retour
+                    <div class="flex flex-col-reverse md:flex-row items-center justify-between pt-8 border-t border-slate-100 gap-6">
+                        <button type="button" onclick="prevStep()" class="text-slate-400 hover:text-[#0A1128] font-bold text-sm flex items-center gap-2 transition-colors">
+                            <span class="material-symbols-outlined text-sm">arrow_back</span> Retour
                         </button>
-                        <button type="submit" class="px-8 py-3 bg-primary-container text-white font-bold rounded-full hover:scale-[1.02] shadow-lg transition-transform flex items-center gap-2">
-                            Terminer l'inscription <span class="material-symbols-outlined text-sm">check</span>
+                        <button type="submit" class="w-full md:w-auto px-8 py-4 bg-[#0A1128] hover:bg-[#F5A623] text-white hover:text-[#0A1128] font-black text-[10px] uppercase tracking-widest rounded-2xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                            Terminer l'inscription <span class="material-symbols-outlined text-lg">check_circle</span>
                         </button>
                     </div>
                 </div>
@@ -233,11 +224,15 @@
             return;
         }
         
-        // Hide Step 1, Show Step 2
-        document.getElementById('step-1').classList.add('hidden');
-        document.getElementById('step-2').classList.remove('hidden');
+        // Form Animation
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('step-2');
+        
+        step1.classList.add('hidden');
+        step2.classList.remove('hidden');
+        step2.classList.add('animate-fade-in');
 
-        // Logic to show/hide Association fields and make them required
+        // Logic to show/hide Association fields
         const assocFieldsDiv = document.getElementById('association-fields');
         const assocInputs = ['ville', 'licenseNumber', 'category_id', 'description', 'profilePhoto', 'documentKYC'];
         
@@ -255,6 +250,7 @@
     function prevStep() {
         document.getElementById('step-2').classList.add('hidden');
         document.getElementById('step-1').classList.remove('hidden');
+        document.getElementById('step-1').classList.add('animate-fade-in');
     }
 </script>
 </body>

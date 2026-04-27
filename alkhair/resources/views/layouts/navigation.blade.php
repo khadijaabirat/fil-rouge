@@ -4,10 +4,9 @@
             <div class="flex items-center gap-8">
                 <div class="shrink-0 flex items-center">
                     <a href="{{ url('/') }}" class="flex items-center gap-3 group">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-container to-slate-800 text-secondary-container flex items-center justify-center font-headline font-black text-sm shadow-md group-hover:scale-105 transition-transform duration-300 border border-outline-variant/20">
-                            AK
+                        <div class="w-10 h-10">
+                            <x-application-logo class="w-10 h-10" />
                         </div>
-                        <span class="font-headline font-extrabold tracking-tight text-primary-container">AL-KHAIR</span>
                     </a>
                 </div>
 

@@ -155,15 +155,9 @@
 
     <header id="main-nav" class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent py-4">
         <nav class="container mx-auto px-4 flex justify-between items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-lg shadow-black/5">
-            <div class="flex items-center gap-3">
-                <div class="bg-gradient-to-br from-[#F5A623] to-[#FFD085] p-2 rounded-xl font-black text-[#0A1128] text-xl shadow-md">AK</div>
-                <div>
-                    <a href="{{ url('/') }}">
-                        <h1 class="text-2xl font-black text-white drop-shadow-md leading-none tracking-tight">AL-KHAIR</h1>
-                        <p class="text-[10px] text-[#F5A623] font-bold tracking-widest uppercase">Certifié 2026</p>
-                    </a>
-                </div>
-            </div>
+            <a href="{{ url('/') }}" class="flex items-center group">
+                <x-application-logo class="w-12 h-12 text-white group-hover:scale-105 transition-transform" />
+            </a>
             <div class="hidden md:flex items-center gap-8">
                 <a class="text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="#projets">Projets</a>
                 <a class="text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="#impact">Impact</a>
@@ -872,13 +866,9 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
                 <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="bg-gradient-to-br from-[#0A1128] to-[#1a2744] p-3 rounded-xl font-black text-[#F5A623] text-xl shadow-lg">AK</div>
-                        <div>
-                            <h5 class="text-xl font-black text-[#0A1128] leading-none tracking-tight">AL-KHAIR</h5>
-                            <p class="text-[10px] text-[#F5A623] font-bold tracking-widest uppercase">Certifié 2026</p>
-                        </div>
-                    </div>
+                    <a href="{{ url('/') }}" class="inline-block mb-4">
+                        <x-application-logo class="w-32 h-32 text-[#0A1128]" />
+                    </a>
                     <p class="text-slate-600 text-sm leading-relaxed">
                         Plateforme marocaine de dons solidaires avec transparence totale.
                     </p>

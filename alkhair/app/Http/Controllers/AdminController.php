@@ -16,32 +16,74 @@ use App\Notifications\AssociationStatusChanged;
 class AdminController extends Controller
 {
     public function dashboard(){
-    $pendingAssociations=User::where('role', 'association')
-    ->where('status','PENDING')
-    ->get();
-    $pendingDonations = Donation::with(['donator', 'project', 'payment'])
+        $pendingAssociations = User::where('role', 'association')
+            ->where('status','PENDING')
+            ->latest()
+            ->take(4)
+            ->get();
+            
+        $pendingDonationsCount = Donation::whereHas('payment', function ($query) {
+                $query->where('status', 'PENDING')
+                ->whereNotNull('paymentReceipt');
+            })
+            ->where('status', 'PENDING')
+            ->count();
+            
+        $recentManualDonations = Donation::with(['donator', 'project', 'payment'])
+            ->whereHas('payment', function ($query) {
+                $query->whereNotNull('paymentReceipt');
+            })
+            ->latest()
+            ->take(5)
+            ->get();
+            
+        $recentActivities = Donation::with(['donator', 'project'])
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('admin.dashboard', compact('pendingAssociations', 'pendingDonationsCount', 'recentManualDonations', 'recentActivities'));
+    }
+
+    public function showDonation($id) {
+        $donation = Donation::with(['donator', 'project.association', 'payment'])->findOrFail($id);
+        return view('admin.donation-details', compact('donation'));
+    }
+
+    public function validations() {
+        $pendingAssociations = User::where('role', 'association')
+            ->where('status','PENDING')
+            ->get();
+            
+        $pendingDonations = Donation::with(['donator', 'project', 'payment'])
             ->whereHas('payment', function ($query) {
                 $query->where('status', 'PENDING')
                 ->whereNotNull('paymentReceipt');
             })
-    ->where('status', 'PENDING')
-    ->get();
+            ->where('status', 'PENDING')
+            ->get();
 
-         $withdrawalRequests = Project::whereHas('donations', function ($query) {
-            $query->where('status', 'PROCESSING');
-        })->with('association')->get();
+        $managedProjects = Project::whereIn('status', ['OPEN', 'COMPLETED', 'SUSPENDED'])
+            ->with('association')
+            ->get();
 
+        return view('admin.validation', compact('pendingAssociations', 'pendingDonations', 'managedProjects'));
+    }
 
-$managedAssociations = User::where('role', 'association')
-                                   ->whereIn('status', ['ACTIVE', 'BANNED'])
-                                   ->get();
- $managedProjects = Project::whereIn('status', ['OPEN', 'COMPLETED', 'SUSPENDED'])
-                                  ->with('association')
-                                  ->get();
+    public function users(Request $request) {
+        $query = User::query()->where('role', '!=', 'admin');
+        
+        if ($request->has('role') && $request->role !== 'all') {
+            $query->where('role', $request->role);
+        }
+        
+        if ($request->has('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
 
- return view('admin.dashboard', compact('pendingAssociations', 'pendingDonations', 'withdrawalRequests', 'managedAssociations', 'managedProjects'));
-
-  }
+        $users = $query->latest()->paginate(10);
+        return view('admin.gestionutilisateur', compact('users'));
+    }
 
 
 
@@ -152,6 +194,7 @@ public function suspendProject($id)
     {
 $association = User::where('role', 'association')->findOrFail($id);
          $association->update(['status' => 'ACTIVE']);
+         $association->notify(new AssociationStatusChanged('ACTIVE'));
 
 $suspendedProjects = $association->projects()->where('status', 'SUSPENDED')->get();
 

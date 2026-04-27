@@ -1,181 +1,220 @@
 <!DOCTYPE html>
-<html class="light" lang="fr">
+<html class="scroll-smooth light" lang="fr">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Espace Donateur | AL-KHAIR ARCHIVE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <title>Espace Donateur | AL-KHAIR</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary-container": "#021c36",
-                        "secondary-container": "#feb700",
-                        "surface": "#f8f9fb",
-                        "on-surface": "#191c1e",
-                        "on-surface-variant": "#43474d",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-container-low": "#f2f4f6",
-                        "secondary": "#7c5800",
-                    },
-                    fontFamily: {
-                        "headline": ["Manrope", "sans-serif"],
-                        "body": ["Inter", "sans-serif"],
-                        "label": ["Inter", "sans-serif"]
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
     <style>
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .glass-effect { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        body { font-family: 'Inter', sans-serif; background: #f0f2f5; }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Poppins', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        
+        .neu-card { background: #fff; border-radius: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.04); transition: all 0.4s cubic-bezier(.4,0,.2,1); }
+        .neu-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 20px 48px rgba(0,0,0,0.1); transform: translateY(-4px); }
+        .neu-card-static { background: #fff; border-radius: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.04); }
+        
+        .glass-sidebar { background: rgba(255,255,255,0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-right: 1px solid rgba(0,0,0,0.06); }
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(.4,0,.2,1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .sidebar-link { transition: all 0.25s ease; border-radius: 14px; }
+        .sidebar-link:hover { background: rgba(10,17,40,0.04); }
+        .sidebar-link.active { background: linear-gradient(135deg, #0A1128, #1a2744); color: #fff; box-shadow: 0 4px 16px rgba(10,17,40,0.3); }
+
+        .progress-bar { background: linear-gradient(90deg, #F5A623 0%, #FFD085 50%, #F5A623 100%); background-size: 200% 100%; animation: shimmer 2s infinite; }
+        @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
     </style>
 </head>
-<body class="bg-surface font-body text-on-surface antialiased flex min-h-screen overflow-x-hidden">
+<body class="bg-gradient-to-br from-[#e8ecf3] to-white text-slate-700 overflow-x-hidden selection:bg-[#F5A623] selection:text-white min-h-screen flex">
 
 @php
     $totalDonated = isset($myDonations) ? $myDonations->whereIn('status', ['VALIDATED', 'PROCESSING', 'RECEIVED', 'IMPACT'])->sum('amount') : 0;
     $projectsSupported = isset($myDonations) ? $myDonations->whereIn('status', ['VALIDATED', 'PROCESSING', 'RECEIVED', 'IMPACT'])->unique('project_id')->count() : 0;
-    $livesTouched = $projectsSupported * 125; // رقم تقديري للأثر
+    $livesTouched = $projectsSupported * 125;
 @endphp
 
-<aside class="hidden md:flex h-screen w-72 border-r bg-surface-container-lowest flex-col p-6 gap-y-4 sticky top-0 border-outline-variant/20 shadow-sm">
-    <div class="mb-8">
-        <span class="font-headline font-black text-xl text-primary-container uppercase tracking-widest">AL-KHAIR</span>
-        <p class="font-body font-medium text-sm tracking-wide text-on-surface-variant mt-1">Espace Donateur</p>
+<!-- Sidebar -->
+<aside class="h-screen w-72 fixed left-0 top-0 z-50 glass-sidebar flex flex-col p-6">
+    <div class="mb-10">
+        <a href="{{ route('home') }}" class="flex items-center gap-3 mb-4 group">
+            <div class="w-12 h-12">
+                <x-application-logo class="w-12 h-12 group-hover:scale-105 transition-transform" />
+            </div>
+        </a>
     </div>
-    
-    <nav class="flex flex-col gap-y-2 flex-grow">
-        <a href="#" class="flex items-center gap-3 px-4 py-3 cursor-pointer transition-all bg-primary-container text-white font-bold rounded-lg shadow-sm">
-            <span class="material-symbols-outlined">dashboard</span>
-            <span class="font-body text-sm tracking-wide">Tableau de bord</span>
+
+    <nav class="flex-grow space-y-2">
+        <a href="{{ route('donator.dashboard') }}" class="sidebar-link flex items-center gap-3 px-4 py-3.5 active">
+            <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+            <span class="text-sm font-semibold">Tableau de bord</span>
         </a>
-        
-        <a href="#projets" class="flex items-center gap-3 px-4 py-3 cursor-pointer transition-all text-on-surface-variant hover:bg-surface-container-low hover:text-primary-container hover:translate-x-1 duration-200 rounded-lg">
-            <span class="material-symbols-outlined">explore</span>
-            <span class="font-body font-medium text-sm tracking-wide">Projets Solidaires</span>
+        <a href="#projets" class="sidebar-link flex items-center gap-3 px-4 py-3.5 text-slate-600">
+            <span class="material-symbols-outlined text-xl">explore</span>
+            <span class="text-sm font-semibold">Projets Solidaires</span>
         </a>
-        
-        <a href="#historique" class="flex items-center gap-3 px-4 py-3 cursor-pointer transition-all text-on-surface-variant hover:bg-surface-container-low hover:text-primary-container hover:translate-x-1 duration-200 rounded-lg">
-            <span class="material-symbols-outlined">receipt_long</span>
-            <span class="font-body font-medium text-sm tracking-wide">Historique des dons</span>
+        <a href="#historique" class="sidebar-link flex items-center gap-3 px-4 py-3.5 text-slate-600">
+            <span class="material-symbols-outlined text-xl">receipt_long</span>
+            <span class="text-sm font-semibold">Historique des dons</span>
+        </a>
+        <a href="{{ route('profile.edit') }}" class="sidebar-link flex items-center gap-3 px-4 py-3.5 text-slate-600">
+            <span class="material-symbols-outlined text-xl">person</span>
+            <span class="text-sm font-semibold">Mon Profil</span>
         </a>
     </nav>
-    
-    <div class="pt-6 border-t border-outline-variant/20">
-        <a href="#projets" class="block text-center w-full bg-secondary-container text-on-secondary-container font-bold py-3 rounded-lg hover:scale-[0.98] transition-transform shadow-md">
+
+    <div class="pt-6 border-t border-slate-200/50 space-y-3">
+        <a href="#projets" class="w-full py-4 bg-[#0A1128] text-white rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#F5A623] hover:text-[#0A1128] shadow-lg transition-all active:scale-95">
+            <span class="material-symbols-outlined text-[18px]">favorite</span>
             Faire un don
         </a>
-        <form method="POST" action="{{ route('logout') }}" class="mt-4">
+        <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 cursor-pointer transition-all text-red-500 hover:bg-red-50 rounded-lg">
-                <span class="material-symbols-outlined">logout</span>
-                <span class="font-body font-medium text-sm tracking-wide">Déconnexion</span>
+            <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-500/10 font-bold text-sm transition-all rounded-xl group">
+                <span class="material-symbols-outlined text-xl">logout</span>
+                Déconnexion
             </button>
         </form>
     </div>
 </aside>
 
-<main class="flex-grow flex flex-col min-h-screen">
-    
-    <header class="bg-white/80 backdrop-blur-xl docked full-width top-0 sticky z-50 flex justify-between items-center w-full px-8 py-4 shadow-sm shadow-black/5">
-        <div class="flex items-center gap-4">
-            <h1 class="font-headline font-extrabold text-2xl tracking-tighter text-primary-container md:hidden">AL-KHAIR</h1>
-        </div>
-        <div class="flex items-center gap-6 ml-auto">
-            <div class="flex items-center gap-3 pl-6 border-l border-outline-variant/20">
-                <div class="text-right hidden sm:block">
-                    <p class="font-headline font-bold text-sm tracking-tight text-primary-container">{{ auth()->user()->name }}</p>
-                    <p class="text-[10px] font-bold uppercase tracking-widest text-secondary">Membre Actif</p>
+<!-- Main Content -->
+<main class="ml-72 flex-grow min-h-screen relative">
+    <!-- Header -->
+    <header class="fixed right-0 top-0 z-40 bg-white/70 backdrop-blur-2xl border-b border-black/[0.04] flex justify-between items-center px-8 py-4" style="width: calc(100% - 18rem);">
+        <h2 class="text-xl font-black text-[#0A1128] tracking-tight">Bienvenue, {{ auth()->user()->name }}</h2>
+        <div class="flex items-center gap-5">
+            @if(session('success'))
+                <div class="px-4 py-1.5 bg-emerald-50 border border-emerald-100 rounded-lg text-emerald-600 text-xs font-bold shadow-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                    {{ session('success') }}
                 </div>
-                <div class="w-10 h-10 rounded-full border-2 border-secondary bg-primary-container flex items-center justify-center text-white font-bold">
-                    {{ substr(auth()->user()->name, 0, 1) }}
+            @endif
+            @if(session('info'))
+                <div class="px-4 py-1.5 bg-blue-50 border border-blue-100 rounded-lg text-blue-600 text-xs font-bold shadow-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[16px]">info</span>
+                    {{ session('info') }}
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="px-4 py-1.5 bg-red-50 border border-red-100 rounded-lg text-red-600 text-xs font-bold shadow-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[16px]">error</span>
+                    {{ session('error') }}
+                </div>
+            @endif
+            <div class="flex items-center gap-3 pl-5 border-l border-slate-200">
+                <div class="text-right hidden md:block">
+                    <p class="text-sm font-bold text-[#0A1128] truncate max-w-[200px]">{{ auth()->user()->name }}</p>
+                    <p class="text-[10px] text-[#F5A623] font-bold uppercase tracking-wider">Membre Actif</p>
+                </div>
+                <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center font-black text-white text-sm shadow-lg border border-slate-700 overflow-hidden">
+                    @if(auth()->user()->profilePhoto)
+                        <img src="{{ asset('storage/' . auth()->user()->profilePhoto) }}" class="w-full h-full object-cover">
+                    @else
+                        {{ substr(auth()->user()->name, 0, 1) }}
+                    @endif
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="p-6 md:p-10 space-y-10">
+    <div class="pt-28 pb-20 px-8 max-w-7xl mx-auto space-y-8">
         
-        @if(session('success'))
-            <div class="p-4 bg-green-50 border border-green-200 text-green-800 rounded-xl flex items-center gap-3 shadow-sm">
-                <span class="material-symbols-outlined text-green-600" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                <span class="font-semibold">{{ session('success') }}</span>
+        <section class="flex flex-col md:flex-row justify-between items-end gap-6 reveal active">
+            <div>
+                <span class="text-[10px] font-black text-[#F5A623] uppercase tracking-[0.2em] mb-2 block">Dernière MAJ : {{ now()->format('d/m/Y H:i') }}</span>
+                <h3 class="text-4xl font-black text-[#0A1128] tracking-tight">Vue d'ensemble</h3>
             </div>
-        @endif
+        </section>
 
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 relative overflow-hidden bg-primary-container rounded-xl p-8 text-white shadow-xl flex flex-col justify-between min-h-[280px]">
+        <!-- Hero Stats Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 reveal active" style="animation-delay: 0.1s">
+            <!-- Main Card -->
+            <div class="lg:col-span-2 relative overflow-hidden bg-gradient-to-br from-[#0A1128] to-[#162040] rounded-[2rem] p-10 text-white shadow-2xl flex flex-col justify-between min-h-[300px] group border border-slate-700">
                 <div class="relative z-10">
-                    <span class="text-xs font-bold uppercase tracking-[0.2em] text-white/60">Capital de Bienfaisance Total</span>
-                    <h2 class="text-5xl md:text-6xl font-headline font-extrabold mt-4 tracking-tighter">{{ number_format($totalDonated, 0, ',', ' ') }} DH</h2>
-                </div>
-                <div class="relative z-10 flex flex-wrap gap-4 items-end justify-between mt-8">
-                    <div class="flex gap-8">
-                        <div>
-                            <p class="text-xs text-white/50 uppercase tracking-widest mb-1">Dons Réalisés</p>
-                            <p class="text-2xl font-headline font-bold">{{ isset($myDonations) ? $myDonations->count() : 0 }}</p>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-3 bg-white/10 rounded-xl backdrop-blur-sm border border-white/10">
+                            <span class="material-symbols-outlined text-[#F5A623] text-2xl" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
                         </div>
-                        <div>
-                            <p class="text-xs text-white/50 uppercase tracking-widest mb-1">Projets Soutenus</p>
-                            <p class="text-2xl font-headline font-bold">{{ $projectsSupported }}</p>
+                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-[#F5A623]">Capital de Bienfaisance</span>
+                    </div>
+                    <h2 class="text-5xl md:text-7xl font-black mt-2 tracking-tighter">
+                        {{ number_format($totalDonated, 0, ',', ' ') }} <span class="text-2xl text-slate-400 ml-2">DH</span>
+                    </h2>
+                </div>
+                <div class="relative z-10 flex flex-wrap gap-6 items-end justify-between mt-10">
+                    <div class="flex gap-10">
+                        <div class="flex flex-col">
+                            <p class="text-[10px] text-white/50 uppercase tracking-[0.2em] font-black mb-2">Dons Réalisés</p>
+                            <p class="text-3xl font-black text-white">{{ isset($myDonations) ? $myDonations->count() : 0 }}</p>
+                        </div>
+                        <div class="flex flex-col border-l border-white/10 pl-10">
+                            <p class="text-[10px] text-white/50 uppercase tracking-[0.2em] font-black mb-2">Projets Soutenus</p>
+                            <p class="text-3xl font-black text-white">{{ $projectsSupported }}</p>
                         </div>
                     </div>
-                    <div class="bg-amber-500/20 glass-effect border border-amber-500/30 px-4 py-2 rounded-lg flex items-center gap-2">
-                        <span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">verified</span>
-                        <span class="text-sm font-bold tracking-wide">Compte Vérifié</span>
+                    <div class="bg-emerald-500/20 border border-emerald-500/30 px-5 py-2.5 rounded-xl flex items-center gap-2 backdrop-blur-sm shadow-lg">
+                        <span class="material-symbols-outlined text-emerald-400 text-lg" style="font-variation-settings: 'FILL' 1;">verified</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-emerald-400">Compte Vérifié</span>
                     </div>
                 </div>
-                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-secondary opacity-20 blur-[80px] rounded-full pointer-events-none"></div>
-                <div class="absolute right-10 top-10 w-32 h-32 bg-amber-400 opacity-10 blur-[40px] rounded-full pointer-events-none"></div>
+                <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-[#F5A623]/20 rounded-full blur-[80px] group-hover:bg-[#F5A623]/30 transition-colors duration-700 pointer-events-none"></div>
+                <div class="absolute right-10 top-10 w-48 h-48 bg-blue-500/10 blur-[60px] rounded-full pointer-events-none"></div>
             </div>
 
-            <div class="bg-surface-container-lowest rounded-xl p-8 flex flex-col justify-between border border-outline-variant/20 shadow-sm">
-                <div>
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="w-14 h-14 bg-amber-50 flex items-center justify-center rounded-xl">
-                            <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">diversity_3</span>
+            <!-- Impact Card -->
+            <div class="neu-card-static p-10 flex flex-col justify-between relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-8">
+                        <div class="w-14 h-14 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-3xl text-blue-600" style="font-variation-settings: 'FILL' 1;">diversity_3</span>
                         </div>
-                        <span class="text-[10px] font-black bg-amber-100 text-secondary px-3 py-1 rounded-full tracking-widest uppercase">Impact</span>
+                        <span class="text-[10px] font-black text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 uppercase tracking-widest shadow-sm">Impact</span>
                     </div>
-                    <h3 class="text-xl font-headline font-bold text-primary-container">Vies Impactées</h3>
-                    <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">Vos dons ont permis d'améliorer les conditions de vie d'environ <strong class="text-secondary">{{ number_format($livesTouched, 0, ',', ' ') }} personnes</strong>.</p>
+                    <h3 class="text-2xl font-black text-[#0A1128] mb-4">Vies Impactées</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed font-medium">Vos dons ont permis d'améliorer les conditions de vie d'environ <strong class="text-[#F5A623] text-lg block mt-2">{{ number_format($livesTouched, 0, ',', ' ') }} personnes</strong></p>
+                </div>
+                <div class="absolute -bottom-12 -right-12 text-[#0A1128]/5 pointer-events-none">
+                    <span class="material-symbols-outlined text-[180px]" style="font-variation-settings: 'FILL' 1;">public</span>
                 </div>
             </div>
         </section>
 
-        <section id="projets">
-            <div class="flex justify-between items-end mb-6">
-                <h2 class="text-2xl font-headline font-bold tracking-tight text-primary-container">Projets en cours</h2>
+        <!-- Projects Section -->
+        <section id="projets" class="reveal active" style="animation-delay: 0.2s">
+            <div class="flex justify-between items-end mb-8 mt-12">
+                <div>
+                    <h2 class="text-3xl font-black tracking-tight text-[#0A1128]">Projets en cours</h2>
+                    <p class="text-slate-500 font-bold mt-1">Découvrez les campagnes solidaires</p>
+                </div>
             </div>
 
-            <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant/20 mb-8">
-                <form action="{{ url()->current() }}" method="GET" class="flex flex-col md:flex-row gap-4">
+            <!-- Search and Filter -->
+            <div class="neu-card-static p-4 mb-8">
+                <form action="{{ url()->current() }}" method="GET" class="flex flex-col md:flex-row gap-3">
                     <div class="flex-1 relative">
-                        <span class="material-symbols-outlined absolute left-3 top-3 text-outline-variant">search</span>
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher un projet..." class="w-full pl-10 pr-4 py-3 bg-surface border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary-container focus:border-transparent transition-all outline-none">
+                        <span class="material-symbols-outlined absolute left-4 top-4 text-slate-400">search</span>
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher un projet..." class="w-full pl-12 pr-4 py-4 bg-slate-50 border-0 rounded-xl focus:ring-2 focus:ring-[#F5A623] transition-all font-bold text-sm text-[#0A1128]">
                     </div>
                     <div class="w-full md:w-64 relative">
-                        <select name="category" class="w-full px-4 py-3 bg-surface border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary-container outline-none appearance-none font-medium text-on-surface-variant">
+                        <select name="category_id" class="w-full pl-4 pr-12 py-4 bg-slate-50 border-0 rounded-xl focus:ring-2 focus:ring-[#F5A623] appearance-none font-bold text-sm text-[#0A1128] cursor-pointer">
                             <option value="">Toutes les catégories</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
                         </select>
-                        <span class="material-symbols-outlined absolute right-3 top-3 text-outline-variant pointer-events-none">expand_more</span>
+                        <span class="material-symbols-outlined absolute right-4 top-4 text-slate-400 pointer-events-none">expand_more</span>
                     </div>
-                    <button type="submit" class="bg-primary-container text-white px-8 py-3 rounded-lg hover:bg-slate-800 transition font-bold shadow-md">
+                    <button type="submit" class="bg-[#0A1128] text-white px-8 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#F5A623] hover:text-[#0A1128] transition-all shadow-md active:scale-95">
                         Filtrer
                     </button>
-                    @if(request('search') || request('category'))
-                        <a href="{{ url()->current() }}" class="bg-surface-container-high text-on-surface-variant px-6 py-3 rounded-lg hover:bg-surface-container-highest transition font-bold text-center flex items-center justify-center">
+                    @if(request('search') || request('category_id'))
+                        <a href="{{ url()->current() }}" class="bg-slate-100 text-slate-500 px-8 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center justify-center shadow-sm">
                             Effacer
                         </a>
                     @endif
@@ -183,97 +222,133 @@
             </div>
 
             @if(isset($projects) && $projects->count() > 0)
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                     @foreach($projects as $project)
-                        <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-outline-variant/10 flex flex-col">
-                            <div class="h-48 relative overflow-hidden group">
-                                <img src="{{ $project->image ? asset('storage/' . $project->image) : 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=800&auto=format&fit=crop' }}" alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                                <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-[10px] font-bold px-3 py-1 rounded-full text-primary-container shadow-sm uppercase tracking-wider">
+                        <div class="neu-card overflow-hidden flex flex-col group border-transparent hover:border-slate-100">
+                            <!-- Project Image -->
+                            <div class="h-56 relative overflow-hidden bg-slate-100">
+                                <img src="{{ $project->image ? asset('storage/' . $project->image) : 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=800&auto=format&fit=crop' }}" alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128]/90 via-[#0A1128]/20 to-transparent"></div>
+                                <div class="absolute top-5 left-5 bg-white/90 backdrop-blur-md text-[#0A1128] text-[10px] font-black px-3 py-1.5 rounded-lg shadow-sm uppercase tracking-widest">
                                     {{ $project->category->name ?? 'Général' }}
                                 </div>
-                                <h4 class="absolute bottom-4 left-4 right-4 text-white font-bold text-lg leading-tight line-clamp-2">{{ $project->title }}</h4>
                             </div>
-                            
-                            <div class="p-6 flex flex-col flex-grow">
-                                <p class="text-xs text-on-surface-variant mb-4 line-clamp-2 flex-grow">{{ $project->description }}</p>
 
-                                <div class="mb-6">
-                                    <div class="flex justify-between text-xs font-bold mb-2">
-                                        <span class="text-primary-container">{{ number_format($project->currentAmount, 0, ',', ' ') }} DH</span>
-                                        <span class="text-outline-variant">Objectif: {{ number_format($project->goalAmount, 0, ',', ' ') }} DH</span>
+                            <!-- Project Content -->
+                            <div class="p-8 flex flex-col flex-grow bg-white">
+                                <h4 class="font-black text-xl text-[#0A1128] mb-3 leading-tight line-clamp-2 group-hover:text-[#F5A623] transition-colors">{{ $project->title }}</h4>
+                                <p class="text-sm text-slate-500 mb-6 line-clamp-2 flex-grow font-medium leading-relaxed">{{ $project->description }}</p>
+
+                                <!-- Progress Section -->
+                                <div class="mb-8 space-y-3">
+                                    <div class="flex justify-between font-black text-sm mb-1">
+                                        <span class="text-[#0A1128]">{{ number_format($project->currentAmount, 0, ',', ' ') }} DH</span>
+                                        <span class="text-[#F5A623]">
+                                            @php
+                                                $percentage = ($project->goalAmount > 0) ? ($project->currentAmount / $project->goalAmount) * 100 : 0;
+                                                $percentage = min($percentage, 100);
+                                            @endphp
+                                            {{ number_format($percentage, 0) }}%
+                                        </span>
                                     </div>
-                                    <div class="w-full bg-surface-container-high rounded-full h-2 overflow-hidden">
-                                        @php
-                                            $percentage = ($project->goalAmount > 0) ? ($project->currentAmount / $project->goalAmount) * 100 : 0;
-                                            $percentage = min($percentage, 100);
-                                        @endphp
-                                        <div class="bg-gradient-to-r from-secondary to-secondary-container h-full rounded-full" style="width: {{ $percentage }}%"></div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden shadow-inner">
+                                        <div class="progress-bar h-full rounded-full" style="width: {{ $percentage }}%"></div>
+                                    </div>
+                                    <div class="text-[10px] text-slate-400 font-black uppercase tracking-widest">
+                                        Objectif: {{ number_format($project->goalAmount, 0, ',', ' ') }} DH
                                     </div>
                                 </div>
 
-                                <div class="flex gap-3 mt-auto">
-                                    <a href="{{ route('projects.show', $project->id) }}" class="flex-1 text-center bg-surface-container-low text-primary-container py-2.5 rounded-lg hover:bg-surface-container-high transition font-bold text-sm border border-outline-variant/20">Détails</a>
-                                    <a href="{{ route('donations.create', $project->id) }}" class="flex-1 text-center bg-secondary-container text-on-secondary-container py-2.5 rounded-lg hover:bg-yellow-500 transition font-bold text-sm shadow-sm">Soutenir</a>
+                                <!-- Action Buttons -->
+                                <div class="flex gap-4 mt-auto">
+                                    <a href="{{ route('projects.show', $project->id) }}" class="flex-1 text-center bg-slate-50 text-slate-500 py-3.5 rounded-xl hover:bg-slate-100 hover:text-[#0A1128] transition-colors font-black text-[10px] uppercase tracking-widest border border-slate-200">Détails</a>
+                                    <a href="{{ route('donations.create', $project->id) }}" class="flex-1 text-center bg-[#0A1128] text-white py-3.5 rounded-xl hover:bg-[#F5A623] hover:text-[#0A1128] transition-all font-black text-[10px] uppercase tracking-widest shadow-lg active:scale-95">Soutenir</a>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
-                <div class="mt-8 flex justify-center">
+                <div class="mt-10 flex justify-center">
                     {{ $projects->links() }}
                 </div>
             @else
-                <div class="bg-surface-container-lowest p-12 rounded-xl text-center border border-dashed border-outline-variant shadow-sm">
-                    <span class="material-symbols-outlined text-4xl text-outline-variant mb-4">search_off</span>
-                    <h3 class="text-lg font-bold text-primary-container mb-2">Aucun projet trouvé</h3>
-                    <p class="text-sm text-on-surface-variant">Essayez de modifier vos critères de recherche.</p>
+                <div class="neu-card-static p-16 text-center border-2 border-dashed border-slate-200">
+                    <div class="w-20 h-20 mx-auto bg-slate-50 rounded-[2rem] flex items-center justify-center mb-6 border border-slate-100 shadow-sm">
+                        <span class="material-symbols-outlined text-4xl text-slate-300">search_off</span>
+                    </div>
+                    <h3 class="text-2xl font-black text-[#0A1128] mb-2">Aucun projet trouvé</h3>
+                    <p class="text-slate-500 font-medium">Essayez de modifier vos critères de recherche.</p>
                 </div>
             @endif
         </section>
 
-        <section id="historique" class="bg-surface-container-lowest rounded-xl p-8 shadow-sm border border-outline-variant/20 mb-10">
-            <div class="flex justify-between items-center mb-8">
-                <h3 class="text-2xl font-headline font-bold tracking-tight text-primary-container">Historique des Dons</h3>
+        <!-- Donations History Section -->
+        <section id="historique" class="neu-card-static p-8 reveal active" style="animation-delay: 0.3s">
+            <div class="flex justify-between items-center mb-8 mt-4">
+                <div>
+                    <h3 class="text-3xl font-black text-[#0A1128]">Historique des Dons</h3>
+                    <p class="text-slate-500 font-bold mt-1">Retrouvez vos contributions passées</p>
+                </div>
             </div>
-            
+
             @if(isset($myDonations) && $myDonations->count() > 0)
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="text-[10px] uppercase tracking-widest text-on-surface-variant font-black border-b border-outline-variant/30">
-                                <th class="pb-4 px-2">Date</th>
-                                <th class="pb-4 px-2">Projet</th>
-                                <th class="pb-4 px-2 text-right">Montant</th>
-                                <th class="pb-4 px-2 text-center">Statut</th>
+                <div class="overflow-x-auto rounded-2xl border border-slate-100">
+                    <table class="w-full text-left bg-white">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="py-5 px-6 text-[10px] uppercase tracking-widest text-slate-400 font-black">Date</th>
+                                <th class="py-5 px-6 text-[10px] uppercase tracking-widest text-slate-400 font-black">Projet</th>
+                                <th class="py-5 px-6 text-[10px] uppercase tracking-widest text-slate-400 font-black text-right">Montant</th>
+                                <th class="py-5 px-6 text-[10px] uppercase tracking-widest text-slate-400 font-black text-center">Statut & Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-outline-variant/10">
+                        <tbody class="divide-y divide-slate-50">
                             @foreach($myDonations as $donation)
-                                <tr class="hover:bg-surface-container-low transition-colors">
-                                    <td class="py-5 px-2 text-sm font-medium text-on-surface-variant">
+                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                    <td class="py-6 px-6 text-sm text-slate-400 font-bold">
                                         {{ $donation->created_at->format('d/m/Y') }}
                                     </td>
-                                    <td class="py-5 px-2 font-bold text-primary-container">
-                                        {{ $donation->project->title ?? 'Projet clôturé' }}
+                                    <td class="py-6 px-6">
+                                        <a href="{{ $donation->project ? route('projects.show', $donation->project->id) : '#' }}" class="font-black text-[#0A1128] hover:text-[#F5A623] transition-colors line-clamp-1 text-base">
+                                            {{ $donation->project->title ?? 'Projet clôturé' }}
+                                        </a>
                                     </td>
-                                    <td class="py-5 px-2 text-right font-headline font-bold text-secondary">
-                                        {{ number_format($donation->amount, 0, ',', ' ') }} DH
+                                    <td class="py-6 px-6 text-right font-black text-[#0A1128] text-lg">
+                                        {{ number_format($donation->amount, 0, ',', ' ') }} <span class="text-[#F5A623] text-sm ml-1">DH</span>
                                     </td>
-                                    <td class="py-5 px-2">
-                                        <div class="flex justify-center">
+                                    <td class="py-6 px-6">
+                                        <div class="flex justify-center flex-col items-center gap-3">
                                             @if($donation->status === 'PENDING')
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-yellow-50 text-yellow-700 text-[10px] font-bold uppercase tracking-wider border border-yellow-200">En attente</span>
+                                                <span class="inline-flex items-center px-4 py-2 rounded-lg bg-amber-50 text-amber-600 text-[10px] font-black uppercase tracking-widest border border-amber-100 shadow-sm">
+                                                    <span class="material-symbols-outlined text-[14px] mr-1">pending</span> En attente
+                                                </span>
                                             @elseif($donation->status === 'VALIDATED')
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-wider border border-green-200">Validé</span>
+                                                <span class="inline-flex items-center px-4 py-2 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-widest border border-emerald-100 shadow-sm">
+                                                    <span class="material-symbols-outlined text-[14px] mr-1">check_circle</span> Validé
+                                                </span>
                                             @elseif($donation->status === 'PROCESSING')
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider border border-blue-200">En cours</span>
+                                                <span class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-widest border border-blue-100 shadow-sm">
+                                                    <span class="material-symbols-outlined text-[14px] mr-1">sync</span> En cours
+                                                </span>
                                             @elseif($donation->status === 'RECEIVED')
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-[10px] font-bold uppercase tracking-wider border border-indigo-200">Reçu</span>
+                                                <span class="inline-flex items-center px-4 py-2 rounded-lg bg-purple-50 text-purple-600 text-[10px] font-black uppercase tracking-widest border border-purple-100 shadow-sm">
+                                                    <span class="material-symbols-outlined text-[14px] mr-1">done_all</span> Reçu
+                                                </span>
                                             @elseif($donation->status === 'IMPACT')
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-primary-container text-secondary-container text-[10px] font-bold uppercase tracking-wider">🌟 Impact</span>
+                                                <span class="inline-flex items-center px-4 py-2 rounded-lg bg-[#0A1128] text-[#F5A623] text-[10px] font-black uppercase tracking-widest shadow-md">
+                                                    <span class="material-symbols-outlined text-[14px] mr-1">verified</span> Impact
+                                                </span>
                                             @else
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-red-50 text-red-700 text-[10px] font-bold uppercase tracking-wider border border-red-200">Échoué</span>
+                                                <span class="inline-flex items-center px-4 py-2 rounded-lg bg-red-50 text-red-600 text-[10px] font-black uppercase tracking-widest border border-red-100 shadow-sm">
+                                                    <span class="material-symbols-outlined text-[14px] mr-1">cancel</span> Échoué
+                                                </span>
+                                            @endif
+
+                                            @if(in_array($donation->status, ['VALIDATED', 'PROCESSING', 'RECEIVED', 'IMPACT']))
+                                                <a href="{{ route('donations.receipt', $donation->id) }}" class="text-[#0A1128] bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-md text-[10px] font-black flex items-center gap-1 transition-colors uppercase tracking-widest" title="Télécharger le reçu">
+                                                    <span class="material-symbols-outlined text-[14px]">download</span>
+                                                    Reçu
+                                                </a>
                                             @endif
                                         </div>
                                     </td>
@@ -283,27 +358,36 @@
                     </table>
                 </div>
             @else
-                <div class="bg-surface-container-lowest p-12 rounded-xl text-center border border-dashed border-outline-variant shadow-sm">
-                    <span class="material-symbols-outlined text-4xl text-outline-variant mb-4">favorite</span>
-                    <h3 class="text-lg font-bold text-primary-container mb-2">Aucun don effectué</h3>
-                    <p class="text-sm text-on-surface-variant mb-4">Commencez à soutenir les projets solidaires dès maintenant !</p>
-                    <a href="{{ url('/projects') }}" class="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container px-6 py-3 rounded-lg font-bold hover:scale-105 transition-transform">
-                        <span class="material-symbols-outlined">favorite</span>
+                <div class="p-16 text-center border-2 border-dashed border-slate-200 rounded-2xl">
+                    <div class="w-20 h-20 mx-auto bg-amber-50 rounded-[2rem] flex items-center justify-center mb-6 border border-amber-100 shadow-sm">
+                        <span class="material-symbols-outlined text-4xl text-[#F5A623]">favorite</span>
+                    </div>
+                    <h3 class="text-2xl font-black text-[#0A1128] mb-2">Aucun don effectué</h3>
+                    <p class="text-slate-500 font-medium mb-8">Commencez à soutenir les projets solidaires dès maintenant !</p>
+                    <a href="{{ url('/projects') }}" class="inline-flex items-center gap-2 bg-[#0A1128] text-white px-8 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#F5A623] hover:text-[#0A1128] transition-all shadow-lg active:scale-95">
+                        <span class="material-symbols-outlined text-[18px]">explore</span>
                         Explorer les projets
                     </a>
                 </div>
             @endif
         </section>
-        
-    </div>
 
-    <footer class="bg-surface-container-lowest w-full py-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center px-10 mt-auto">
-        <div>
-            <span class="font-headline font-bold text-primary-container">AL-KHAIR</span>
-            <p class="font-body text-[10px] font-medium uppercase tracking-widest text-on-surface-variant mt-1">© 2024 La plateforme solidaire.</p>
-        </div>
-    </footer>
+    </div>
 </main>
+
+<script>
+    // Scroll reveal animation
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>

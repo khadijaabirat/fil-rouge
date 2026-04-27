@@ -19,8 +19,8 @@ class CheckRole
             {
                 abort(403,'accés non autorisé');
             }
-       if ($request->user()->role === 'association' && $request->user()->status !== 'ACTIVE') {
-            return redirect()->route('home')->with('error', 'Votre compte est en attente de validation ou bloqué.');
+       if ($request->user()->role === 'association' && $request->user()->status !== 'ACTIVE' && !$request->routeIs('association.pending')) {
+            return redirect()->route('association.pending');
         }
         return $next($request);
     }

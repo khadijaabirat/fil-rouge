@@ -29,6 +29,9 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth','role:admin'])->group(function(){
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/admin/donation/{id}', [AdminController::class, 'showDonation'])->name('admin.donation.show');
+Route::get('/admin/validations', [AdminController::class, 'validations'])->name('admin.validations');
+Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
 Route::post('/admin/association/{id}/validate', [AdminController::class, 'validateAssociation'])->name('admin.validateAssociation');
 Route::post('/admin/donation/{id}/validate', [AdminController::class, 'validateDonation'])->name('admin.validateDonation');
 Route::post('/admin/donation/{id}/reject', [AdminController::class, 'rejectDonation'])->name('admin.rejectDonation');
@@ -45,8 +48,13 @@ Route::post('/admin/project/{id}/approve-withdrawal', [AdminController::class, '
  
     });
 
+Route::middleware(['auth','role:association'])->group(function(){
+Route::get('/association/pending', [AssociationController::class, 'pending'])->withoutMiddleware(['verified'])->name('association.pending');
+});
+
 Route::middleware(['auth','verified','role:association'])->group(function(){
 Route::get('/association/dashboard', [AssociationController::class, 'dashboard'])->name('association.dashboard');
+Route::get('/association/projects/expired', [AssociationController::class, 'expiredProjects'])->name('association.projects.expired');
  
 Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
@@ -73,6 +81,9 @@ Route::post('/projects/{id}/donate', [DonationController::class, 'store'])->name
 //  Stripe
 Route::get('/donations/{id}/success', [DonationController::class, 'success'])->name('donations.success');
 Route::get('/donations/{id}/cancel', [DonationController::class, 'cancel'])->name('donations.cancel');
+
+// Confirmation
+Route::get('/donations/{id}/confirmation', [DonationController::class, 'confirmation'])->name('donations.confirmation');
 
 // PDF Receipt
 Route::get('/donations/{id}/receipt', [\App\Http\Controllers\PdfController::class, 'downloadDonationReceipt'])->name('donations.receipt');
