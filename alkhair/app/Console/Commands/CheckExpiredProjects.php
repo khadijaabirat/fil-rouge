@@ -7,9 +7,8 @@ use App\Models\Project;
 
 class CheckExpiredProjects extends Command
 {
-    protected $signature = 'projects:check-expired';
-    protected $description = 'Check and close expired projects automatically';
-
+protected $signature = 'projects:close-expired';
+protected $description = 'Ferme automatiquement les projets dont la date limite est dépassée';
     public function handle()
     {
         $expiredProjects = Project::where('status', 'OPEN')
@@ -18,12 +17,15 @@ class CheckExpiredProjects extends Command
 
         $count = 0;
         foreach ($expiredProjects as $project) {
-            $project->checkDeadline();
+           $isCompleted = $project->checkDeadline();
+            
+            if ($isCompleted) {
             $this->info("Project #{$project->id} - {$project->title} has been closed.");
             $count++;
+            }
         }
 
-        $this->info("Total expired projects processed: {$count}");
-        return Command::SUCCESS;
+$this->info("{$count} projets ont été fermés automatiquement.");
+        return Command::SUCCESS; 
     }
 }
