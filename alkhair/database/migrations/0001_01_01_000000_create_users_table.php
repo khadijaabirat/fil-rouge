@@ -32,6 +32,7 @@ return new class extends Migration
 
             $table->rememberToken();
               $table->timestamp('kyc_verified_at')->nullable();
+              $table->softDeletes();
             $table->timestamps();
 
         });

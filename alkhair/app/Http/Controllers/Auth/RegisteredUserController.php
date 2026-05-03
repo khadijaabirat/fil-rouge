@@ -38,10 +38,14 @@ public function store(RegisterUserRequest $request): RedirectResponse
         $logoPath = null;
 
         try {
-            if ($request->role === 'association') {
-                $kycPath = $request->file('documentKYC')->store('kyc_documents', 'local');
-                $logoPath = $request->file('profilePhoto')->store('logos', 'public');
-            }
+           if ($request->role === 'association') {
+    if ($request->hasFile('documentKYC')) {
+        $kycPath = $request->file('documentKYC')->store('kyc_documents', 'local');
+    }
+    if ($request->hasFile('profilePhoto')) {
+        $logoPath = $request->file('profilePhoto')->store('logos', 'public');
+    }
+}
 
             $user = DB::transaction(function () use ($request, $kycPath, $logoPath) {
                 return User::create([

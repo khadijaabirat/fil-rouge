@@ -5,18 +5,17 @@ namespace App\Services;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Project;
 use App\Models\User;
-
+use App\Models\Category;
 class CacheService
 {
-    const CACHE_TTL = 3600; // 1 hour
+    const CACHE_TTL = 3600;  
 
     public function getStatistics()
     {
         return Cache::remember('statistics', self::CACHE_TTL, function () {
             return [
                 'totalCollected' => Project::sum('currentAmount'),
-                'activeAssociations' => User::where('role', 'association')
-                    ->count(),
+                'activeAssociations' => User::where('role', 'association')->where('status', 'ACTIVE')->count(),
                 'completedProjects' => Project::where('status', 'COMPLETED')->count(),
                 'openProjects' => Project::where('status', 'OPEN')->count(),
             ];
@@ -30,6 +29,7 @@ class CacheService
                 ->whereColumn('currentAmount', '<', 'goalAmount')
                 ->with(['association', 'category'])
                 ->latest()
+                ->take(12)
                 ->get();
         });
     }
@@ -37,7 +37,7 @@ class CacheService
     public function getCategories()
     {
         return Cache::remember('categories', 86400, function () {
-            return \App\Models\Category::all();
+            return Category::all();
         });
     }
 

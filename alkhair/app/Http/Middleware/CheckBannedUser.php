@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class CheckBannedUser
 {
     /**
-     * Handle an incoming request.
+     *  
      *
      * @param  Closure(Request): (Response)  $next
      */

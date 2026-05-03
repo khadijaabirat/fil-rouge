@@ -17,9 +17,10 @@ return new class extends Migration
         $table->string('message')->nullable();
         $table->dateTime('donationDate')->useCurrent();
         $table->boolean('isAnonymous')->default(false);
-        $table->enum('status', ['PENDING', 'VALIDATED', 'PROCESSING', 'RECEIVED', 'IMPACT'])->default('PENDING');
+        $table->enum('status', ['PENDING', 'VALIDATED', 'PROCESSING', 'RECEIVED', 'IMPACT','FAILED'])->default('PENDING');
        $table->foreignId('donator_id')->nullable()->constrained('users')->nullOnDelete();
         $table->foreignId('project_id')->constrained('projects');
+        $table->softDeletes();
             $table->timestamps();
         });
     }

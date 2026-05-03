@@ -6,81 +6,66 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Donation;
 use App\Models\Project;
-use App\Models\Category;
-use App\Models\Payment;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
- use App\Notifications\DonationStatusChanged;
-use App\Notifications\AssociationStatusChanged;
-
+use App\Services\AssociationService;
+use App\Services\DonationService;
+use App\Services\ProjectService;
+ 
 class AdminController extends Controller
 {
-    public function dashboard(){
-        $pendingAssociations = User::where('role', 'association')
-            ->where('status','PENDING')
-            ->latest()
-            ->take(4)
-            ->get();
-            
-        $pendingDonationsCount = Donation::whereHas('payment', function ($query) {
-                $query->where('status', 'PENDING')
-                ->whereNotNull('paymentReceipt');
-            })
-            ->where('status', 'PENDING')
-            ->count();
-            
-        $recentManualDonations = Donation::with(['donator', 'project', 'payment'])
-            ->whereHas('payment', function ($query) {
-                $query->whereNotNull('paymentReceipt');
-            })
-            ->latest()
-            ->take(5)
-            ->get();
-            
-        $recentActivities = Donation::with(['donator', 'project'])
-            ->latest()
-            ->take(3)
-            ->get();
+    protected $associationService;
+    protected $donationService;
+    protected $projectService;
+ 
+    public function __construct(
+        AssociationService $associationService,
+        DonationService $donationService,
+        ProjectService $projectService
+    ) {
+        $this->associationService = $associationService;
+        $this->donationService = $donationService;
+        $this->projectService = $projectService;
+    }
+ 
+    public function dashboard()
+    {
+        $pendingAssociations = $this->associationService->getPendingAssociations(4);
+        $pendingDonationsCount = $this->donationService->countPendingDonations();
+        $recentManualDonations = $this->donationService->getRecentManualDonations(5);
+        $recentActivities = $this->donationService->getRecentActivities(3);
+        $withdrawalRequests = $this->projectService->getWithdrawalRequests();
 
-        // Demandes de retrait en attente
-        $withdrawalRequests = Project::with(['association', 'donations' => function($q) {
-                $q->where('status', 'PROCESSING');
-            }])
-            ->whereHas('donations', function($q) {
-                $q->where('status', 'PROCESSING');
-            })
-            ->latest()
-            ->get();
-
-        return view('admin.dashboard', compact('pendingAssociations', 'pendingDonationsCount', 'recentManualDonations', 'recentActivities', 'withdrawalRequests'));
+        return view('admin.dashboard', compact(
+            'pendingAssociations',
+            'pendingDonationsCount',
+            'recentManualDonations',
+            'recentActivities',
+            'withdrawalRequests'
+        ));
     }
 
-    public function showDonation($id) {
+ 
+    public function showDonation($id)
+    {
         $donation = Donation::with(['donator', 'project.association', 'payment'])->findOrFail($id);
         return view('admin.donation-details', compact('donation'));
     }
+ 
+    public function validations()
+    {
+        $pendingAssociations = $this->associationService->getPendingAssociations();
+        $pendingDonations = $this->donationService->getPendingDonations();
+        $managedProjects = $this->projectService->getManagedProjects();
 
-    public function validations() {
-        $pendingAssociations = User::where('role', 'association')
-            ->where('status','PENDING')
-            ->get();
-            
-        $pendingDonations = Donation::with(['donator', 'project', 'payment'])
-            ->whereHas('payment', function ($query) {
-                $query->where('status', 'PENDING')
-                ->whereNotNull('paymentReceipt');
-            })
-            ->where('status', 'PENDING')
-            ->get();
-
-        $managedProjects = Project::whereIn('status', ['OPEN', 'COMPLETED', 'SUSPENDED'])
-            ->with('association')
-            ->get();
-
-        return view('admin.validation', compact('pendingAssociations', 'pendingDonations', 'managedProjects'));
+        return view('admin.validation', compact(
+            'pendingAssociations',
+            'pendingDonations',
+            'managedProjects'
+        ));
     }
 
-    public function users(Request $request) {
+ 
+    public function users(Request $request)
+    {
         $query = User::query()->where('role', '!=', 'admin');
         
         if ($request->has('role') && $request->role !== 'all') {
@@ -97,141 +82,119 @@ class AdminController extends Controller
 
 
 
-public function validateAssociation($id){
-    $association = User::where('role', 'association')->findOrFail($id);
-    
-    $association->update(['status' => 'ACTIVE']);
-    $association->notify(new AssociationStatusChanged('ACTIVE'));
-    
-    return back()->with('success', 'Le compte de l association a été validé');
-}
-
-
-
- public function validateDonation($id)
+  
+    public function validateAssociation($id)
     {
-        $donation = Donation::findOrFail($id);
-        if ($donation->status !== 'PENDING') {
-            return back()->with('error', 'Ce don a déjà été traité.');
+        try {
+            $association = User::where('role', 'association')->findOrFail($id);
+            $this->associationService->validate($association);
+            
+            return back()->with('success', 'Le compte de l\'association a été validé');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-        
-        DB::transaction(function () use ($donation) {
-            $payment = Payment::where('donation_id', $donation->id)->first();
-       
-            $donation->update(['status' => 'VALIDATED']);
-            if ($payment) {
-                $payment->update(['status' => 'SUCCESS']);
-            }
+    }
+
+ 
+    public function verifyKyc($id)
+    {
+        try {
+            $association = User::where('role', 'association')->findOrFail($id);
+            $this->associationService->verifyKyc($association);
             
-            $project = Project::findOrFail($donation->project_id);
-            $project->increment('currentAmount', $donation->amount);
-            $project->calculateProgress();
+            return back()->with('success', 'Le KYC de l\'association a été vérifié');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+
+ 
+    public function validateDonation($id)
+    {
+        try {
+            $donation = Donation::findOrFail($id);
+            $this->donationService->validate($donation);
             
-            if ($donation->donator) {
-                $donation->donator->notify(new DonationStatusChanged($donation, 'VALIDATED'));
-            }
-        });
-        
-        return back()->with('success', 'Le don manuel a été validé et le montant a été ajouté au projet !');
+            return back()->with('success', 'Le don manuel a été validé et le montant a été ajouté au projet !');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
 
 
-
+ 
     public function rejectDonation($id)
     {
-        $donation = Donation::findOrFail($id);
-        if ($donation->status !== 'PENDING') {
-            return back()->with('error', 'Impossible de refuser ce don car il a déjà été traité.');
+        try {
+            $donation = Donation::findOrFail($id);
+            $this->donationService->reject($donation);
+            
+            return back()->with('error', 'Le don a été refusé car le reçu est invalide.');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-        
-        $payment = Payment::where('donation_id', $donation->id)->first();
-       
-        
-        $donation->update(['status' => 'FAILED']);
-        if ($payment) {
-            $payment->update(['status' => 'FAILED']);
+    }
+ 
+    public function approveWithdrawal($id)
+    {
+        try {
+            $project = Project::findOrFail($id);
+            $this->projectService->approveWithdrawal($project);
+            
+            return back()->with('success', 'Les fonds ont été marqués comme transférés à l\'association.');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-        
-        if ($payment && $payment->paymentReceipt && Storage::disk('public')->exists($payment->paymentReceipt)) {
-            Storage::disk('public')->delete($payment->paymentReceipt);
+    }
+ 
+    public function banAssociation($id)
+    {
+        try {
+            $association = User::where('role', 'association')->findOrFail($id);
+            $this->associationService->ban($association);
+            
+            return back()->with('success', 'L\'association a été bannie et tous ses projets ont été suspendus.');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-        
-        if ($donation->donator) {
-            $donation->donator->notify(new DonationStatusChanged($donation, 'FAILED'));
+    }
+
+ 
+    public function suspendProject($id)
+    {
+        try {
+            $project = Project::findOrFail($id);
+            $this->projectService->suspend($project);
+            
+            return back()->with('success', 'Le projet a été suspendu avec succès. Les dons sont désormais bloqués.');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-        
-        return back()->with('error', 'Le don a été refusé car le reçu est invalide.');
     }
-
-
-     public function approveWithdrawal($id)
+ 
+    public function unbanAssociation($id)
     {
-        $project = Project::findOrFail($id);
-
-        $project->donations()->where('status', 'PROCESSING')->update(['status' => 'RECEIVED']);
-
-        return back()->with('success', 'Les fonds ont été marqués comme transférés à l\'association.');
-    }
-
-
-public function banAssociation($id)
-    {
-        $association = User::where('role', 'association')->findOrFail($id);
-        
-        $association->update(['status' => 'BANNED']);
-        $association->projects()->update(['status' => 'SUSPENDED']);
-        $association->notify(new AssociationStatusChanged('BANNED'));
-        
-        return back()->with('success', 'L\'association a été bannie et tous ses projets ont été suspendus.');
-    }
-
-
-
-public function suspendProject($id)
-    {
-        $project = Project::findOrFail($id);
-
-        $project->update(['status' => 'SUSPENDED']);
-
-        return back()->with('success', 'Le projet a été suspendu avec succès. Les dons sont désormais bloqués.');
-    }
-
-
-
-
-     public function unbanAssociation($id)
-    {
-$association = User::where('role', 'association')->findOrFail($id);
-         $association->update(['status' => 'ACTIVE']);
-         $association->notify(new AssociationStatusChanged('ACTIVE'));
-
-$suspendedProjects = $association->projects()->where('status', 'SUSPENDED')->get();
-
-foreach ($suspendedProjects as $project) {
-            $project->update(['status' => 'OPEN']);
-            $project->calculateProgress();
-            if (method_exists($project, 'checkDeadline')) {
-                $project->checkDeadline();
-            }
+        try {
+            $association = User::where('role', 'association')->findOrFail($id);
+            $this->associationService->unban($association);
+            
+            return back()->with('success', 'L\'association a été réactivée avec succès.');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-        return back()->with('success', 'L\'association a été réactivée avec succès.');
     }
-
-
-
-
-     public function restoreProject($id)
+ 
+    public function restoreProject($id)
     {
-        $project = Project::findOrFail($id);
-
-         $project->update(['status' => 'OPEN']);
-
-         $project->calculateProgress();
-        $project->checkDeadline();
-
-        return back()->with('success', 'Le projet a été restauré et est de nouveau en ligne.');
+        try {
+            $project = Project::findOrFail($id);
+            $this->projectService->restore($project);
+            
+            return back()->with('success', 'Le projet a été restauré et est de nouveau en ligne.');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
-
-
 }

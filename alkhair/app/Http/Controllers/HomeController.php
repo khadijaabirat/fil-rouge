@@ -24,33 +24,14 @@ class HomeController extends Controller
         $statistics = $this->cacheService->getStatistics();
         $categories = $this->cacheService->getCategories();
 
+         $directCount = Project::count();
+       
         $filters = $request->only(['search', 'category', 'ville', 'sort']);
         
-        if (empty($filters['search']) && empty($filters['category']) && empty($filters['ville'])) {
-            $projects = $this->cacheService->getOpenProjects();
+       if (empty(array_filter($filters))) {
+             $projects = $this->cacheService->getOpenProjects();
         } else {
-            $query = Project::with(['association', 'category'])
-                ->where('status', 'OPEN')
-                ->whereColumn('currentAmount', '<', 'goalAmount');
-            
-            if (!empty($filters['search'])) {
-                $query->where(function($q) use ($filters) {
-                    $q->where('title', 'like', '%' . $filters['search'] . '%')
-                      ->orWhere('description', 'like', '%' . $filters['search'] . '%');
-                });
-            }
-            
-            if (!empty($filters['category'])) {
-                $query->where('category_id', $filters['category']);
-            }
-
-            if (!empty($filters['ville'])) {
-                $query->whereHas('association', function($q) use ($filters) {
-                    $q->where('ville', $filters['ville']);
-                });
-            }
-            
-            $projects = $query->latest()->limit(12)->get();
+            $projects = ProjectSearchService::search($filters)->limit(12)->get();
         }
         
         $total = $statistics['totalCollected'];
@@ -62,7 +43,7 @@ class HomeController extends Controller
                 'totalCollected' => $total,  
                 'totalInMillions' => $total / 1000000,
                 'verifiedAssociations' => $statistics['activeAssociations'],
-                'completedProjects' => $statistics['completedProjects']
+                'completedProjects' => $directCount   
             ]
         ));
     }

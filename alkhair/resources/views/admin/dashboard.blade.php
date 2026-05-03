@@ -167,9 +167,16 @@
                     <p class="text-sm font-bold text-[#0A1128]">{{ auth()->user()->name }}</p>
                     <p class="text-[10px] text-[#F5A623] font-bold uppercase tracking-wider">Super Admin</p>
                 </div>
-                <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center font-black text-[#F5A623] text-sm shadow-lg">
-                    {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
-                </div>
+                @if(auth()->user()->profilePhoto)
+                    <img src="{{ asset('storage/' . auth()->user()->profilePhoto) }}" alt="{{ auth()->user()->name }}" class="h-10 w-10 rounded-xl object-cover border border-slate-200 shadow-lg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center font-black text-[#F5A623] text-sm shadow-lg" style="display:none;">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+                    </div>
+                @else
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center font-black text-[#F5A623] text-sm shadow-lg border border-[#F5A623]/20">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+                    </div>
+                @endif
             </div>
         </div>
     </header>
@@ -204,8 +211,8 @@
             $activeAssocs = \App\Models\User::where('role', 'association')->where('status', 'ACTIVE')->count() ?? 0;
             $totalDonors = \App\Models\User::where('role', 'donator')->count() ?? 0;
             $completedProjects = \App\Models\Project::where('status', 'COMPLETED')->count() ?? 0;
-            $totalProjects = \App\Models\Project::count() ?? 1;
-            $impactRate = ($completedProjects / $totalProjects) * 100;
+            $totalProjects = \App\Models\Project::count() ?? 0;
+            $impactRate = $totalProjects > 0 ? ($completedProjects / $totalProjects) * 100 : 0;
         @endphp
         <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
             <!-- Total Collecté -->

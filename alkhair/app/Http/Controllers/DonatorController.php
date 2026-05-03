@@ -19,7 +19,7 @@ class DonatorController extends Controller
         $donator = Auth::user();
 
         $myDonations = Donation::where('donator_id', $donator->id)
-            ->with(['project', 'payment'])
+            ->with(['project.association', 'payment'])
             ->latest()
             ->get();
 

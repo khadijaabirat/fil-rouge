@@ -12,8 +12,7 @@ class UserSeeder extends Seeder
     {
 
     $defaultPassword = Hash::make('password');
-        // ============ ADMIN ============
-      User::create([
+       User::create([
             'name' => 'Admin AlKhair',
             'email' => 'admin@alkhair.ma',
             'password' => $defaultPassword,
@@ -24,8 +23,7 @@ class UserSeeder extends Seeder
             'status' => 'ACTIVE',
         ]);
 
-        // ============ ASSOCIATIONS (IDs 2-13) ============
-          $associationsData = [
+           $associationsData = [
             [
                 'name' => 'Association Espoir et Avenir',
                 'email' => 'espoir.avenir@alkhair.ma',
@@ -207,8 +205,7 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        // ============ DONATEURS (IDs 14-28) ============
-         $donators = [
+          $donators = [
             [
                 'name' => 'Ahmed Benali',
                 'email' => 'ahmed.benali@gmail.com',

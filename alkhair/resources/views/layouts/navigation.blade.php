@@ -11,27 +11,30 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @if(Auth::user()->isAdmin())
-                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="font-body font-bold text-primary-container">
-                            {{ __('Dashboard Admin') }}
-                        </x-nav-link>
-                    @elseif(Auth::user()->isAssociation())
-                        <x-nav-link :href="route('association.dashboard')" :active="request()->routeIs('association.dashboard')" class="font-body font-bold text-primary-container">
-                            {{ __('Espace Association') }}
-                        </x-nav-link>
-                    @elseif(Auth::user()->isDonator())
-                        <x-nav-link :href="route('donator.dashboard')" :active="request()->routeIs('donator.dashboard')" class="font-body font-bold text-primary-container">
-                            {{ __('Mon Espace') }}
-                        </x-nav-link>
-                    @else
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="font-body font-bold text-primary-container">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                    @endif
+                    @auth
+                        @if(Auth::user()->isAdmin())
+                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="font-body font-bold text-primary-container">
+                                {{ __('Dashboard Admin') }}
+                            </x-nav-link>
+                        @elseif(Auth::user()->isAssociation())
+                            <x-nav-link :href="route('association.dashboard')" :active="request()->routeIs('association.dashboard')" class="font-body font-bold text-primary-container">
+                                {{ __('Espace Association') }}
+                            </x-nav-link>
+                        @elseif(Auth::user()->isDonator())
+                            <x-nav-link :href="route('donator.dashboard')" :active="request()->routeIs('donator.dashboard')" class="font-body font-bold text-primary-container">
+                                {{ __('Mon Espace') }}
+                            </x-nav-link>
+                        @else
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="font-body font-bold text-primary-container">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+                        @endif
+                    @endauth
                 </div>
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                @auth
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-4 py-2 border border-outline-variant/30 text-sm leading-4 font-bold rounded-full text-primary-container bg-surface-container-lowest hover:bg-surface-container-low focus:outline-none transition ease-in-out duration-150 shadow-sm">
@@ -64,6 +67,7 @@
                         </form>
                     </x-slot>
                 </x-dropdown>
+                @endauth
             </div>
 
             <div class="-me-2 flex items-center sm:hidden">
@@ -78,6 +82,7 @@
     </div>
 
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-surface-container-lowest border-b border-outline-variant/20 shadow-md absolute w-full">
+        @auth
         <div class="pt-2 pb-3 space-y-1">
             @if(Auth::user()->isAdmin())
                 <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="font-body font-bold text-primary-container">
@@ -125,5 +130,6 @@
                 </form>
             </div>
         </div>
+        @endauth
     </div>
 </nav>

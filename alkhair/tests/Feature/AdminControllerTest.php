@@ -47,7 +47,7 @@ class AdminControllerTest extends TestCase
         Notification::fake();
 
         $response = $this->actingAs($this->admin)
-            ->post(route('admin.associations.validate', $this->association->id));
+            ->post(route('admin.validateAssociation', $this->association->id));
 
         $response->assertRedirect();
         $this->assertDatabaseHas('users', [
@@ -84,7 +84,7 @@ class AdminControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin)
-            ->post(route('admin.donations.validate', $donation->id));
+            ->post(route('admin.validateDonation', $donation->id));
 
         $response->assertRedirect();
         $this->assertDatabaseHas('donations', [
@@ -121,7 +121,7 @@ class AdminControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin)
-            ->post(route('admin.donations.reject', $donation->id));
+            ->post(route('admin.rejectDonation', $donation->id));
 
         $response->assertRedirect();
         $this->assertDatabaseHas('donations', [
@@ -146,7 +146,7 @@ class AdminControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin)
-            ->post(route('admin.withdrawals.approve', $project->id));
+            ->post(route('admin.approveWithdrawal', $project->id));
 
         $response->assertRedirect();
         $this->assertDatabaseHas('donations', [
@@ -167,7 +167,7 @@ class AdminControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin)
-            ->post(route('admin.associations.ban', $this->association->id));
+            ->post(route('admin.banAssociation', $this->association->id));
 
         $response->assertRedirect();
         $this->assertDatabaseHas('users', [
@@ -192,7 +192,7 @@ class AdminControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin)
-            ->post(route('admin.associations.unban', $this->association->id));
+            ->post(route('admin.unbanAssociation', $this->association->id));
 
         $response->assertRedirect();
         $this->assertDatabaseHas('users', [
@@ -214,7 +214,7 @@ class AdminControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin)
-            ->post(route('admin.projects.suspend', $project->id));
+            ->post(route('admin.suspendProject', $project->id));
 
         $response->assertRedirect();
         $this->assertDatabaseHas('projects', [
@@ -232,7 +232,7 @@ class AdminControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin)
-            ->post(route('admin.projects.restore', $project->id));
+            ->post(route('admin.restoreProject', $project->id));
 
         $response->assertRedirect();
         $this->assertDatabaseHas('projects', [

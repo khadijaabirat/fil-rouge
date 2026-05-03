@@ -9,7 +9,7 @@ use Illuminate\Validation\Rules\Password;
 class RegisterUserRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     *  
      */
     public function authorize(): bool
     {
@@ -17,9 +17,9 @@ class RegisterUserRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     *  
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * @return array<string, 
      */
     public function rules(): array
     {
@@ -45,11 +45,9 @@ class RegisterUserRequest extends FormRequest
     {
         return [
             'description.min' => 'La description de l\'association doit contenir au moins 50 caractères pour être validée.',
-            'amount.min' => 'Le montant minimum du don est de 100 DH.',
-            'documentKYC.max' => 'Le document KYC ne peut pas dépasser 5 Mo.',
+             'documentKYC.max' => 'Le document KYC ne peut pas dépasser 5 Mo.',
             'profilePhoto.max' => 'La photo de profil ne peut pas dépasser 5 Mo.',
-            'paymentReceipt.max' => 'Le reçu de paiement ne peut pas dépasser 5 Mo.',
-            'message.max' => 'Votre message ne peut pas dépasser 500 caractères.',
+             'message.max' => 'Votre message ne peut pas dépasser 500 caractères.',
         ];
     }
 }

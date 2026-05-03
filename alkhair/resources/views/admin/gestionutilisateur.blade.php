@@ -146,6 +146,7 @@
                             <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Email</th>
                             <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Rôle</th>
                             <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Statut</th>
+                            <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">KYC</th>
                             <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Inscription</th>
                             <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">Actions</th>
                         </tr>
@@ -155,9 +156,16 @@
                             <tr class="hover:bg-slate-50/50 transition-colors">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 flex items-center justify-center text-[#0A1128] font-black text-sm">
-                                            {{ substr($user->name, 0, 1) }}
-                                        </div>
+                                        @if($user->profilePhoto)
+                                            <img src="{{ asset('storage/' . $user->profilePhoto) }}" alt="{{ $user->name }}" class="w-10 h-10 rounded-xl object-cover border border-slate-200 shadow-sm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                            <div class="w-10 h-10 rounded-xl overflow-hidden bg-gradient-to-br from-[#0A1128] to-[#1a2744] border border-slate-200 flex items-center justify-center text-[#F5A623] font-black text-xs" style="display:none;">
+                                                {{ strtoupper(substr($user->name, 0, 1)) }}
+                                            </div>
+                                        @else
+                                            <div class="w-10 h-10 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 flex items-center justify-center text-[#0A1128] font-black text-sm">
+                                                {{ substr($user->name, 0, 1) }}
+                                            </div>
+                                        @endif
                                         <span class="font-bold text-[#0A1128]">{{ $user->name }}</span>
                                     </div>
                                 </td>
@@ -184,10 +192,38 @@
                                         </span>
                                     @endif
                                 </td>
+                                <td class="px-6 py-4">
+                                    @if($user->role === 'association')
+                                        @if($user->kyc_verified_at)
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-widest border border-emerald-100 shadow-sm">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Vérifié
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-600 text-[10px] font-black uppercase tracking-widest border border-amber-100 shadow-sm">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> En attente
+                                            </span>
+                                        @endif
+                                    @else
+                                        <span class="text-[10px] font-bold uppercase tracking-widest text-slate-300">-</span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4 text-xs font-bold text-slate-400">{{ $user->created_at->format('d M Y') }}</td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-2">
                                         @if($user->role === 'association')
+                                            @if($user->documentKYC)
+                                                <a href="{{ asset('storage/' . $user->documentKYC) }}" target="_blank" class="p-2.5 bg-blue-50 text-blue-600 hover:bg-blue-500 hover:text-white rounded-xl transition-all shadow-sm" title="Voir document KYC">
+                                                    <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                                </a>
+                                            @endif
+                                            @if(!$user->kyc_verified_at)
+                                                <form action="{{ route('admin.verifyKyc', $user->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="p-2.5 bg-green-50 text-green-600 hover:bg-green-500 hover:text-white rounded-xl transition-all shadow-sm" title="Vérifier KYC">
+                                                        <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                                    </button>
+                                                </form>
+                                            @endif
                                             @if($user->status === 'BANNED')
                                                 <form action="{{ route('admin.unbanAssociation', $user->id) }}" method="POST">
                                                     @csrf

@@ -18,7 +18,8 @@ return new class extends Migration
         $table->string('videoLink')->nullable();
         $table->string('image')->nullable();
 $table->foreignId('project_id')->constrained('projects');
-            $table->timestamps();
+         $table->softDeletes();   
+$table->timestamps();
         });
     }
 

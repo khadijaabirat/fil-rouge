@@ -6,124 +6,95 @@ use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\ImpactReport;
 use Illuminate\Support\Facades\Auth;
-use App\Notifications\ImpactReportPublished;
+use App\Http\Requests\StoreImpactReportRequest;
+use App\Services\ImpactReportService;
 
+ 
 class ImpactReportController extends Controller
 {
+    protected $impactReportService;
+
+    public function __construct(ImpactReportService $impactReportService)
+    {
+        $this->impactReportService = $impactReportService;
+    }
+
+  
     public function index(Request $request)
     {
-        $query = ImpactReport::with(['project.association', 'project.category'])
-            ->whereHas('project')
-            ->latest('completionDate');
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->whereHas('project', function($projectQuery) use ($search) {
-                    $projectQuery->where('title', 'like', "%{$search}%")
-                        ->orWhere('ville', 'like', "%{$search}%")
-                        ->orWhereHas('association', function($assocQuery) use ($search) {
-                            $assocQuery->where('name', 'like', "%{$search}%");
-                        });
-                })
-                ->orWhere('description', 'like', "%{$search}%");
-            });
-        }
-
-        $impactReports = $query->paginate(12);
+        $searchTerm = $request->filled('search') ? $request->search : null;
+        $impactReports = $this->impactReportService->searchReports($searchTerm)->paginate(12);
 
         return view('impact.indeximpact', compact('impactReports'));
     }
-
+ 
     public function show($id)
     {
-        $impactReport = ImpactReport::with(['project.association', 'project.category', 'project.donations.donator'])
-            ->findOrFail($id);
+        $impactReport = ImpactReport::with([
+            'project.association',
+            'project.category',
+            'project.donations.donator'
+        ])->findOrFail($id);
         
         $project = $impactReport->project;
 
         return view('impact.showimpact', compact('impactReport', 'project'));
     }
-
+ 
     public function create($id = null)
     {
-        // إذا كان id = 0 أو null، نعرض liste des projets
-        if ($id === null || $id == 0) {
-            $association = Auth::user();
-            
-            // المشاريع اللي محتاجة rapport d'impact
-            $projectsNeedingReport = Project::where('association_id', $association->id)
-                ->where(function($query) {
-                    // Projets COMPLETED بلا rapport
-                    $query->where('status', 'COMPLETED')
-                          ->whereDoesntHave('impactReport');
-                })
-                ->orWhere(function($query) use ($association) {
-                    // Projets avec dons RECEIVED
-                    $query->where('association_id', $association->id)
-                          ->whereHas('donations', function($q) {
-                              $q->where('status', 'RECEIVED');
-                          });
-                })
-                ->with(['category', 'donations'])
-                ->get();
-            
+        $association = Auth::user();
+
+         if ($id === null || $id == 0) {
+            $projectsNeedingReport = $this->impactReportService->getProjectsNeedingReport($association);
             return view('impact.select_project', compact('projectsNeedingReport'));
         }
         
-        // Sinon, formulaire normal pour un projet spécifique
-        $project = Project::findOrFail($id);
+         $project = Project::findOrFail($id);
 
         if ($project->association_id !== Auth::id()) {
-            abort(403, 'Accès non autorisé.');
+            return redirect()->route('impact-reports.create')
+                ->with('error', 'Accès non autorisé.');
         }
         
         if ($project->impactReport()->exists()) {
-            return redirect()->route('association.dashboard')
+            return redirect()->route('impact-reports.create')
                 ->with('error', 'Ce projet possède déjà un rapport d\'impact.');
         }
         
-        return view('impact.impact_create', compact('project'));
+        return view('association.impact_create', compact('project'));
     }
-
-
-
-    public function store(Request $request, $id)
+ 
+    public function store(StoreImpactReportRequest $request, $id = null)
     {
-        $project = Project::findOrFail($id);
+        try {
+             $projectId = $id ?? $request->input('project_id');
+            
+            if (!$projectId) {
+                return back()->with('error', 'Projet non spécifié.')->withInput();
+            }
+            
+            $project = Project::findOrFail($projectId);
 
-        if ($project->association_id !== Auth::id()) {
-            abort(403, 'Accès non autorisé.');
-        }
-if ($project->impactReport()->exists()) {
+            if ($project->association_id !== Auth::id()) {
+                abort(403, 'Accès non autorisé.');
+            }
+            
+            if ($project->impactReport()->exists()) {
+                return back()->with('error', 'Ce projet possède déjà un rapport d\'impact.');
+            }
+
+            $this->impactReportService->createReport(
+                $project,
+                $request->validated(),
+                $request->file('image')
+            );
+
             return redirect()->route('association.dashboard')
-                ->with('error', 'Un rapport d\'impact a déjà été publié pour ce projet.');
+                ->with('success', 'Félicitations ! Le rapport d\'impact a été publié avec succès.');
+                
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage())->withInput();
         }
-        $request->validate([
-            'description' => 'required|string|min:50',
-            'completionDate' => 'required|date',
-            'videoLink' => 'nullable|url',
-        ]);
-
-        ImpactReport::create([
-            'description' => $request->description,
-            'completionDate' => $request->completionDate,
-            'videoLink' => $request->videoLink,
-            'project_id' => $project->id,
-        ]);
-
-        $project->donations()->where('status', 'RECEIVED')->update(['status' => 'IMPACT']);
-        
-        $project->donations()->where('status', 'IMPACT')
-            ->whereNotNull('donator_id')
-            ->with('donator')
-            ->get()
-            ->each(function ($donation) use ($project) {
-                if ($donation->donator) {
-                    $donation->donator->notify(new ImpactReportPublished($project));
-                }
-            });
-
-        return redirect()->route('association.dashboard')->with('success', 'Félicitations ! Le rapport d\'impact a été publié avec succès.');
     }
 }

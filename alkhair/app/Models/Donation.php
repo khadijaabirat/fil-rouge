@@ -7,15 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Project;
 use App\Models\Payment;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 class Donation extends Model
 {
+    use HasFactory, SoftDeletes;
+    
     protected $fillable = [
         'amount', 'message', 'donationDate', 'isAnonymous',
         'status', 'donator_id', 'project_id'
     ];
     
-    /** @use HasFactory<\Database\Factories\DonationFactory> */
-    use HasFactory;
+    protected $appends = ['donator_name'];
     
     protected function casts(): array
     {
@@ -25,22 +29,36 @@ class Donation extends Model
         ];
     }
     
-    public function donator(){
+    public function donator()
+    {
         return $this->belongsTo(User::class,'donator_id');
+    }
+ 
+    protected function donatorName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->isAnonymous ? 'Donateur anonyme' : ($this->donator?->name ?? 'Inconnu')
+        );
+    }
+    
+    public function toArray()
+    {
+        $array = parent::toArray();
+        
+        if ($this->isAnonymous) {
+            unset($array['donator']);
+            unset($array['donator_id']);
+        }
+        
+        return $array;
     }
     
     public function association()
     {
-        return $this->hasOneThrough(
-            User::class,
-            Project::class,
-            'id',
-            'id',
-            'project_id',
-            'association_id'
-        );
+         return $this->project ? $this->project->association() : null;
     }
-   public function project()
+    
+    public function project()
     {
         return $this->belongsTo(Project::class, 'project_id');
     }

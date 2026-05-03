@@ -7,9 +7,7 @@ use App\Models\Project;
 
 class StoreDonationRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+ 
     public function authorize(): bool
     {
         return auth()->check() && auth()->user()->isDonator();
@@ -22,19 +20,11 @@ class StoreDonationRequest extends FormRequest
      */
     public function rules(): array
     {
-        $project = Project::findOrFail($this->route('id'));
-        $remainingAmount = $project->goalAmount - $project->currentAmount;
-
         return [
             'amount' => [
                 'required',
                 'numeric',
                 'min:100',
-                function ($attribute, $value, $fail) use ($remainingAmount) {
-                    if ($value > $remainingAmount) {
-                        $fail("Le montant ne peut pas dépasser l'objectif restant (" . number_format($remainingAmount, 0, ',', ' ') . " DH).");
-                    }
-                },
             ],
             'message' => 'nullable|string|max:500',
             'isAnonymous' => 'nullable|boolean',

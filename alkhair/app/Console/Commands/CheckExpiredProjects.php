@@ -26,19 +26,19 @@ protected $description = 'Ferme automatiquement les projets dont la date limite 
                 $newStatus = $project->fresh()->status;
                 
                 if ($newStatus === 'CLOSED') {
-                    $this->warn("❌ Project #{$project->id} - {$project->title} → CLOSED (objectif non atteint)");
+                    $this->warn("Project #{$project->id} - {$project->title} -> CLOSED (objectif non atteint)");
                     $closedCount++;
                 } elseif ($newStatus === 'COMPLETED') {
-                    $this->info("✅ Project #{$project->id} - {$project->title} → COMPLETED (objectif atteint)");
+                    $this->info("Project #{$project->id} - {$project->title} -> COMPLETED (objectif atteint)");
                     $completedCount++;
                 }
             }
         }
 
-        $this->info("\n📊 Résumé:");
-        $this->info("✅ {$completedCount} projet(s) complété(s)");
-        $this->warn("❌ {$closedCount} projet(s) fermé(s)");
-        $this->info("🔢 Total: " . ($closedCount + $completedCount) . " projet(s) traité(s)");
+        $this->info("\nResume:");
+        $this->info("{$completedCount} projet(s) complete(s)");
+        $this->warn("{$closedCount} projet(s) ferme(s)");
+        $this->info("Total: " . ($closedCount + $completedCount) . " projet(s) traite(s)");
         
         return Command::SUCCESS; 
     }

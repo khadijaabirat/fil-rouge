@@ -5,28 +5,34 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\Donation;
-use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Stripe\Stripe;
-use Stripe\Checkout\Session;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use App\Notifications\DonationStatusChanged;
+use App\Services\PaymentProcessingService;
 
+use App\Http\Requests\StoreDonationRequest;
+ 
 class DonationController extends Controller
 {
+    protected $paymentProcessingService;
+
+    public function __construct(PaymentProcessingService $paymentProcessingService)
+    {
+        $this->paymentProcessingService = $paymentProcessingService;
+    }
+ 
     public function create($id)
     {
         $project = Project::findOrFail($id);
+        
         if ($project->status !== 'OPEN') {
-            return redirect()->route('projects.show', $id)->with('error', 'Ce projet n\'accepte plus de dons.');
+            return redirect()->route('projects.show', $id)
+                ->with('error', 'Ce projet n\'accepte plus de dons.');
         }
+        
         return view('donator.donate', compact('project'));
     }
 
-
-public function store(Request $request, $id)
+ 
+    public function store(StoreDonationRequest $request, $id)
     {
         $project = Project::findOrFail($id);
 
@@ -34,184 +40,93 @@ public function store(Request $request, $id)
             abort(403, 'Ce projet n\'accepte plus de dons.');
         }
 
-        $request->validate([
-            'amount' => 'required|numeric|min:100',
-            'message' => 'nullable|string|max:500',
-            'isAnonymous' => 'nullable',
-            'paymentMethod' => 'required|in:ONLINE,MANUAL',
-            'paymentReceipt' => 'required_if:paymentMethod,MANUAL|file|mimes:pdf,jpg,png|max:5120',
-        ], [
-            'amount.min' => 'Le montant minimum du don est de 100 DH.',
-            'amount.required' => 'Le montant du don est obligatoire.',
-            'message.max' => 'Votre message ne peut pas dépasser 500 caractères.',
-            'paymentReceipt.required_if' => 'Le reçu de paiement est obligatoire pour un don manuel.',
-            'paymentReceipt.max' => 'Le reçu de paiement ne peut pas dépasser 5 Mo.',
-            'paymentReceipt.mimes' => 'Le reçu doit être au format PDF, JPG ou PNG.',
-        ]);
+        $validated = $request->validated();
 
-         if ($request->paymentMethod === 'MANUAL') {
-            if ($request->hasFile('paymentReceipt')) {
-                $receiptPath = $request->file('paymentReceipt')->store('receipts', 'public');
+        try {
+          
+            if ($request->paymentMethod === 'MANUAL') {
+                $donation = $this->paymentProcessingService->createManualDonation(
+                    $validated,
+                    $request->file('paymentReceipt'),
+                    Auth::id(),
+                    $project->id
+                );
 
-                $donation = DB::transaction(function () use ($request, $project, $receiptPath) {
-                    $donation = Donation::create([
-                        'amount' => $request->amount,
-                        'message' => $request->message,
-                        'donationDate' => now(),
-                        'isAnonymous' => $request->has('isAnonymous'),
-                        'status' => 'PENDING',
-                        'donator_id' => Auth::id(),
-                        'project_id' => $project->id,
-                    ]);
-
-                    Payment::create([
-                        'transactionId' => Str::uuid()->toString(),
-                        'paymentMethod' => 'MANUAL',
-                        'paymentReceipt' => $receiptPath,
-                        'amount' => $request->amount,
-                        'paymentDate' => now(),
-                        'status' => 'PENDING',
-                        'donation_id' => $donation->id,
-                    ]);
-
-                    return $donation;
-                });
-
-                return redirect()->route('donations.confirmation', $donation->id)->with('success', 'Votre promesse de don a été enregistrée. Elle sera traitée prochainement par l\'administration.');
+                return redirect()->route('donations.confirmation', $donation->id)
+                    ->with('success', 'Votre promesse de don a été enregistrée. Elle sera traitée prochainement par l\'administration.');
             }
-        }
+ 
+            if ($request->paymentMethod === 'ONLINE') {
+                $checkoutUrl = $this->paymentProcessingService->createOnlineDonation(
+                    $validated,
+                    Auth::id(),
+                    $project
+                );
 
-        if ($request->paymentMethod === 'ONLINE') {
-Stripe::setApiKey(config('services.stripe.secret'));
-            try {
-                 DB::beginTransaction();
-
-                 $donation = Donation::create([
-                    'amount' => $request->amount,
-                    'message' => $request->message,
-                    'donationDate' => now(),
-                    'isAnonymous' => $request->has('isAnonymous'),
-                    'status' => 'PENDING',
-                    'donator_id' => Auth::id(),
-                    'project_id' => $project->id,
-                ]);
-
-                 $payment = Payment::create([
-                    'transactionId' => 'pending',
-                    'paymentMethod' => 'ONLINE',
-                    'paymentReceipt' => null,
-                    'amount' => $request->amount,
-                    'paymentDate' => now(),
-                    'status' => 'PENDING',
-                    'donation_id' => $donation->id,
-                ]);
-
-                 $checkout_session = Session::create([
-                    'payment_method_types' => ['card'],
-                    'line_items' => [[
-                        'price_data' => [
-                            'currency' => 'mad',
-                            'unit_amount' => $request->amount * 100, // Stripe كيخدم بالسنتيم
-                            'product_data' => [
-                                'name' => 'Don pour : ' . $project->title,
-                                'description' => 'Plateforme AL-KHAIR',
-                            ],
-                        ],
-                        'quantity' => 1,
-                    ]],
-                    'mode' => 'payment',
-                     'success_url' => route('donations.success', ['id' => $donation->id]) . '?session_id={CHECKOUT_SESSION_ID}',
-                    'cancel_url' => route('donations.cancel', ['id' => $donation->id]),
-                ]);
-
-                 $payment->update(['transactionId' => $checkout_session->id]);
-
-                 DB::commit();
-
-                 return redirect($checkout_session->url);
-
-            } catch (\Exception $e) {
-                 DB::rollBack();
-                return back()->with('error', 'Le service de paiement est temporairement indisponible. Veuillez réessayer plus tard.');
+                return redirect($checkoutUrl);
             }
-        }
 
-        return back()->with('error', 'Une erreur est survenue lors du traitement de votre don.');
+            return back()->with('error', 'Une erreur est survenue lors du traitement de votre don.');
+            
+        } catch (\Exception $e) {
+            return back()->with('error', 'Le service de paiement est temporairement indisponible. Veuillez réessayer plus tard.');
+        }
     }
 
-
-
-public function success(Request $request, $id)
+  
+    public function success(Request $request, $id)
     {
         $donation = Donation::findOrFail($id);
+        
         if ($donation->donator_id !== Auth::id()) {
             abort(403, 'Accès non autorisé.');
         }
+        
         if ($donation->status === 'VALIDATED') {
-            return redirect()->route('donator.dashboard')->with('info', 'Ce paiement a déjà été validé.');
+            return redirect()->route('donator.dashboard')
+                ->with('info', 'Ce paiement a déjà été validé.');
         }
+        
         $sessionId = $request->query('session_id');
+        
         if (!$sessionId) {
             abort(403, 'Session de paiement introuvable ou invalide.');
         }
-Stripe::setApiKey(config('services.stripe.secret'));
-        try {
-            $session =  Session::retrieve($sessionId);
 
-            if ($session->payment_status !== 'paid') {
-                abort(403, 'Le paiement n\'a pas été complété chez Stripe.');
-            }
+        try {
+            $this->paymentProcessingService->validateStripePayment($donation, $sessionId);
+            
+            return redirect()->route('donations.confirmation', $donation->id)
+                ->with('success', 'Merci, Votre don en ligne a été validé.');
+                
         } catch (\Exception $e) {
             abort(500, 'Erreur de vérification avec Stripe.');
         }
-
-        DB::transaction(function () use ($donation) {
-            try {
-                $payment = Payment::where('donation_id', $donation->id)->firstOrFail();
-
-                $donation->update(['status' => 'VALIDATED']);
-                $payment->update(['status' => 'SUCCESS']);
-
-                $project = Project::findOrFail($donation->project_id);
-                $project->increment('currentAmount', $donation->amount);
-                $project->calculateProgress();
-                
-                $donation->donator->notify(new DonationStatusChanged($donation, 'VALIDATED'));
-            } catch (\Exception $e) {
-                \Log::error('Donation validation failed: ' . $e->getMessage());
-                throw $e;
-            }
-        });
-        return redirect()->route('donations.confirmation', $donation->id)->with('success', 'Merci, Votre don en ligne a été validé.');
     }
-
-
-
-
- public function cancel($id)
+ 
+    public function cancel($id)
     {
-        $donation = Donation::findOrFail($id);
-        if ($donation->status === 'PENDING') {
-            $payment = Payment::where('donation_id', $donation->id)->first();
+        try {
+            $donation = Donation::findOrFail($id);
+            $this->paymentProcessingService->cancelDonation($donation);
             
-            if ($payment && $payment->paymentReceipt && Storage::disk('public')->exists($payment->paymentReceipt)) {
-                Storage::disk('public')->delete($payment->paymentReceipt);
-            }
-            
-            if ($payment) {
-                $payment->delete();
-            }
-            $donation->delete();
+            return redirect()->route('donator.dashboard')
+                ->with('error', 'Vous avez annulé le paiement en ligne.');
+                
+        } catch (\Exception $e) {
+            return redirect()->route('donator.dashboard')
+                ->with('error', 'Une erreur est survenue lors de l\'annulation.');
         }
-        return redirect()->route('donator.dashboard')->with('error', 'Vous avez annulé le paiement en ligne.');
     }
-
+ 
     public function confirmation($id)
     {
         $donation = Donation::with('project')->findOrFail($id);
+        
         if ($donation->donator_id !== Auth::id()) {
             abort(403, 'Accès non autorisé.');
         }
+        
         return view('donator.confirmation', compact('donation'));
     }
 }

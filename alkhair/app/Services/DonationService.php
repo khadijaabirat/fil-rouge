@@ -2,70 +2,98 @@
 
 namespace App\Services;
 
-use App\Repositories\Interfaces\DonationRepositoryInterface;
-use App\Repositories\Interfaces\ProjectRepositoryInterface;
+use App\Models\Donation;
 use App\Models\Payment;
+use App\Models\ManualPayment;
 use App\Notifications\DonationStatusChanged;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class DonationService
 {
-    protected $donationRepo;
-    protected $projectRepo;
-
-    public function __construct(
-        DonationRepositoryInterface $donationRepo,
-        ProjectRepositoryInterface $projectRepo
-    ) {
-        $this->donationRepo = $donationRepo;
-        $this->projectRepo = $projectRepo;
-    }
-
-    public function createDonation(array $data)
+    public function validate(Donation $donation): bool
     {
-        return DB::transaction(function () use ($data) {
-            return $this->donationRepo->create($data);
-        });
-    }
+        if ($donation->status !== 'PENDING') {
+            throw new \Exception('Ce don a déjà été traité.');
+        }
 
-    public function validateDonation($donationId)
-    {
-        return DB::transaction(function () use ($donationId) {
-            $donation = $this->donationRepo->find($donationId);
-            
-            $this->donationRepo->update($donationId, ['status' => 'VALIDATED']);
-            
-            $payment = Payment::where('donation_id', $donationId)->first();
-            if ($payment) {
-                $payment->update(['status' => 'SUCCESS']);
+        return DB::transaction(function () use ($donation) {
+            $payment = ManualPayment::where('donation_id', $donation->id)->first();
+
+            if (!$payment) {
+                throw new \Exception('Paiement introuvable.');
             }
-            
-            $this->projectRepo->incrementAmount($donation->project_id, $donation->amount);
-            $donation->project->calculateProgress();
-            
+
+            $payment->validate();
+
             if ($donation->donator) {
                 $donation->donator->notify(new DonationStatusChanged($donation, 'VALIDATED'));
             }
-            
-            return $donation;
+
+            return true;
         });
     }
 
-    public function rejectDonation($donationId)
+    public function reject(Donation $donation): bool
     {
-        $donation = $this->donationRepo->find($donationId);
-        
-        $this->donationRepo->update($donationId, ['status' => 'FAILED']);
-        
-        $payment = Payment::where('donation_id', $donationId)->first();
-        if ($payment) {
-            $payment->update(['status' => 'FAILED']);
+        if ($donation->status !== 'PENDING') {
+            throw new \Exception('Impossible de refuser ce don car il a déjà été traité.');
         }
-        
+
+        $payment = ManualPayment::where('donation_id', $donation->id)->first();
+
+        if ($payment) {
+            $payment->reject();
+
+            if ($payment->paymentReceipt && Storage::disk('public')->exists($payment->paymentReceipt)) {
+                Storage::disk('public')->delete($payment->paymentReceipt);
+            }
+        }
+
         if ($donation->donator) {
             $donation->donator->notify(new DonationStatusChanged($donation, 'FAILED'));
         }
-        
-        return $donation;
+
+        return true;
+    }
+
+    public function getPendingDonations()
+    {
+        return Donation::with(['donator', 'project.association', 'payment'])
+            ->whereHas('payment', function ($query) {
+                $query->where('status', 'PENDING')
+                    ->whereNotNull('paymentReceipt');
+            })
+            ->where('status', 'PENDING')
+            ->get();
+    }
+
+    public function countPendingDonations(): int
+    {
+        return Donation::whereHas('payment', function ($query) {
+                $query->where('status', 'PENDING')
+                    ->whereNotNull('paymentReceipt');
+            })
+            ->where('status', 'PENDING')
+            ->count();
+    }
+
+    public function getRecentManualDonations(int $limit = 5)
+    {
+        return Donation::with(['donator', 'project.association', 'payment'])
+            ->whereHas('payment', function ($query) {
+                $query->whereNotNull('paymentReceipt');
+            })
+            ->latest()
+            ->take($limit)
+            ->get();
+    }
+
+    public function getRecentActivities(int $limit = 3)
+    {
+        return Donation::with(['donator', 'project.association'])
+            ->latest()
+            ->take($limit)
+            ->get();
     }
 }

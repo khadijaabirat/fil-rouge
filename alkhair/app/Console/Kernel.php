@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule): void
     {
-        // Scheduler moved to routes/console.php
+        $schedule->command('projects:close-expired')->daily();
     }
 
     protected function commands(): void

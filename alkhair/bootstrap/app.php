@@ -5,8 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use \App\Http\Middleware\CheckBannedUser;
 use App\Http\Middleware\CheckRole;
-use App\Http\Middleware\LogCriticalActions;
-
+ 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -16,12 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
             CheckBannedUser::class,
-            LogCriticalActions::class,
-        ]);
+         ]);
          $middleware->alias([
             'role'=> CheckRole::class,
-            'log.critical' => LogCriticalActions::class,
-        ]);
+         ]);
     })
     
     ->withExceptions(function (Exceptions $exceptions): void {

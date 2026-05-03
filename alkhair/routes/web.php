@@ -38,6 +38,7 @@ Route::get('/admin/donation/{id}', [AdminController::class, 'showDonation'])->na
 Route::get('/admin/validations', [AdminController::class, 'validations'])->name('admin.validations');
 Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
 Route::post('/admin/association/{id}/validate', [AdminController::class, 'validateAssociation'])->name('admin.validateAssociation');
+Route::post('/admin/association/{id}/verify-kyc', [AdminController::class, 'verifyKyc'])->name('admin.verifyKyc');
 Route::post('/admin/donation/{id}/validate', [AdminController::class, 'validateDonation'])->name('admin.validateDonation');
 Route::post('/admin/donation/{id}/reject', [AdminController::class, 'rejectDonation'])->name('admin.rejectDonation');
 Route::post('/admin/project/{id}/approve-withdrawal', [AdminController::class, 'approveWithdrawal'])->name('admin.approveWithdrawal');
@@ -67,12 +68,12 @@ Route::get('/projects/create', [ProjectController::class, 'create'])->name('proj
     Route::put('/projects/{id}', [ProjectController::class, 'update'])->name('projects.update');
     Route::delete('/projects/{id}', [ProjectController::class, 'destroy'])->name('projects.destroy');
 
-Route::post('/projects/{id}/extend', [\App\Http\Controllers\ProjectController::class, 'extendDeadline'])->name('projects.extend');
+Route::post('/projects/{id}/extend', [ProjectController::class, 'extendDeadline'])->name('projects.extend');
 Route::post('/association/projects/{id}/withdraw', [AssociationController::class, 'withdrawFunds'])->name('association.withdraw');
 Route::get('/association/projects/{id?}/impact', [ImpactReportController::class, 'create'])->name('impact.create');
 Route::post('/association/projects/{id}/impact', [ImpactReportController::class, 'store'])->name('impact.store');
-Route::get('/association/profile', [\App\Http\Controllers\AssociationController::class, 'editProfile'])->name('association.profile');
-Route::put('/association/profile', [\App\Http\Controllers\AssociationController::class, 'updateProfile'])->name('association.updateProfile');
+Route::get('/association/profile', [AssociationController::class, 'editProfile'])->name('association.profile');
+Route::put('/association/profile', [AssociationController::class, 'updateProfile'])->name('association.updateProfile');
 
 });
 
@@ -83,13 +84,8 @@ Route::get('/donator/dashboard', [DonatorController::class, 'dashboard'])->name(
 Route::get('/projects/{id}/donate', [DonationController::class, 'create'])->name('donations.create');
 Route::post('/projects/{id}/donate', [DonationController::class, 'store'])->name('donations.store');
 
-//  Stripe
 Route::get('/donations/{id}/success', [DonationController::class, 'success'])->name('donations.success');
 Route::get('/donations/{id}/cancel', [DonationController::class, 'cancel'])->name('donations.cancel');
-
-// Confirmation
 Route::get('/donations/{id}/confirmation', [DonationController::class, 'confirmation'])->name('donations.confirmation');
-
-// PDF Receipt
 Route::get('/donations/{id}/receipt', [\App\Http\Controllers\PdfController::class, 'downloadDonationReceipt'])->name('donations.receipt');
 });

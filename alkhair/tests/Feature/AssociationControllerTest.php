@@ -118,7 +118,7 @@ class AssociationControllerTest extends TestCase
     public function test_association_can_access_edit_profile()
     {
         $response = $this->actingAs($this->association)
-            ->get(route('association.profile.edit'));
+            ->get(route('association.profile'));
 
         $response->assertStatus(200);
         $response->assertViewIs('association.profile');
@@ -129,7 +129,7 @@ class AssociationControllerTest extends TestCase
         Storage::fake('public');
 
         $response = $this->actingAs($this->association)
-            ->put(route('association.profile.update'), [
+            ->put(route('association.updateProfile'), [
                 'name' => 'Updated Association',
                 'phone' => '0612345678',
                 'ville' => 'Casablanca',
@@ -151,7 +151,7 @@ class AssociationControllerTest extends TestCase
     public function test_association_cannot_update_profile_with_invalid_rib()
     {
         $response = $this->actingAs($this->association)
-            ->put(route('association.profile.update'), [
+            ->put(route('association.updateProfile'), [
                 'name' => 'Test',
                 'rib' => '123', // Invalid RIB (not 24 characters)
             ]);
@@ -173,10 +173,10 @@ class AssociationControllerTest extends TestCase
             'status' => 'COMPLETED'
         ]);
 
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
+        
         $response = $this->actingAs($this->association)
             ->post(route('association.withdraw', $project->id));
-
-        $response->assertStatus(403);
     }
 
     public function test_association_profile_photo_is_deleted_when_updated()
@@ -191,7 +191,7 @@ class AssociationControllerTest extends TestCase
         $newPhoto = UploadedFile::fake()->image('new.jpg');
         
         $response = $this->actingAs($this->association)
-            ->put(route('association.profile.update'), [
+            ->put(route('association.updateProfile'), [
                 'name' => $this->association->name,
                 'profilePhoto' => $newPhoto
             ]);

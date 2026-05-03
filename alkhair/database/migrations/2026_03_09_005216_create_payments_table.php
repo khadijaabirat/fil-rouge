@@ -20,7 +20,8 @@ return new class extends Migration
 $table->dateTime('paymentDate')->nullable();
          $table->enum('status', ['SUCCESS', 'FAILED', 'PENDING'])->default('PENDING');
          $table->foreignId('donation_id')->constrained('donations');
-            $table->timestamps();
+         $table->softDeletes();
+         $table->timestamps();
         });
     }
 

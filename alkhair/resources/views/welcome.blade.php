@@ -158,9 +158,19 @@
             <a href="{{ url('/') }}" class="flex items-center group">
                 <x-application-logo class="w-12 h-12 text-white group-hover:scale-105 transition-transform" />
             </a>
+            
+            <!-- Hamburger Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+            
             <div class="hidden md:flex items-center gap-8">
                 <a class="text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="#projets">Projets</a>
                 <a class="text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="#impact">Impact</a>
+                <a class="text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="{{ route('faq') }}">FAQ</a>
+                <a class="text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="{{ route('contact') }}">Contact</a>
 
                 @auth
                     @if(Auth::user()->isAdmin())
@@ -183,6 +193,36 @@
                 @endauth
             </div>
         </nav>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl mx-4 mt-2 shadow-lg shadow-black/5">
+            <div class="px-4 py-4 space-y-4">
+                <a class="block text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="#projets">Projets</a>
+                <a class="block text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="#impact">Impact</a>
+                <a class="block text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="{{ route('faq') }}">FAQ</a>
+                <a class="block text-white/90 font-medium hover:text-[#F5A623] transition-colors" href="{{ route('contact') }}">Contact</a>
+
+                @auth
+                    @if(Auth::user()->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}" class="block text-[#F5A623] font-bold">Dashboard Admin</a>
+                    @elseif(Auth::user()->isAssociation())
+                        <a href="{{ route('association.dashboard') }}" class="block text-[#F5A623] font-bold">Espace Association</a>
+                    @elseif(Auth::user()->isDonator())
+                        <a href="{{ route('donator.dashboard') }}" class="block text-[#F5A623] font-bold">Mon Espace</a>
+                    @endif
+
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="block w-full text-left glass hover:bg-red-500/20 text-white text-sm font-bold px-4 py-2 rounded-xl transition-all shadow-sm mt-4">Quitter</button>
+                    </form>
+                @else
+                    <a class="block text-white/90 font-medium hover:text-[#F5A623] transition" href="{{ route('login') }}">Connexion</a>
+                    <a class="block bg-gradient-to-r from-[#F5A623] to-[#FFD085] text-[#0A1128] font-bold px-4 py-2 rounded-xl transition-all shadow-lg shadow-[#F5A623]/30 text-center mt-4" href="{{ route('register') }}">
+                        S'inscrire
+                    </a>
+                @endauth
+            </div>
+        </div>
     </header>
 
     <section class="relative min-h-[90vh] flex items-center overflow-hidden pt-20">
@@ -219,27 +259,28 @@
     </section>
 
     <section class="container mx-auto px-4 -mt-20 relative z-20 mb-24 reveal">
+        
         <div class="glass-card rounded-[2rem] shadow-2xl p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 md:divide-x divide-gray-200/50">
 
         <div class="text-center group">
                 <div class="text-5xl font-black text-[#0A1128] mb-2">
-                    <span class="counter" data-target="{{ $totalCollected ?? 0 }}">000000</span>
+                    <span class="counter" data-target="{{ $totalCollected ?? 0 }}">{{ str_pad($totalCollected ?? 0, 6, '0', STR_PAD_LEFT) }}</span>
                 </div>
                 <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Dirhams collectés</div>
             </div>
 
             <div class="text-center group">
                 <div class="text-5xl font-black text-[#0A1128] mb-2">
-                    <span class="counter" data-target="{{ $verifiedAssociations ?? 0 }}">000000</span>
+                    <span class="counter" data-target="{{ $verifiedAssociations ?? 0 }}">{{ str_pad($verifiedAssociations ?? 0, 6, '0', STR_PAD_LEFT) }}</span>
                 </div>
                 <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Assoc. Vérifiées</div>
             </div>
 
             <div class="text-center group">
                 <div class="text-5xl font-black text-[#0A1128] mb-2">
-                    <span class="counter" data-target="{{ $completedProjects ?? 0 }}">000000</span>
+                    <span class="counter" data-target="{{ $completedProjects ?? 0 }}">{{ str_pad($completedProjects ?? 0, 6, '0', STR_PAD_LEFT) }}</span>
                 </div>
-                <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Projets Achevés</div>
+                <div class="text-slate-500 font-bold uppercase tracking-widest text-sm">Total Projets</div>
             </div>
 
         </div>
@@ -879,6 +920,9 @@
                     <ul class="space-y-2 text-slate-600 text-sm">
                         <li><a href="{{ url('/') }}" class="hover:text-[#F5A623] transition-colors">Accueil</a></li>
                         <li><a href="{{ route('projects.index') }}" class="hover:text-[#F5A623] transition-colors">Projets</a></li>
+                        <li><a href="{{ route('impact.index') }}" class="hover:text-[#F5A623] transition-colors">Impact</a></li>
+                        <li><a href="{{ route('faq') }}" class="hover:text-[#F5A623] transition-colors">FAQ</a></li>
+                        <li><a href="{{ route('contact') }}" class="hover:text-[#F5A623] transition-colors">Contact</a></li>
                         <li><a href="{{ route('register') }}" class="hover:text-[#F5A623] transition-colors">S'inscrire</a></li>
                     </ul>
                 </div>
@@ -903,6 +947,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             // 1. Navbar Scroll Effect (Glassmorphism on scroll)
             const navbar = document.getElementById('main-nav');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
                     navbar.classList.add('bg-[#0A1128]/80', 'backdrop-blur-xl', 'shadow-xl');
@@ -912,6 +959,18 @@
                     navbar.classList.remove('bg-[#0A1128]/80', 'backdrop-blur-xl', 'shadow-xl');
                     navbar.classList.add('bg-transparent', 'py-4');
                     navbar.classList.remove('py-2');
+                }
+            });
+            
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navbar.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.classList.add('hidden');
                 }
             });
 
@@ -946,13 +1005,14 @@
             // 4. Number Counter Animation for Stats
             const counters = document.querySelectorAll('.counter');
             const animationDuration = 2500;
-            const targetDigits = 6;
+            console.log('Counters found:', counters.length);
 
             const counterObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const counter = entry.target;
                         const target = parseFloat(counter.getAttribute('data-target')) || 0;
+                        console.log('Counter target:', target);
                         let startTime = null;
 
                         const updateCount = (currentTime) => {
@@ -963,12 +1023,12 @@
                             const easeOut = 1 - Math.pow(1 - percentage, 3);
                             const currentVal = Math.floor(target * easeOut);
                             
-                            counter.innerText = currentVal.toString().padStart(targetDigits, '0');
+                            counter.innerText = String(currentVal).padStart(6, '0');
 
                             if (progress < animationDuration) {
                                 requestAnimationFrame(updateCount);
                             } else {
-                                counter.innerText = Math.floor(target).toString().padStart(targetDigits, '0');
+                                counter.innerText = String(Math.floor(target)).padStart(6, '0');
                             }
                         };
                         

@@ -42,7 +42,7 @@
     </div>
 
     <nav class="flex-grow space-y-2">
-        <a href="{{ auth()->user()->role === 'donator' ? route('donator.dashboard') : route('dashboard') }}" class="sidebar-link flex items-center gap-3 px-4 py-3.5 text-slate-600">
+        <a href="@if(auth()->user()->role === 'donator'){{ route('donator.dashboard') }}@elseif(auth()->user()->role === 'association'){{ route('association.dashboard') }}@elseif(auth()->user()->role === 'admin'){{ route('admin.dashboard') }}@else{{ route('home') }}@endif" class="sidebar-link flex items-center gap-3 px-4 py-3.5 text-slate-600">
             <span class="material-symbols-outlined text-xl">dashboard</span>
             <span class="text-sm font-semibold">Tableau de bord</span>
         </a>
@@ -68,7 +68,7 @@
     <!-- Header -->
     <header class="fixed right-0 top-0 z-40 bg-white/70 backdrop-blur-2xl border-b border-black/[0.04] flex justify-between items-center px-8 py-4" style="width: calc(100% - 18rem);">
         <div class="flex items-center gap-4">
-            <a href="{{ auth()->user()->role === 'donator' ? route('donator.dashboard') : route('dashboard') }}" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-slate-100 transition-colors">
+            <a href="@if(auth()->user()->role === 'donator'){{ route('donator.dashboard') }}@elseif(auth()->user()->role === 'association'){{ route('association.dashboard') }}@elseif(auth()->user()->role === 'admin'){{ route('admin.dashboard') }}@else{{ route('home') }}@endif" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-slate-100 transition-colors">
                 <span class="material-symbols-outlined text-[#0A1128]">arrow_back</span>
             </a>
             <h2 class="text-xl font-black text-[#0A1128] tracking-tight">Paramètres du profil</h2>
@@ -77,7 +77,7 @@
             <div class="flex items-center gap-3 pl-5 border-l border-slate-200">
                 <div class="text-right hidden md:block">
                     <p class="text-sm font-bold text-[#0A1128] truncate max-w-[200px]">{{ auth()->user()->name }}</p>
-                    <p class="text-[10px] text-[#F5A623] font-bold uppercase tracking-wider">{{ auth()->user()->role }}</p>
+                    <p class="text-[10px] text-[#F5A623] font-bold uppercase tracking-wider">{{ ucfirst(auth()->user()->role) }}</p>
                 </div>
                 <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-[#0A1128] to-[#1a2744] flex items-center justify-center font-black text-[#F5A623] text-sm shadow-lg border border-[#F5A623]/20">
                     <span class="material-symbols-outlined text-[20px]">person</span>

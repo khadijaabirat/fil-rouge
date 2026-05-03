@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Project;
+use Illuminate\Database\Eloquent\SoftDeletes;
 class ImpactReport extends Model
 {
-    /** @use HasFactory<\Database\Factories\ImpactReportFactory> */
-    use HasFactory;
+     use HasFactory, SoftDeletes;
     protected $fillable = [
         'description', 'completionDate', 'videoLink', 'project_id', 'image'
     ];

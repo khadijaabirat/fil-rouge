@@ -26,6 +26,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories');
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
