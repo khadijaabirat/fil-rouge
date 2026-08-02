@@ -18,6 +18,8 @@
 
 # 📖 About The Project
 
+<img width="2952" height="1520" alt="127 0 0 1_8000_ (4)" src="https://github.com/user-attachments/assets/b2fe8f08-accd-4f20-b77c-a861deb8fb4a" />
+
 **AL-KHAIR** is a full-stack charity management platform developed with **Laravel 11** to provide a transparent and secure donation ecosystem connecting donors with local Moroccan charities.
 
 The platform focuses on **transparency**, **traceability**, and **trust** by allowing every donation to be tracked throughout its complete lifecycle—from donation creation to the final impact report published by the association.
@@ -366,10 +368,12 @@ Relationships include:
 
 ## Home Page
 
-> Replace with your screenshot
-
+ 
 ```
-assets/screenshots/home.png
+ 
+
+
+
 ```
 
 ---
