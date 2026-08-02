@@ -1,329 +1,695 @@
-# 🌟 AL-KHAIR - Plateforme Solidaire de Collecte de Dons
+# 🌟 AL-KHAIR — Transparent Charity Donation Platform
 
-![Laravel](https://img.shields.io/badge/Laravel-11-red)
-![PHP](https://img.shields.io/badge/PHP-8.1+-blue)
-![Tests](https://img.shields.io/badge/Tests-30+-green)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+<p align="center">
 
-## 📖 À propos
+![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.x-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Blade](https://img.shields.io/badge/Blade-Laravel-F55247?style=for-the-badge)
+![MVC](https://img.shields.io/badge/Architecture-MVC-success?style=for-the-badge)
+![SOLID](https://img.shields.io/badge/SOLID-Principles-blueviolet?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-AL-KHAIR est une plateforme web solidaire qui connecte les donateurs avec des associations marocaines locales, garantissant une transparence totale sur l'utilisation des dons grâce à un suivi rigoureux et traçable de leur cycle de vie.
-
-### 🎯 Objectifs
-
-- ✅ Faciliter la collecte de dons en ligne
-- ✅ Garantir la traçabilité complète des dons
-- ✅ Offrir une transparence totale à tous les acteurs
-- ✅ Centraliser la gestion des associations, projets et dons
+</p>
 
 ---
 
-## ✨ Fonctionnalités Principales
+# 📖 About The Project
 
-### Pour les Donateurs
-- 🎁 Effectuer des dons (minimum 100 DH)
-- 🕵️ Option de don anonyme
-- 💬 Ajouter des messages d'encouragement
-- 📄 Télécharger des reçus PDF
-- 📊 Suivre l'historique des dons
-- 🔔 Recevoir des notifications en temps réel
+**AL-KHAIR** is a full-stack charity management platform developed with **Laravel 11** to provide a transparent and secure donation ecosystem connecting donors with local Moroccan charities.
 
-### Pour les Associations
-- 📝 Inscription avec vérification KYC
-- 🚀 Créer et gérer des projets
-- 💰 Suivre les dons reçus
-- 📈 Publier des rapports d'impact
-- 💳 Demander le retrait des fonds
-- 🔔 Notifications sur les mises à jour
+The platform focuses on **transparency**, **traceability**, and **trust** by allowing every donation to be tracked throughout its complete lifecycle—from donation creation to the final impact report published by the association.
 
-### Pour les Administrateurs
-- ✅ Valider les comptes associations
-- 🔍 Vérifier les dons manuels
-- 🛡️ Modérer les contenus
-- 📊 Accéder aux statistiques globales
-- 🚫 Suspendre/Bannir des comptes
+Unlike traditional donation systems, AL-KHAIR provides a complete workflow for managing associations, charitable projects, donations, payment validation, PDF reports, and real-time notifications through an intuitive role-based dashboard.
+
+The application was designed following modern software engineering practices including **MVC Architecture**, **SOLID Principles**, **Role-Based Access Control (RBAC)**, secure authentication, and scalable database design.
 
 ---
 
-## 🛠️ Technologies Utilisées
+# 🚀 Key Features
 
-### Backend
-- **PHP 8.1+** - Langage de programmation
-- **Laravel 11** - Framework MVC
-- **MySQL** - Base de données
-- **Eloquent ORM** - Gestion des données
+## 👤 Donor Dashboard
 
-### Frontend
-- **Blade Templates** - Moteur de templates
-- **Tailwind CSS** - Framework CSS
-- **JavaScript** - Interactivité
-- **Alpine.js** - Composants réactifs
-
-### Outils & Services
-- **Stripe** - Paiement en ligne (simulation)
-- **DomPDF** - Génération de PDF
-- **Laravel Queue** - Gestion des tâches asynchrones
-- **Laravel Scheduler** - Tâches planifiées
-- **PHPUnit/Pest** - Tests automatisés
+- Secure Registration & Login
+- Email Verification
+- Password Recovery
+- Edit Profile
+- Online Donations
+- Manual Donations
+- Anonymous Donations
+- Donation History
+- Project Progress Tracking
+- Download Donation Receipt (PDF)
+- Email Notifications
+- Impact Counter
+- Real-Time Donation Status
 
 ---
 
-## 📦 Installation
+## 🏢 Association Dashboard
 
-### Prérequis
-- PHP >= 8.1
-- Composer
+- KYC Verification
+- Association Profile Management
+- Logo & Media Upload
+- Project Creation
+- Project Management
+- Donation Tracking
+- Donation Confirmation
+- Collection Statistics
+- Impact Report Publishing
+- PDF Impact Report Generation
+- Email Notifications
+
+---
+
+## 🛠 Administrator Dashboard
+
+- Association Approval
+- KYC Validation
+- Manual Donation Validation
+- Platform Moderation
+- User Management
+- Global Statistics
+- Project Monitoring
+- Donation Monitoring
+- Content Management
+- Dashboard Analytics
+
+---
+
+# 💡 Donation Lifecycle
+
+Every donation follows a complete traceable workflow:
+
+```
+Pending
+      │
+      ▼
+Validated
+      │
+      ▼
+Processing
+      │
+      ▼
+Received
+      │
+      ▼
+Impact Published
+```
+
+Each stage is stored securely inside the database, providing complete transparency for donors, associations, and administrators.
+
+---
+
+# 🎯 Core Functionalities
+
+### Donation Management
+
+- Online Payment (Stripe Simulation)
+- Manual Payment with Receipt Upload
+- Donation Comments
+- Anonymous Donations
+- Donation Validation
+- PDF Receipts
+- Donation History
+
+### Association Management
+
+- Association Registration
+- Administrative Approval
+- KYC Verification
+- Media Upload
+- Project Management
+- Collection Reports
+
+### Project Management
+
+- Financial Goal Tracking
+- Progress Bar
+- Expiration Management
+- Deadline Extension
+- Automatic Project Status
+- Impact Report Generation
+
+### Search System
+
+- Search by Project Name
+- Search by Category
+- Search by City
+- Sort by Urgency
+- Sort by Nearby Projects
+
+### Notification System
+
+- Email Notifications
+- In-App Notifications
+- Donation Status Updates
+- Project Updates
+- Impact Report Notifications
+
+---
+
+
+
+# 🛠 Technology Stack
+
+## Backend
+
+- Laravel 11
+- PHP 8.x
+- MVC Architecture
+- Eloquent ORM
+- RESTful Routing
+- Laravel Breeze
+- RBAC (Role-Based Access Control)
+- Form Request Validation
+- Laravel Middleware
+- Mailtrap
+- DomPDF
+- Stripe (Payment Simulation)
+
+---
+
+## Frontend
+
+- HTML5
+- Tailwind CSS
+- JavaScript (ES6)
+- Blade Template Engine
+- Fetch API
+- Leaflet.js
+- Responsive Design
+
+---
+
+## Database
+
 - MySQL
-- Node.js & NPM
+- Database Migrations
+- Eloquent Relationships
+- Foreign Keys
+- Data Integrity
+- Query Optimization
 
-### Étapes d'installation
+---
+
+## Development Tools
+
+- Git
+- GitHub
+- Composer
+- NPM
+- Trello
+- Figma
+- VS Code
+
+---
+
+# 🏗 Architecture
+
+The application follows a scalable **Laravel MVC Architecture**, ensuring a clean separation between business logic, presentation, and data management.
+
+```
+                 Client
+                    │
+                    ▼
+            Laravel Routes
+                    │
+                    ▼
+              Controllers
+                    │
+     ┌──────────────┼──────────────┐
+     ▼              ▼              ▼
+ Validation      Services      Notifications
+     │              │              │
+     ▼              ▼              ▼
+             Eloquent Models
+                    │
+                    ▼
+                 MySQL
+```
+
+The project follows several software engineering principles:
+
+- MVC Architecture
+- SOLID Principles
+- Separation of Concerns
+- Clean Code Practices
+- RESTful Design
+- Reusable Components
+- Secure Authentication
+- Role-Based Authorization
+
+---
+
+# 🔐 Security Features
+
+Security was considered throughout the development process.
+
+### Authentication
+
+- Laravel Breeze Authentication
+- Secure Login & Registration
+- Email Verification
+- Forgot Password
+- Password Reset
+- Session Protection
+
+### Authorization
+
+- Role-Based Access Control (RBAC)
+- Admin Authorization
+- Association Authorization
+- Donor Authorization
+- Route Protection
+- Middleware Authorization
+
+### Data Protection
+
+- Password Hashing (Bcrypt)
+- CSRF Protection
+- XSS Protection
+- SQL Injection Protection
+- File Validation
+- Secure File Upload
+- Input Sanitization
+
+### Media Management
+
+- Association Logos
+- User Profile Pictures
+- KYC Documents
+- Donation Receipts
+- Impact Report Images
+
+---
+
+# 📂 Main Modules
+
+## Authentication Module
+
+- Register
+- Login
+- Email Verification
+- Password Reset
+- Profile Management
+
+---
+
+## Donation Module
+
+- Online Donations
+- Manual Donations
+- Donation Tracking
+- Anonymous Donations
+- Donation Receipts (PDF)
+
+---
+
+## Association Module
+
+- Registration
+- KYC Verification
+- Dashboard
+- Project Management
+- Impact Reports
+
+---
+
+## Project Module
+
+- Create Projects
+- Financial Goals
+- Progress Tracking
+- Expiration Management
+- Deadline Extension
+
+---
+
+## Administration Module
+
+- User Management
+- Association Approval
+- Donation Validation
+- Platform Statistics
+- Content Moderation
+
+---
+
+# 📊 Database Highlights
+
+The platform relies on a relational database designed using Laravel Eloquent ORM.
+
+Main entities include:
+
+- Users
+- Associations
+- Projects
+- Donations
+- Categories
+- Notifications
+- Impact Reports
+
+Relationships include:
+
+- One-to-Many
+- Many-to-Many
+- Foreign Key Constraints
+- Cascading Deletes
+- Data Integrity Rules
+
+---
+
+# 📸 Screenshots
+
+## Home Page
+
+> Replace with your screenshot
+
+```
+assets/screenshots/home.png
+```
+
+---
+
+## Donor Dashboard
+
+```
+assets/screenshots/donor-dashboard.png
+```
+
+---
+
+## Association Dashboard
+
+```
+assets/screenshots/association-dashboard.png
+```
+
+---
+
+## Administrator Dashboard
+
+```
+assets/screenshots/admin-dashboard.png
+```
+
+---
+
+## Project Details
+
+```
+assets/screenshots/project-details.png
+```
+
+---
+
+## Donation Workflow
+
+```
+assets/screenshots/donation-process.png
+```
+
+---
+
+## Impact Report
+
+```
+assets/screenshots/impact-report.png
+```
+
+---
+
+## User Profile
+
+```
+assets/screenshots/profile.png
+```
+
+
+
+# 🚀 Getting Started
+
+## Prerequisites
+
+Before running the project locally, make sure you have installed:
+
+- PHP 8.x
+- Composer
+- Node.js & NPM
+- MySQL
+- Git
+
+---
+
+# ⚙️ Installation
+
+Clone the repository
 
 ```bash
-# 1. Cloner le projet
-git clone https://github.com/votre-repo/alkhair.git
-cd alkhair
+git clone https://github.com/your-username/AL-KHAIR.git
+```
 
-# 2. Installer les dépendances PHP
+Navigate to the project
+
+```bash
+cd AL-KHAIR
+```
+
+Install PHP dependencies
+
+```bash
 composer install
+```
 
-# 3. Installer les dépendances JavaScript
+Install JavaScript dependencies
+
+```bash
 npm install
+```
 
-# 4. Copier le fichier d'environnement
+Create the environment file
+
+```bash
 cp .env.example .env
+```
 
-# 5. Générer la clé d'application
+Generate the application key
+
+```bash
 php artisan key:generate
+```
 
-# 6. Configurer la base de données dans .env
+Configure your database inside `.env`
+
+```env
 DB_DATABASE=alkhair
 DB_USERNAME=root
 DB_PASSWORD=
+```
 
-# 7. Exécuter les migrations
+Run database migrations
+
+```bash
 php artisan migrate
+```
 
-# 8. Exécuter les seeders (optionnel)
+Seed the database (optional)
+
+```bash
 php artisan db:seed
+```
 
-# 9. Créer le lien symbolique pour le storage
+Create the storage link
+
+```bash
 php artisan storage:link
+```
 
-# 10. Compiler les assets
+Build frontend assets
+
+```bash
 npm run build
-
-# 11. Démarrer le serveur
-php artisan serve
 ```
 
----
+Start the development server
 
-## ⚙️ Configuration
-
-### Configuration Email (.env)
-```env
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=votre-email@gmail.com
-MAIL_PASSWORD=votre-mot-de-passe-app
-MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=votre-email@gmail.com
-MAIL_FROM_NAME="AL-KHAIR"
-```
-
-### Configuration Stripe (.env)
-```env
-STRIPE_KEY=pk_test_votre_cle_publique
-STRIPE_SECRET=sk_test_votre_cle_secrete
-```
-
-### Configuration Queue (.env)
-```env
-QUEUE_CONNECTION=database
-```
-
-### Configuration Cache (.env)
-```env
-CACHE_DRIVER=file  # ou redis pour de meilleures performances
-```
-
----
-
-## 🚀 Utilisation
-
-### Démarrer le serveur de développement
 ```bash
 php artisan serve
 ```
 
-### Démarrer le worker de queue
-```bash
-php artisan queue:work
-```
-
-### Exécuter le scheduler (en production)
-Ajouter dans crontab:
-```bash
-* * * * * cd /chemin-vers-projet && php artisan schedule:run >> /dev/null 2>&1
-```
-
-### Vérifier les projets expirés manuellement
-```bash
-php artisan projects:check-expired
-```
-
 ---
 
-## 🧪 Tests
-
-### Exécuter tous les tests
-```bash
-php artisan test
-```
-
-### Exécuter des tests spécifiques
-```bash
-php artisan test --filter AuthenticationTest
-```
-
-### Exécuter avec couverture
-```bash
-php artisan test --coverage
-```
-
-### Tests disponibles (30+ tests)
-- ✅ AuthenticationTest (5 tests)
-- ✅ DonationTest (5 tests)
-- ✅ ProjectTest (5 tests)
-- ✅ AdminTest (5 tests)
-- ✅ AssociationTest (5 tests)
-- ✅ SearchTest (4 tests)
-- ✅ NotificationTest (2 tests)
-
----
-
-## 📁 Structure du Projet
+# 📁 Project Structure
 
 ```
-alkhair/
+AL-KHAIR
+│
 ├── app/
-│   ├── Console/
-│   │   └── Commands/          # Commandes Artisan
 │   ├── Http/
-│   │   ├── Controllers/       # Contrôleurs
-│   │   ├── Middleware/        # Middlewares
-│   │   └── Requests/          # Form Requests
-│   ├── Models/                # Modèles Eloquent
-│   ├── Notifications/         # Notifications
-│   ├── Observers/             # Observers
-│   ├── Policies/              # Policies
-│   ├── Repositories/          # Repositories
-│   └── Services/              # Services
+│   ├── Models/
+│   ├── Notifications/
+│   ├── Services/
+│   ├── Policies/
+│   └── Providers/
+│
+├── bootstrap/
+│
+├── config/
+│
 ├── database/
-│   ├── factories/             # Factories
-│   ├── migrations/            # Migrations
-│   └── seeders/               # Seeders
+│   ├── migrations/
+│   ├── factories/
+│   └── seeders/
+│
+├── public/
+│
 ├── resources/
-│   ├── views/                 # Vues Blade
-│   └── css/                   # Styles
+│   ├── views/
+│   ├── css/
+│   └── js/
+│
 ├── routes/
-│   ├── web.php                # Routes web
-│   └── auth.php               # Routes authentification
+│
+├── storage/
+│
 ├── tests/
-│   └── Feature/               # Tests fonctionnels
-└── storage/
-    └── app/
-        ├── public/            # Fichiers publics
-        └── private/           # Fichiers privés (KYC)
+│
+└── README.md
 ```
 
 ---
 
-## 🔐 Sécurité
+# ✨ Project Highlights
 
-### Mesures de sécurité implémentées
-- ✅ Protection CSRF
-- ✅ Protection XSS
-- ✅ Protection SQL Injection
-- ✅ Hashage des mots de passe (Bcrypt)
-- ✅ Vérification d'email obligatoire
-- ✅ Middleware d'authentification
-- ✅ RBAC (Role-Based Access Control)
-- ✅ Validation des fichiers uploadés
-- ✅ SoftDeletes pour l'intégrité des données
+This project demonstrates practical experience with:
 
----
-
-## 📊 Statistiques du Projet
-
-- **Lignes de code**: ~15,000+
-- **Fichiers**: 150+
-- **Tests**: 30+
-- **Couverture**: 40%+
-- **Modèles**: 7
-- **Controllers**: 10+
-- **Migrations**: 10+
-- **Services**: 5+
-- **Repositories**: 2+
-
----
-
-## 🤝 Contribution
-
-Les contributions sont les bienvenues! Veuillez suivre ces étapes:
-
-1. Fork le projet
-2. Créer une branche (`git checkout -b feature/AmazingFeature`)
-3. Commit vos changements (`git commit -m 'Add AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
-
----
-
-## 📝 Licence
-
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
-
----
-
-## 👥 Auteurs
-
-- **Votre Nom** - Développeur Principal
-
----
-
-## 📞 Contact
-
-- **Email**: contact@alkhair.ma
-- **Site Web**: https://alkhair.ma
-- **GitHub**: https://github.com/votre-username
-
----
-
-## 🙏 Remerciements
-
-- Laravel Framework
+- Laravel 11 Development
+- PHP 8
+- MVC Architecture
+- SOLID Principles
+- Authentication & Authorization
+- Role-Based Access Control (RBAC)
+- Eloquent ORM
+- MySQL Database Design
+- Responsive UI Development
 - Tailwind CSS
-- Stripe
-- Tous les contributeurs open-source
+- JavaScript
+- RESTful Routing
+- File Upload Management
+- PDF Generation with DomPDF
+- Email Testing using Mailtrap
+- Stripe Payment Simulation
+- Laravel Middleware
+- Secure Authentication
+- Form Validation
+- Dashboard Development
+- CRUD Operations
+- Git Version Control
+- Agile Project Management (Trello)
 
 ---
 
-## 📸 Captures d'écran
+# 🔮 Future Improvements
 
-### Page d'accueil
-![Home](screenshots/home.png)
+Future versions of the platform may include:
 
-### Tableau de bord Donateur
-![Donator Dashboard](screenshots/donator-dashboard.png)
-
-### Tableau de bord Association
-![Association Dashboard](screenshots/association-dashboard.png)
-
-### Tableau de bord Admin
-![Admin Dashboard](screenshots/admin-dashboard.png)
+- Mobile Application
+- Real Payment Gateway Integration
+- Multi-language Support
+- Real-Time Notifications
+- Donation Analytics Dashboard
+- AI-Based Fraud Detection
+- Advanced Reporting
+- API for Third-Party Integrations
+- Progressive Web App (PWA)
+- Dark Mode
 
 ---
 
-**Développé avec ❤️ pour le Maroc**
+# 💼 Skills Demonstrated
+
+- Full-Stack Web Development
+- Backend Development
+- Frontend Development
+- Database Design
+- Software Architecture
+- Object-Oriented Programming (OOP)
+- Secure Authentication
+- Authorization Management
+- Business Logic Implementation
+- Payment Workflow
+- File Management
+- PDF Report Generation
+- Email Services
+- Responsive Design
+- Clean Code
+- Problem Solving
+
+---
+
+# 📷 Demo
+
+> Replace these links with your own.
+
+**GitHub Repository**
+
+```
+https://github.com/your-username/AL-KHAIR
+```
+
+**Live Demo**
+
+```
+Coming Soon
+```
+
+---
+
+# 👨‍💻 Author
+
+## Khadija Abirat
+
+Full-Stack Web Developer specialized in building modern, secure, and scalable web applications using Laravel and PHP.
+
+### Core Technologies
+
+- Laravel 11
+- PHP 8
+- MySQL
+- JavaScript
+- Tailwind CSS
+- HTML5
+- Git & GitHub
+
+### Currently Exploring
+
+- Artificial Intelligence
+- Data Science
+- Machine Learning
+- Python
+- MLOps
+
+---
+
+# 📄 License
+
+This project was developed for educational purposes as part of the **YouCode Full-Stack Web Development Program**.
+
+---
+
+# ⭐ Support
+
+If you found this project interesting, consider giving it a ⭐ on GitHub.
+
+Your support is greatly appreciated!
+
+---
+
+<p align="center">
+
+Developed with ❤️ using Laravel 11 & Tailwind CSS
+
+</p>
