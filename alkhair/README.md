@@ -446,7 +446,7 @@ Relationships include:
  
 <img width="3122" height="2826" alt="127 0 0 1_8000_association_profile" src="https://github.com/user-attachments/assets/15c5f07b-5d1a-44c4-b2c4-701f975d8026" />
 <img width="1763" height="3144" alt="Capture d’écran_1-9-2026_165858_127 0 0 1" src="https://github.com/user-attachments/assets/cd09fc40-7dca-4f27-89a3-0b5aba91dba4" />
-<img width="1763" height="3897" alt="Capture d’écran_1-9-2026_164617_127 0 0 1" src="https://github.com/user-attachments/assets/0038c324-07f7-4a52-997b-0202de545388" />
+ <img width="1763" height="3897" alt="Capture d’écran_1-9-2026_171448_127 0 0 1" src="https://github.com/user-attachments/assets/96287a41-0f91-436f-a921-881419e25217" />
 
  
 
