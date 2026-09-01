@@ -1,3 +1,4 @@
+
 # 🌟 AL-KHAIR — Transparent Charity Donation Platform
 
 <p align="center">
@@ -651,12 +652,20 @@ Coming Soon
 ```
 
 ---
+ 
+## 👨‍💻 Author
 
-# 👨‍💻 Author
+**Khadija Abirat**
 
-## Khadija Abirat
+Full-Stack Web Developer passionate about building secure, scalable, and user-focused web applications with Laravel.
 
-Full-Stack Web Developer specialized in building modern, secure, and scalable web applications using Laravel and PHP.
+📍 Morocco
+
+💼 Open to Full-Time, Internship, and Remote Opportunities
+
+🌐 GitHub: https://github.com/khadijaabirat
+
+💼 LinkedIn: https://linkedin.com/in/khadijaabirat
 
 ### Core Technologies
 
