@@ -373,24 +373,47 @@ Relationships include:
 ```
  
 
+<img width="1763" height="7257" alt="Capture d’écran_1-9-2026_1728_127 0 0 1" src="https://github.com/user-attachments/assets/992f2551-edb4-4e87-b31d-821cc48b0d4e" />
+
 
 
 ```
 
 ---
+## Login 
 
+```
+ <img width="2572" height="1784" alt="127 0 0 1_8000_login" src="https://github.com/user-attachments/assets/0f400636-6ded-4ad8-91ac-f3a817cf9b34" />
+
+```
+
+---
+## Register 
+
+```
+ <img width="2952" height="1520" alt="127 0 0 1_8000_register (1)" src="https://github.com/user-attachments/assets/90b8ef72-abc5-40ae-8f40-45408ce71124" />
+<img width="2952" height="1520" alt="127 0 0 1_8000_register (2)" src="https://github.com/user-attachments/assets/4a9a89a2-8c16-4e63-beb5-5d62eea1d923" />
+
+```
+
+---
 ## Donor Dashboard
 
 ```
-assets/screenshots/donor-dashboard.png
+ <img width="1763" height="4616" alt="Capture d’écran_1-9-2026_154939_127 0 0 1" src="https://github.com/user-attachments/assets/696356e4-3796-4ee7-8e2f-2c8f5c91d391" />
+
+
 ```
 
 ---
-
+ 
 ## Association Dashboard
 
 ```
-assets/screenshots/association-dashboard.png
+<img width="3122" height="3954" alt="127 0 0 1_8000_association_dashboard" src="https://github.com/user-attachments/assets/9a68cdca-a600-4bc9-ba65-b08e8a7720f7" />
+<img width="3122" height="1678" alt="127 0 0 1_8000_association_projects_expired" src="https://github.com/user-attachments/assets/4cd70446-41e4-4db5-99f9-d367596a37f2" />
+
+
 ```
 
 ---
@@ -398,7 +421,11 @@ assets/screenshots/association-dashboard.png
 ## Administrator Dashboard
 
 ```
-assets/screenshots/admin-dashboard.png
+<img width="3122" height="3738" alt="127 0 0 1_8000_admin_dashboard" src="https://github.com/user-attachments/assets/4fa7b512-8a3f-4bdb-bd82-293f0ffe62b0" />
+<img width="3122" height="2028" alt="127 0 0 1_8000_admin_categories" src="https://github.com/user-attachments/assets/390b42dd-64bc-449a-9c85-1a731fb526bb" />
+<img width="3136" height="2520" alt="127 0 0 1_8000_admin_users" src="https://github.com/user-attachments/assets/84203e8e-9c23-402d-9694-52baf1d68caa" />
+
+
 ```
 
 ---
@@ -406,7 +433,11 @@ assets/screenshots/admin-dashboard.png
 ## Project Details
 
 ```
-assets/screenshots/project-details.png
+<img width="1763" height="7257" alt="Capture d’écran_1-9-2026_1728_127 0 0 1" src="https://github.com/user-attachments/assets/ee4e19f7-e4b8-4275-a44e-67d85cb15e83" />
+<img width="1763" height="3543" alt="Capture d’écran_1-9-2026_164225_127 0 0 1" src="https://github.com/user-attachments/assets/d828f0d9-d90d-4f1e-9349-58e691d79f92" />
+
+<img width="3122" height="4736" alt="127 0 0 1_8000_projects_14" src="https://github.com/user-attachments/assets/193db992-0dc1-4a83-b720-0a46c6cc3c7b" />
+
 ```
 
 ---
@@ -414,7 +445,17 @@ assets/screenshots/project-details.png
 ## Donation Workflow
 
 ```
-assets/screenshots/donation-process.png
+1er methode paimment en ligne avec strip :
+
+ <img width="3122" height="2584" alt="127 0 0 1_8000_projects_59_donate" src="https://github.com/user-attachments/assets/da5a6159-5edd-49bc-98a5-5ef8c0e906f1" />
+
+ <img width="3122" height="1850" alt="checkout stripe com_c_pay_cs_test_a1k0hjc9lQt018Kp3JnrhNH8yXa6hF4QG0Dbea0kzZtEppFEeKGbkFjIMs (1)" src="https://github.com/user-attachments/assets/9a1fe738-f276-477f-9a39-c660a4e887aa" />
+
+<img width="3122" height="1678" alt="127 0 0 1_8000_donations_90_confirmation" src="https://github.com/user-attachments/assets/dfcca5fc-2bbf-468f-b08c-a089debb3121" />
+
+2eme methode paimment avec viremment:
+<img width="3122" height="1678" alt="127 0 0 1_8000_donations_91_confirmation" src="https://github.com/user-attachments/assets/3a51342b-8ee2-41c7-a2a8-7074015072ce" />
+<img width="3122" height="3318" alt="127 0 0 1_8000_projects_59_donate (1)" src="https://github.com/user-attachments/assets/6507261e-f106-4af4-8ae5-1b2b6335178c" />
 ```
 
 ---
@@ -422,7 +463,12 @@ assets/screenshots/donation-process.png
 ## Impact Report
 
 ```
-assets/screenshots/impact-report.png
+
+<img width="3122" height="2826" alt="127 0 0 1_8000_association_profile" src="https://github.com/user-attachments/assets/15c5f07b-5d1a-44c4-b2c4-701f975d8026" />
+<img width="1763" height="3144" alt="Capture d’écran_1-9-2026_165858_127 0 0 1" src="https://github.com/user-attachments/assets/cd09fc40-7dca-4f27-89a3-0b5aba91dba4" />
+<img width="1763" height="3897" alt="Capture d’écran_1-9-2026_164617_127 0 0 1" src="https://github.com/user-attachments/assets/0038c324-07f7-4a52-997b-0202de545388" />
+
+
 ```
 
 ---
@@ -430,7 +476,9 @@ assets/screenshots/impact-report.png
 ## User Profile
 
 ```
-assets/screenshots/profile.png
+
+<img width="3122" height="2826" alt="127 0 0 1_8000_association_profile" src="https://github.com/user-attachments/assets/de3effc0-2564-4dff-82b7-8255c16a9d2e" />
+
 ```
 
 
@@ -665,7 +713,7 @@ Full-Stack Web Developer passionate about building secure, scalable, and user-fo
 
 🌐 GitHub: https://github.com/khadijaabirat
 
-💼 LinkedIn: https://linkedin.com/in/khadijaabirat
+💼 LinkedIn: https://linkedin.com/abirat-khadija
 
 ### Core Technologies
 
